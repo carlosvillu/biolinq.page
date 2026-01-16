@@ -1,0 +1,40 @@
+{
+  "login": "Login",
+  "signup": "Sign up",
+  "login_title": "Log in",
+  "signup_title": "Sign up",
+  "email_label": "Email",
+  "password_label": "Password",
+  "confirm_password_label": "Confirm password",
+  "email_placeholder": "you@email.com",
+  "password_placeholder": "Your password",
+  "password_placeholder_signup": "Create a password",
+  "confirm_password_placeholder": "Confirm your password",
+  "invalid_email": "Invalid email",
+  "password_min_length": "Password must be at least 8 characters",
+  "passwords_dont_match": "Passwords don't match",
+  "invalid_credentials": "Invalid credentials",
+  "login_error": "Error logging in",
+  "signup_error": "Error creating account",
+  "google_continue": "Continue with Google",
+  "logging_in": "Logging in...",
+  "creating_account": "Creating account...",
+  "have_account_prompt": "Already have an account?",
+  "no_account_prompt": "Don't have an account?",
+  "login_link": "Log in",
+  "signup_link": "Sign up",
+
+  "or_divider": "or",
+  "loading": "Loading...",
+
+  "hero_title": "Welcome to [PROJECT_NAME]",
+  "hero_description": "Your project description goes here",
+  "hero_cta": "Get started",
+
+  "footer_copyright": "© 2025 [PROJECT_NAME]",
+
+  "theme_light": "Light",
+  "theme_dark": "Dark",
+  "theme_system": "System",
+  "theme_label": "Theme"
+}

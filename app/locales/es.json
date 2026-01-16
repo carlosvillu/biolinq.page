@@ -1,0 +1,40 @@
+{
+  "login": "Iniciar sesión",
+  "signup": "Registrarse",
+  "login_title": "Iniciar sesión",
+  "signup_title": "Registrarse",
+  "email_label": "Email",
+  "password_label": "Contraseña",
+  "confirm_password_label": "Confirmar contraseña",
+  "email_placeholder": "tu@email.com",
+  "password_placeholder": "Tu contraseña",
+  "password_placeholder_signup": "Crea una contraseña",
+  "confirm_password_placeholder": "Confirma tu contraseña",
+  "invalid_email": "Email inválido",
+  "password_min_length": "La contraseña debe tener al menos 8 caracteres",
+  "passwords_dont_match": "Las contraseñas no coinciden",
+  "invalid_credentials": "Credenciales inválidas",
+  "login_error": "Error al iniciar sesión",
+  "signup_error": "Error al crear la cuenta",
+  "google_continue": "Continuar con Google",
+  "logging_in": "Iniciando sesión...",
+  "creating_account": "Creando cuenta...",
+  "have_account_prompt": "¿Ya tienes una cuenta?",
+  "no_account_prompt": "¿No tienes una cuenta?",
+  "login_link": "Inicia sesión",
+  "signup_link": "Regístrate",
+
+  "or_divider": "o",
+  "loading": "Cargando...",
+
+  "hero_title": "Bienvenido a [PROJECT_NAME]",
+  "hero_description": "La descripción de tu proyecto va aquí",
+  "hero_cta": "Comenzar",
+
+  "footer_copyright": "© 2025 [PROJECT_NAME]",
+
+  "theme_light": "Claro",
+  "theme_dark": "Oscuro",
+  "theme_system": "Sistema",
+  "theme_label": "Tema"
+}
