@@ -69,7 +69,7 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 0.2: Create BioLinq Database Schema
 
-- [ ] Create `biolinks` table schema in `app/db/schema/biolinks.ts`:
+- [x] Create `biolinks` table schema in `app/db/schema/biolinks.ts`:
   - `id` (uuid, primary key)
   - `user_id` (uuid, unique, foreign key to users, on delete cascade)
   - `username` (varchar(20), unique, not null)
@@ -80,7 +80,7 @@ Antes de empezar, necesitas tener configurado:
   - `created_at` (timestamp, default now)
   - `updated_at` (timestamp, default now)
   - Index on `username`
-- [ ] Create `links` table schema in `app/db/schema/links.ts`:
+- [x] Create `links` table schema in `app/db/schema/links.ts`:
   - `id` (uuid, primary key)
   - `biolink_id` (uuid, foreign key to biolinks, on delete cascade)
   - `emoji` (varchar(10), nullable)
@@ -90,7 +90,7 @@ Antes de empezar, necesitas tener configurado:
   - `total_clicks` (integer, default 0)
   - `created_at` (timestamp, default now)
   - `updated_at` (timestamp, default now)
-- [ ] Create `daily_stats` table schema in `app/db/schema/dailyStats.ts`:
+- [x] Create `daily_stats` table schema in `app/db/schema/dailyStats.ts`:
   - `id` (uuid, primary key)
   - `biolink_id` (uuid, foreign key to biolinks, on delete cascade)
   - `date` (date, not null)
@@ -98,20 +98,20 @@ Antes de empezar, necesitas tener configurado:
   - `clicks` (integer, default 0)
   - Unique constraint on (biolink_id, date)
   - Index on (biolink_id, date)
-- [ ] Create `daily_link_clicks` table schema in `app/db/schema/dailyLinkClicks.ts`:
+- [x] Create `daily_link_clicks` table schema in `app/db/schema/dailyLinkClicks.ts`:
   - `id` (uuid, primary key)
   - `link_id` (uuid, foreign key to links, on delete cascade)
   - `date` (date, not null)
   - `clicks` (integer, default 0)
   - Unique constraint on (link_id, date)
   - Index on (link_id, date)
-- [ ] Update `users` table in `app/db/schema/users.ts`:
+- [x] Update `users` table in `app/db/schema/users.ts`:
   - Add `is_premium` (boolean, default false)
   - Add `stripe_customer_id` (varchar(255), nullable)
-- [ ] Create reserved usernames constant in `app/lib/constants.ts`:
+- [x] Create reserved usernames constant in `app/lib/constants.ts`:
   - List: admin, api, www, app, dashboard, login, signup, settings, premium, help, support, terms, privacy, go
-- [ ] Export all new schemas from `app/db/schema/index.ts`
-- [ ] Define relations in `app/db/schema/relations.ts`:
+- [x] Export all new schemas from `app/db/schema/index.ts`
+- [x] Define relations in `app/db/schema/relations.ts`:
   - users.biolink (one-to-one)
   - biolinks.user (many-to-one)
   - biolinks.links (one-to-many)
@@ -602,7 +602,7 @@ Sequential list of all tasks in recommended order:
 | ----- | ----- | -------------- | ----------------------------------- |
 | 0     | 0.0.1 | ✅ Complete    | Migrate UI to Neo-Brutal design     |
 | 0     | 0.1   | ✅ Complete    | Configure Google OAuth auto sign-up |
-| 0     | 0.2   | ⬜ Not Started | Create DB schema                    |
+| 0     | 0.2   | ✅ Complete    | Create DB schema                    |
 | 0     | 0.3   | ⬜ Not Started | Configure env vars                  |
 | 1     | 1.1  | ⬜ Not Started | Username modal                      |
 | 1     | 1.2  | ⬜ Not Started | Username service                    |
