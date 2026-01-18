@@ -17,6 +17,9 @@
   "login_error": "Error al iniciar sesión",
   "signup_error": "Error al crear la cuenta",
   "google_continue": "Continuar con Google",
+  "google_connecting": "Conectando...",
+  "oauth_no_account": "No se encontró cuenta. Por favor regístrate primero.",
+  "oauth_error": "Error al conectar con Google. Por favor intenta de nuevo.",
   "logging_in": "Iniciando sesión...",
   "creating_account": "Creando cuenta...",
   "have_account_prompt": "¿Ya tienes una cuenta?",
@@ -29,12 +32,26 @@
 
   "hero_title": "Bienvenido a [PROJECT_NAME]",
   "hero_description": "La descripción de tu proyecto va aquí",
-  "hero_cta": "Comenzar",
+  "hero_cta": "Crear mi BioLink",
 
   "footer_copyright": "© 2025 [PROJECT_NAME]",
+  "logout": "Cerrar sesión",
 
   "theme_light": "Claro",
   "theme_dark": "Oscuro",
   "theme_system": "Sistema",
-  "theme_label": "Tema"
+  "theme_label": "Tema",
+
+  "hero_tagline": "Diferénciate siendo simple.",
+  "hero_description_part1": "El Linktree minimalista. Tu página carga en",
+  "hero_pricing_note": "Freemium • 5€ Premium de por vida",
+  "value_speed_title": "Ultra Rápido",
+  "value_speed_desc": "Sin scripts pesados. Tus seguidores no esperarán.",
+  "value_design_title": "Diseño Brutalista",
+  "value_design_desc": "4 temas profesionales que destacan por su simplicidad.",
+  "value_price_title": "Pago Único",
+  "value_price_desc": "Paga 5€ una vez. Sin suscripciones mensuales absurdas.",
+  "footer_terms": "Términos",
+  "footer_privacy": "Privacidad",
+  "footer_rights": "Todos los derechos reservados."
 }

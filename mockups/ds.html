@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gitingest Design System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-primary': '#ffc480',
+            'brand-accent': '#FE4A60',
+            'ink-black': '#111827',
+            'canvas-bg': '#FFFDF8',
+            'panel-cream': '#fff4da',
+            'result-gray': '#fafafa',
+            'input-blue': '#E8F0FE',
+            'control-beige': '#EBDBB7',
+          },
+      boxShadow: {
+            'hard': '2px 2px 0 0 rgba(0,0,0,1)',
+            'hard-lg': '4px 4px 0 0 rgba(0,0,0,1)',
+          }
+        }
+      }
+    }
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const slider = document.getElementById('range-slider');
+      const valueDisplay = document.getElementById('range-value');
+      slider.addEventListener('input', function() {
+        valueDisplay.textContent = this.value;
+        slider.style.setProperty('--fill-percent', this.value + '%');
+      });
+    });
+  </script>
+  <style>
+    @layer components {
+      .badge-new {
+        @apply inline-block -rotate-6 -translate-y-1 mx-1 px-1 bg-[#FE4A60] border border-gray-900 text-white text-[10px] font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)];
+      }
+      .landing-page-title {
+        @apply inline-block w-full relative text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl sm:pt-20 lg:pt-5 font-bold tracking-tighter;
+      }
+      .pattern-select {
+        @apply min-w-max appearance-none pr-6 pl-2 py-2 bg-[#e6e8eb] border-r-[3px] border-gray-900 cursor-pointer focus:outline-none;
+      }
+    }
+    @layer utilities {
+      .link-bounce {
+        @apply transition-transform hover:-translate-y-0.5;
+      }
+      .no-drag {
+        @apply pointer-events-none select-none;
+        -webkit-user-drag: none;
+      }
+    }
+    
+    /* Range Slider Custom Styles */
+    .range-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+    }
+    
+    .range-slider::-webkit-slider-runnable-track {
+      width: 100%;
+      height: 24px;
+      background: linear-gradient(to right, #FE4A60 0%, #FE4A60 var(--fill-percent, 65%), #EBDBB7 var(--fill-percent, 65%), #EBDBB7 100%);
+      border: 3px solid #111827;
+      border-radius: 4px;
+    }
+    
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border: 3px solid #111827;
+      border-radius: 2px;
+      cursor: pointer;
+      margin-top: -12px;
+      box-shadow: 3px 3px 0 0 rgba(0,0,0,1);
+    }
+    
+    .range-slider::-moz-range-track {
+      width: 100%;
+      height: 24px;
+      background: linear-gradient(to right, #FE4A60 0%, #FE4A60 var(--fill-percent, 65%), #EBDBB7 var(--fill-percent, 65%), #EBDBB7 100%);
+      border: 3px solid #111827;
+      border-radius: 4px;
+    }
+    
+    .range-slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      background: white;
+      border: 3px solid #111827;
+      border-radius: 2px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0 0 rgba(0,0,0,1);
+    }
+  </style>
+</head>
+<body class="bg-[#FFFDF8] text-gray-900 min-h-screen">
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <header class="text-center mb-16">
+      <h1 class="landing-page-title">
+        Gitingest
+        <span class="absolute -top-2 -right-8 badge-new">NEW</span>
+      </h1>
+      <p class="text-gray-600 mt-4 text-lg">Design System Documentation</p>
+    </header>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">1. Botones Primarios</h2>
+      <div class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <div class="flex flex-wrap gap-6 items-start">
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <button class="relative border-[3px] border-gray-900 bg-[#ffc480] text-gray-900 px-6 py-3 font-medium text-lg hover:-translate-y-px hover:-translate-x-px transition-transform duration-300 ease-out rounded">
+              Ingest Repository
+            </button>
+          </div>
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <button class="relative border-[3px] border-gray-900 bg-[#ffc480] text-gray-900 px-8 py-4 font-medium text-xl hover:-translate-y-px hover:-translate-x-px transition-transform duration-300 ease-out rounded">
+              Generate Output
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">2. Inputs de Texto</h2>
+      <div class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <div class="space-y-6 max-w-md">
+          <div class="relative">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <input type="text" placeholder="GitHub URL" class="relative w-full bg-[#E8F0FE] border-[3px] border-gray-900 rounded px-4 py-3 text-gray-900 placeholder-gray-600 focus:outline-none">
+          </div>
+          <div class="relative">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <input type="text" placeholder="Repository Path" class="relative w-full bg-[#E8F0FE] border-[3px] border-gray-900 rounded px-4 py-3 text-gray-900 placeholder-gray-600 focus:outline-none font-mono text-sm">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">3. Componentes Small</h2>
+      <div class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="space-y-4">
+            <h3 class="font-bold text-lg">Checkbox Personalizado</h3>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <div class="relative w-6 h-6">
+                <div class="absolute inset-0 bg-gray-900 translate-x-0.5 translate-y-0.5 rounded-sm"></div>
+                <input type="checkbox" class="peer sr-only" id="private-repo">
+                <div class="relative w-5 h-5 bg-white border-[3px] border-gray-900 rounded-sm peer-checked:bg-[#ffc480] transition-all">
+                  <span class="absolute inset-0 flex items-center justify-center scale-0 peer-checked:scale-100 transition-transform duration-200">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <span class="font-medium">Private Repository</span>
+            </label>
+            <label class="flex items-center gap-3 cursor-pointer group">
+              <div class="relative w-6 h-6">
+                <div class="absolute inset-0 bg-gray-900 translate-x-0.5 translate-y-0.5 rounded-sm"></div>
+                <input type="checkbox" class="peer sr-only" id="include-dirs">
+                <div class="relative w-5 h-5 bg-white border-[3px] border-gray-900 rounded-sm peer-checked:bg-[#ffc480] transition-all">
+                  <span class="absolute inset-0 flex items-center justify-center scale-0 peer-checked:scale-100 transition-transform duration-200">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <span class="font-medium">Include Directories</span>
+            </label>
+          </div>
+          <div class="space-y-4">
+            <h3 class="font-bold text-lg">Range Slider</h3>
+            <div class="relative py-2">
+              <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded-xl"></div>
+              <div class="relative bg-[#EBDBB7] border-[3px] border-gray-900 rounded-xl p-4">
+                <div class="relative h-8 flex items-center">
+                  <input type="range" min="0" max="100" value="65" class="w-full h-8 appearance-none bg-transparent cursor-pointer z-10 relative range-slider" id="range-slider">
+                </div>
+                <div class="flex justify-between mt-3 font-mono text-xs text-gray-700">
+                  <span class="font-bold">0</span>
+                  <span class="font-bold" id="range-value">65</span>
+                  <span class="font-bold">∞</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">4. Badges y Tags</h2>
+      <div class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <div class="flex flex-wrap gap-4 items-center">
+          <span class="badge-new">NEW</span>
+          <span class="px-2 py-1 bg-[#FE4A60] border border-gray-900 text-white text-xs font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)] rotate-3">FEATURE</span>
+          <span class="px-3 py-1 bg-[#E8F0FE] border-[3px] border-gray-900 text-gray-900 font-medium rounded text-sm">Input</span>
+          <span class="px-3 py-1 bg-[#EBDBB7] border-[3px] border-gray-900 text-gray-900 font-medium rounded text-sm">Control</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">5. Layout Grid</h2>
+      <div class="bg-[#fff4da] border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <div class="grid grid-cols-1 md:grid-cols-[3fr_2fr] lg:grid-cols-[5fr_4fr_4fr] gap-4">
+          <div class="bg-white border-[3px] border-gray-900 p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+            <span class="font-bold text-sm text-gray-600">Source (3fr)</span>
+          </div>
+          <div class="bg-white border-[3px] border-gray-900 p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+            <span class="font-bold text-sm text-gray-600">Config (2fr)</span>
+          </div>
+          <div class="bg-white border-[3px] border-gray-900 p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+            <span class="font-bold text-sm text-gray-600">Output (2fr)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">6. Cards y Paneles</h2>
+      <div class="space-y-6">
+        <div class="bg-white border-[3px] border-gray-900 rounded-xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+          <h3 class="text-xl font-bold mb-2">Panel Principal</h3>
+          <p class="text-gray-600">Used to contain primary interactions like the Ingest Form.</p>
+          <div class="mt-4 pt-4 border-t-2 border-dashed border-gray-300">
+            <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">bg-[#fff4da]</code>
+          </div>
+        </div>
+        <div class="bg-[#fafafa] border-[3px] border-gray-900 rounded-xl p-6 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+          <h3 class="text-xl font-bold mb-2">Resultados</h3>
+          <p class="text-gray-600">Used for results containers and loaders.</p>
+          <div class="mt-4 pt-4 border-t-2 border-dashed border-gray-300">
+            <code class="bg-gray-100 px-2 py-1 rounded text-sm font-mono">bg-[#fafafa]</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">7. Selectores y Form Elements</h2>
+      <div class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <div class="flex flex-wrap gap-4 items-end">
+          <div class="relative">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <select class="relative min-w-[160px] appearance-none pr-8 pl-4 py-3 bg-[#e6e8eb] border-[3px] border-gray-900 cursor-pointer focus:outline-none rounded">
+              <option>JavaScript</option>
+              <option>TypeScript</option>
+              <option>Python</option>
+              <option>Go</option>
+            </select>
+          </div>
+          <div class="relative group">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <button class="relative border-[3px] border-gray-900 bg-white text-gray-900 px-6 py-3 font-medium hover:bg-gray-50 hover:-translate-y-px hover:-translate-x-px transition-all duration-200 rounded flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">8. Paleta de Colores</h2>
+      <div class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)]" style="background-color: #ffc480;"></div>
+            <p class="font-mono text-sm">#ffc480</p>
+            <p class="text-xs text-gray-600">Primary Brand</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)]" style="background-color: #FE4A60;"></div>
+            <p class="font-mono text-sm">#FE4A60</p>
+            <p class="text-xs text-gray-600">Accent / Alert</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)]" style="background-color: #E8F0FE;"></div>
+            <p class="font-mono text-sm">#E8F0FE</p>
+            <p class="text-xs text-gray-600">Input Blue</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)]" style="background-color: #EBDBB7;"></div>
+            <p class="font-mono text-sm">#EBDBB7</p>
+            <p class="text-xs text-gray-600">Control Beige</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)]" style="background-color: #fff4da;"></div>
+            <p class="font-mono text-sm">#fff4da</p>
+            <p class="text-xs text-gray-600">Panel Cream</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)]" style="background-color: #fafafa;"></div>
+            <p class="font-mono text-sm">#fafafa</p>
+            <p class="text-xs text-gray-600">Result Gray</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)]" style="background-color: #111827;"></div>
+            <p class="font-mono text-sm">#111827</p>
+            <p class="text-xs text-gray-600">Ink Black</p>
+          </div>
+          <div class="space-y-2">
+            <div class="h-16 border-[3px] border-gray-900 rounded shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-white"></div>
+            <p class="font-mono text-sm">#FFFFFF</p>
+            <p class="text-xs text-gray-600">Base White</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold tracking-tight mb-8 border-b-4 border-gray-900 pb-2">9. Tipografía</h2>
+      <div class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)] space-y-8">
+        <div class="space-y-2">
+          <p class="text-sm text-gray-600 font-mono">text-7xl font-bold tracking-tighter</p>
+          <p class="text-7xl font-bold tracking-tighter">Gitingest</p>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm text-gray-600 font-mono">text-2xl font-bold tracking-tight</p>
+          <p class="text-2xl font-bold tracking-tight">Section Heading</p>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm text-gray-600 font-mono">text-lg font-medium</p>
+          <p class="text-lg font-medium">Body Lead Text</p>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm text-gray-600 font-mono">text-base font-normal</p>
+          <p class="text-base font-normal">Standard body text for content and descriptions.</p>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm text-gray-600 font-mono">font-mono text-sm</p>
+          <p class="font-mono text-sm text-gray-700 bg-gray-100 p-2 rounded border border-gray-300 inline-block">
+            src/components/App.tsx:42
+          </p>
+        </div>
+        <div class="space-y-2">
+          <p class="text-sm text-gray-600 font-mono">text-[10px] font-bold</p>
+          <div>
+            <span class="px-1 bg-[#FE4A60] border border-gray-900 text-white text-[10px] font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)]">NEW</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-8 text-gray-600 text-sm">
+    <p>Gitingest Design System — Soft Neo-Brutalism</p>
+  </footer>
+</body>
+</html>

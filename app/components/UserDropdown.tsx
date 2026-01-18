@@ -1,13 +1,12 @@
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from '~/components/ui/dropdown-menu'
-import { ThemeToggle } from '~/components/ThemeToggle'
+  NeoBrutalMenuRoot,
+  NeoBrutalMenuTrigger,
+  NeoBrutalMenuPopup,
+  NeoBrutalMenuItem,
+  NeoBrutalMenuSeparator,
+} from '~/components/neo-brutal/NeoBrutalMenu'
 
 type UserDropdownProps = {
   user: { email: string; role?: string | null }
@@ -30,52 +29,42 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
   const initials = getInitials(user.email)
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <NeoBrutalMenuRoot>
+      <NeoBrutalMenuTrigger>
         <button
-          className="flex items-center gap-2 hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2"
+          className="flex items-center gap-2 px-3 py-2 border-[3px] border-neo-dark rounded bg-white hover:bg-neo-panel transition-colors"
           aria-label="User menu"
         >
           {/* Avatar: always visible */}
-          <div className="w-8 h-8 rounded-full bg-ink text-paper flex items-center justify-center text-xs font-medium">
+          <div className="w-6 h-6 rounded-full bg-neo-dark text-white flex items-center justify-center text-xs font-bold">
             {initials}
           </div>
 
           {/* Email: desktop only */}
-          <span className="hidden md:block text-sm text-slate truncate max-w-[150px]">
+          <span className="hidden md:block text-sm font-medium truncate max-w-[150px]">
             {user.email}
           </span>
         </button>
-      </DropdownMenuTrigger>
+      </NeoBrutalMenuTrigger>
 
-      <DropdownMenuContent align="end" className="min-w-[200px]">
+      <NeoBrutalMenuPopup>
         {/* Email completo */}
-        <div className="px-3 py-2 border-b border-silver">
-          <p className="text-sm text-graphite truncate">{user.email}</p>
+        <div className="px-4 py-2 border-b-2 border-neo-dark">
+          <p className="text-sm font-medium truncate">{user.email}</p>
         </div>
 
-        {/* Theme toggle */}
-        <div className="px-3 py-2 flex items-center justify-between">
-          <span className="text-sm">{t('theme_label')}</span>
-          <ThemeToggle />
-        </div>
+        {/* Link a dashboard */}
+        <NeoBrutalMenuItem>
+          <Link to="/dashboard" className="w-full">
+            Dashboard
+          </Link>
+        </NeoBrutalMenuItem>
 
-        <DropdownMenuSeparator />
-
-        {/* Link a dashboard (solo si es podcaster) */}
-        {user.role === 'podcaster' && (
-          <DropdownMenuItem asChild>
-            <Link to="/dashboard" className="cursor-pointer">
-              Dashboard
-            </Link>
-          </DropdownMenuItem>
-        )}
+        <NeoBrutalMenuSeparator />
 
         {/* Logout */}
-        <DropdownMenuItem onClick={onLogout} className="cursor-pointer">
-          {t('logout')}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <NeoBrutalMenuItem onClick={onLogout}>{t('logout')}</NeoBrutalMenuItem>
+      </NeoBrutalMenuPopup>
+    </NeoBrutalMenuRoot>
   )
 }

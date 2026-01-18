@@ -5,9 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
 import { signIn } from '~/lib/auth.client'
-import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
+import { NeoBrutalButton, NeoBrutalCard, NeoBrutalInput } from '~/components/neo-brutal'
 import {
   Form,
   FormControl,
@@ -81,83 +79,76 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md border border-silver bg-paper">
-        <CardHeader className="text-center">
-          <CardTitle className="font-serif text-3xl">{t('login_title')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <GoogleAuthButton mode="login" callbackURL={searchParams.get('redirect') || '/'} />
+    <div className="min-h-screen bg-neo-canvas flex items-center justify-center px-4">
+      <NeoBrutalCard className="w-full max-w-md">
+        <h1 className="text-2xl font-bold tracking-tight mb-6 text-center">
+          {t('login_title')}
+        </h1>
 
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-silver" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-paper px-4 text-slate">{t('or_divider')}</span>
-            </div>
+        <GoogleAuthButton mode="login" callbackURL={searchParams.get('redirect') || '/'} />
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t-2 border-neo-dark" />
           </div>
+          <div className="relative flex justify-center">
+            <span className="bg-neo-panel px-2 text-sm font-mono">{t('or_divider')}</span>
+          </div>
+        </div>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('email_label')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder={t('email_placeholder')}
-                        className="bg-pearl border-silver focus:border-ink"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('email_label')}</FormLabel>
+                  <FormControl>
+                    <NeoBrutalInput type="email" placeholder={t('email_placeholder')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('password_label')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t('password_placeholder')}
-                        className="bg-pearl border-silver focus:border-ink"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('password_label')}</FormLabel>
+                  <FormControl>
+                    <NeoBrutalInput
+                      type="password"
+                      placeholder={t('password_placeholder')}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              {error && <div className="p-4 border border-ink bg-pearl text-sm">{error}</div>}
+            {error && (
+              <div className="p-4 border-[3px] border-neo-accent bg-neo-accent/10 text-sm">
+                {error}
+              </div>
+            )}
 
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full bg-ink text-paper font-medium hover:bg-graphite transition-colors"
-              >
-                {isLoading ? t('logging_in') : t('login_title')}
-              </Button>
+            <NeoBrutalButton type="submit" disabled={isLoading} variant="primary" className="w-full">
+              {isLoading ? t('logging_in') : t('login_title')}
+            </NeoBrutalButton>
 
-              <p className="text-center text-slate text-sm">
-                {t('no_account_prompt')}{' '}
-                <Link to="/auth/signup" className="text-ink hover:underline font-medium">
-                  {t('signup_link')}
-                </Link>
-              </p>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+            <p className="text-center text-sm mt-6">
+              {t('no_account_prompt')}{' '}
+              <Link to="/auth/signup" className="font-bold underline">
+                {t('signup_link')}
+              </Link>
+            </p>
+          </form>
+        </Form>
+      </NeoBrutalCard>
     </div>
   )
 }

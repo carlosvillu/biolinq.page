@@ -1,55 +1,51 @@
+import { Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu'
-import { Button } from '~/components/ui/button'
+  NeoBrutalMenuRoot,
+  NeoBrutalMenuTrigger,
+  NeoBrutalMenuPopup,
+  NeoBrutalMenuRadioGroup,
+  NeoBrutalMenuRadioItem,
+} from '~/components/neo-brutal'
 import { changeLanguage } from '~/lib/i18n.client'
 import { DEFAULT_LOCALE, isValidLocale, type Locale } from '~/lib/i18n'
 
-const LANGUAGE_OPTIONS: { locale: Locale; flag: string; label: string }[] = [
-  { locale: 'en', flag: '🇬🇧', label: 'English' },
-  { locale: 'es', flag: '🇪🇸', label: 'Español' },
+const LANGUAGE_OPTIONS: { locale: Locale; label: string }[] = [
+  { locale: 'en', label: 'English' },
+  { locale: 'es', label: 'Español' },
 ]
 
 export function LanguageSelector() {
   const { i18n } = useTranslation()
   const currentLocale = isValidLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE
 
-  const currentOption =
-    LANGUAGE_OPTIONS.find((opt) => opt.locale === currentLocale) || LANGUAGE_OPTIONS[0]
-
-  const handleSelect = (locale: Locale) => {
-    changeLanguage(locale)
+  const handleSelect = (locale: string) => {
+    changeLanguage(locale as Locale)
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="secondary"
-          size="sm"
-          className="h-9 px-3 text-sm font-medium text-slate hover:text-ink hover:bg-pearl transition-all"
+    <NeoBrutalMenuRoot>
+      <div className="isolate relative group inline-block">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 rounded bg-neo-dark translate-x-1 translate-y-1 transition-transform duration-200 ease-out group-hover:translate-x-2 group-hover:translate-y-2"
+        />
+        <NeoBrutalMenuTrigger
+          aria-label="Select language"
+          className="relative z-10 flex items-center justify-center p-2 border-[3px] border-neo-dark rounded bg-white text-neo-dark transition-transform duration-200 ease-out group-hover:-translate-x-px group-hover:-translate-y-px group-hover:bg-neo-panel"
         >
-          <span className="mr-1.5">{currentOption.flag}</span>
-          <span className="uppercase">{currentLocale}</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[140px]">
-        {LANGUAGE_OPTIONS.map((option) => (
-          <DropdownMenuItem
-            key={option.locale}
-            onClick={() => handleSelect(option.locale)}
-            className="cursor-pointer"
-          >
-            <span className="mr-2">{option.flag}</span>
-            <span>{option.label}</span>
-            {currentLocale === option.locale && <span className="ml-auto">✓</span>}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+          <Globe className="h-4 w-4" />
+        </NeoBrutalMenuTrigger>
+      </div>
+      <NeoBrutalMenuPopup>
+        <NeoBrutalMenuRadioGroup value={currentLocale} onValueChange={handleSelect}>
+          {LANGUAGE_OPTIONS.map((option) => (
+            <NeoBrutalMenuRadioItem key={option.locale} value={option.locale}>
+              {option.label}
+            </NeoBrutalMenuRadioItem>
+          ))}
+        </NeoBrutalMenuRadioGroup>
+      </NeoBrutalMenuPopup>
+    </NeoBrutalMenuRoot>
   )
 }

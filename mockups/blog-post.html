@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cómo construir interfaces modernas - Blog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Cabinet+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FFFDF8;
+            color: #111827;
+            line-height: 1.7;
+        }
+
+        .font-display {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .neo-border {
+            border: 3px solid #111827;
+        }
+
+        .neo-shadow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #111827;
+            transform: translate(6px, 6px);
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        article p {
+            margin-bottom: 1.5rem;
+        }
+
+        article h2 {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        article h3 {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        article ul, article ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+
+        article li {
+            margin-bottom: 0.5rem;
+        }
+
+        article blockquote {
+            border-left: 4px solid #ffc480;
+            background: #fff4da;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 1.125rem;
+            border-radius: 0.5rem;
+        }
+
+        article code {
+            font-family: 'Space Mono', monospace;
+            background: #E8F0FE;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.9em;
+            border: 2px solid #111827;
+        }
+
+        article pre {
+            background: #111827;
+            color: #ffc480;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+            border: 3px solid #111827;
+        }
+
+        article pre code {
+            background: none;
+            border: none;
+            color: #ffc480;
+            padding: 0;
+        }
+
+        .badge-tag {
+            display: inline-block;
+            background: #E8F0FE;
+            color: #111827;
+            font-family: 'Space Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border: 2px solid #111827;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+        }
+
+        .reading-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: #ffc480;
+            z-index: 1000;
+            transition: width 0.1s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="reading-progress" id="progressBar"></div>
+
+    <!-- Navigation -->
+    <nav class="relative z-50 py-6 px-6 md:px-12 border-b-[3px] border-gray-900">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <a href="landing-page.html" class="flex items-center gap-2 hover:-translate-y-0.5 transition-transform duration-200">
+                <div class="w-10 h-10 bg-[#FE4A60] neo-border rounded-lg flex items-center justify-center font-mono font-bold text-white">
+                    P
+                </div>
+                <span class="font-display text-2xl">← Blog</span>
+            </a>
+            
+            <div class="relative neo-shadow">
+                <button class="neo-border bg-[#E8F0FE] px-6 py-2 rounded font-medium hover:bg-[#d4e4fd] transition-colors">
+                    Suscribirse
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Article Header -->
+    <header class="py-16 px-6 md:px-12 bg-[#fff4da] border-b-[3px] border-gray-900">
+        <div class="max-w-3xl mx-auto">
+            <div class="mb-6">
+                <span class="badge-tag">DISEÑO</span>
+                <span class="badge-tag">FRONTEND</span>
+                <span class="badge-tag">TUTORIAL</span>
+            </div>
+
+            <h1 class="font-display text-4xl md:text-6xl mb-6">
+                Cómo construir interfaces modernas con Soft Neo-Brutalism
+            </h1>
+
+            <div class="flex items-center gap-4 text-gray-600">
+                <div class="flex items-center gap-2">
+                    <div class="w-12 h-12 bg-[#ffc480] neo-border rounded-full flex items-center justify-center font-bold">
+                        CV
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-900">Carlos Villuendas</p>
+                        <p class="text-sm font-mono">Frontend Architect</p>
+                    </div>
+                </div>
+                <span class="text-gray-400">•</span>
+                <time class="font-mono text-sm">12 Enero 2026</time>
+                <span class="text-gray-400">•</span>
+                <span class="font-mono text-sm">8 min lectura</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Article Content -->
+    <article class="py-16 px-6 md:px-12">
+        <div class="max-w-3xl mx-auto">
+            <!-- Featured Image -->
+            <div class="relative neo-shadow mb-12">
+                <div class="neo-border rounded-xl bg-gradient-to-br from-[#ffc480] via-[#FE4A60] to-[#E8F0FE] aspect-video flex items-center justify-center">
+                    <svg class="w-32 h-32 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                        <path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                    </svg>
+                </div>
+            </div>
+
+            <p class="text-xl text-gray-600 mb-8">
+                El diseño Neo-Brutalista está revolucionando la forma en que pensamos sobre las interfaces web. En este artículo, exploramos cómo implementar este estilo audaz y funcional en tus proyectos.
+            </p>
+
+            <h2>¿Qué es el Soft Neo-Brutalism?</h2>
+
+            <p>
+                El <strong>Soft Neo-Brutalism</strong> es una evolución del brutalism digital que combina bordes gruesos, sombras duras y colores pastel saturados. A diferencia del brutalism tradicional, este estilo busca ser "amigable" mientras mantiene la estética cruda y directa.
+            </p>
+
+            <blockquote>
+                "El mejor diseño es el que comunica su función de forma inmediata y memorable."
+            </blockquote>
+
+            <p>
+                Las características principales incluyen:
+            </p>
+
+            <ul>
+                <li><strong>Bordes gruesos de 3px</strong> en casi todos los elementos</li>
+                <li><strong>Sombras sólidas</strong> sin difuminado (blur: 0)</li>
+                <li><strong>Colores planos</strong> con alta saturación</li>
+                <li><strong>Tipografía bold</strong> con tracking ajustado</li>
+                <li><strong>Efectos táctiles</strong> en interacciones</li>
+            </ul>
+
+            <h2>Implementando el sistema de colores</h2>
+
+            <p>
+                La paleta de colores es fundamental. Debemos limitarnos a colores planos que contrasten fuertemente con el negro de los bordes:
+            </p>
+
+            <pre><code>const colors = {
+  cream: '#FFFDF8',      // Fondo global
+  orange: '#ffc480',     // Acciones primarias
+  red: '#FE4A60',        // Alertas y badges
+  yellow: '#fff4da',     // Contenedores
+  blue: '#E8F0FE',       // Inputs
+  black: '#111827'       // Bordes y texto
+};</code></pre>
+
+            <h3>Evitar gradientes complejos</h3>
+
+            <p>
+                El Neo-Brutalism favorece los colores sólidos. Si necesitas gradientes, mantenlos sutiles y úsalos solo para fondos decorativos, nunca en elementos interactivos.
+            </p>
+
+            <h2>La anatomía de un botón perfecto</h2>
+
+            <p>
+                Los botones son el elemento más característico. Veamos cómo crear el efecto de "profundidad física":
+            </p>
+
+            <pre><code>&lt;div class="relative neo-shadow"&gt;
+  &lt;button class="neo-border bg-[#ffc480] 
+                 px-8 py-4 rounded-xl 
+                 font-bold relative z-20
+                 hover:-translate-y-px
+                 hover:-translate-x-px
+                 transition-transform"&gt;
+    Click me
+  &lt;/button&gt;
+&lt;/div&gt;</code></pre>
+
+            <p>
+                La clave está en usar un elemento <code>div</code> padre con <code>position: relative</code> y un pseudo-elemento <code>::before</code> que actúa como la sombra sólida:
+            </p>
+
+            <pre><code>.neo-shadow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #111827;
+  transform: translate(6px, 6px);
+  border-radius: inherit;
+  z-index: -1;
+}</code></pre>
+
+            <h2>Tipografía con carácter</h2>
+
+            <p>
+                La elección tipográfica es crucial. Evita fuentes genéricas como Arial o Inter. Opta por:
+            </p>
+
+            <ul>
+                <li><strong>Display/Headlines:</strong> Fuentes bold con tracking negativo (Cabinet Grotesk, Space Grotesk)</li>
+                <li><strong>Código/Técnico:</strong> Monospace distintiva (Space Mono, JetBrains Mono)</li>
+                <li><strong>Body:</strong> Sans-serif legible pero con personalidad</li>
+            </ul>
+
+            <h3>Jerarquía visual</h3>
+
+            <p>
+                El contraste de tamaños debe ser exagerado. Si tu título es <code>text-6xl</code>, tu cuerpo no debería ser mayor a <code>text-base</code>. Esta diferencia marca la jerarquía de forma inmediata.
+            </p>
+
+            <h2>Animaciones táctiles</h2>
+
+            <p>
+                Las interacciones deben sentirse físicas. El usuario debe percibir que está "presionando" un botón real:
+            </p>
+
+            <pre><code>.btn-press:active {
+  transform: translate(2px, 2px);
+}
+
+.neo-shadow:hover::before {
+  transform: translate(3px, 3px);
+}</code></pre>
+
+            <p>
+                Esta técnica crea la ilusión de que el botón se "hunde" al hacer click, reduciendo la distancia entre el elemento y su sombra.
+            </p>
+
+            <h2>Principios de diseño funcional</h2>
+
+            <p>
+                El Neo-Brutalism no es solo estética, es funcionalidad. Cada decisión debe responder a:
+            </p>
+
+            <ol>
+                <li><strong>Legibilidad:</strong> Los bordes gruesos delimitan zonas de forma clara</li>
+                <li><strong>Jerarquía:</strong> El tamaño y color comunican importancia</li>
+                <li><strong>Feedback:</strong> Las interacciones son obvias y satisfactorias</li>
+                <li><strong>Accesibilidad:</strong> El alto contraste mejora la lectura</li>
+            </ol>
+
+            <blockquote>
+                "No diseñes para impresionar, diseña para que funcione tan bien que sea memorable por defecto."
+            </blockquote>
+
+            <h2>Conclusión</h2>
+
+            <p>
+                El Soft Neo-Brutalism ofrece una alternativa refrescante al diseño corporativo homogéneo. Su enfoque en bordes definidos, colores planos y efectos táctiles crea interfaces que son tanto funcionales como memorables.
+            </p>
+
+            <p>
+                La clave está en mantener la coherencia: define tu sistema de colores, limítate a él, y aplica los mismos principios de bordes y sombras en todos los componentes. El resultado será una interfaz cohesiva y distintiva.
+            </p>
+
+            <p>
+                ¿Listo para experimentar? Empieza con componentes pequeños como botones y badges, luego expande el sistema a cards, forms y layouts completos.
+            </p>
+        </div>
+    </article>
+
+    <!-- Author Bio -->
+    <section class="py-16 px-6 md:px-12 bg-[#fff4da] border-t-[3px] border-gray-900">
+        <div class="max-w-3xl mx-auto">
+            <div class="relative neo-shadow bg-white neo-border rounded-xl p-8">
+                <div class="flex gap-6 items-start">
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-20 bg-[#ffc480] neo-border rounded-full flex items-center justify-center text-3xl font-bold">
+                            CV
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-display text-2xl mb-2">Carlos Villuendas</h3>
+                        <p class="text-gray-600 mb-4">
+                            Frontend Architect especializado en TypeScript, React y diseño de sistemas. Creador de contenido en YouTube sobre desarrollo web y arquitectura frontend.
+                        </p>
+                        <div class="flex gap-3">
+                            <div class="relative neo-shadow">
+                                <a href="#" class="neo-border bg-[#E8F0FE] px-4 py-2 rounded font-mono text-sm inline-block hover:bg-[#d4e4fd] transition-colors">
+                                    Twitter
+                                </a>
+                            </div>
+                            <div class="relative neo-shadow">
+                                <a href="#" class="neo-border bg-[#E8F0FE] px-4 py-2 rounded font-mono text-sm inline-block hover:bg-[#d4e4fd] transition-colors">
+                                    GitHub
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Related Articles -->
+    <section class="py-16 px-6 md:px-12">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="font-display text-3xl mb-8">Artículos relacionados</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="relative neo-shadow bg-white neo-border rounded-xl p-6 hover:-translate-y-1 transition-transform cursor-pointer">
+                    <span class="badge-tag mb-3">REACT</span>
+                    <h3 class="font-display text-xl mb-2">Patterns avanzados en React</h3>
+                    <p class="text-gray-600 text-sm mb-3">Explorando compound components y render props</p>
+                    <span class="font-mono text-xs text-gray-500">5 min lectura</span>
+                </div>
+
+                <div class="relative neo-shadow bg-white neo-border rounded-xl p-6 hover:-translate-y-1 transition-transform cursor-pointer">
+                    <span class="badge-tag mb-3">TYPESCRIPT</span>
+                    <h3 class="font-display text-xl mb-2">Type-safe arquitecturas</h3>
+                    <p class="text-gray-600 text-sm mb-3">Cómo TypeScript mejora tu código</p>
+                    <span class="font-mono text-xs text-gray-500">7 min lectura</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="py-16 px-6 md:px-12 bg-[#ffc480] border-y-[3px] border-gray-900">
+        <div class="max-w-2xl mx-auto text-center">
+            <h2 class="font-display text-4xl mb-4">No te pierdas nada</h2>
+            <p class="text-lg mb-8">Recibe los últimos artículos directamente en tu inbox</p>
+            
+            <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                <input 
+                    type="email" 
+                    placeholder="tu@email.com"
+                    class="neo-border bg-white px-4 py-3 rounded flex-1 font-medium focus:outline-none focus:ring-2 focus:ring-[#FE4A60]"
+                >
+                <div class="relative neo-shadow">
+                    <button class="neo-border bg-[#111827] text-white px-6 py-3 rounded font-bold hover:bg-[#1f2937] transition-colors w-full sm:w-auto">
+                        Suscribir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Reading progress bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        });
+    </script>
+</body>
+</html>

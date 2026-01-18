@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto Moderno - Soft Neo-Brutalism</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Cabinet+Grotesk:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #FFFDF8;
+            color: #111827;
+            overflow-x: hidden;
+        }
+
+        /* Typography */
+        .font-display {
+            font-family: 'Cabinet Grotesk', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .font-mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* Neo-Brutal Core Utilities */
+        .neo-border {
+            border: 3px solid #111827;
+        }
+
+        .neo-shadow {
+            position: relative;
+        }
+
+        .neo-shadow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: #111827;
+            transform: translate(6px, 6px);
+            border-radius: inherit;
+            z-index: -1;
+            transition: transform 0.2s ease-out;
+        }
+
+        .neo-shadow:hover::before {
+            transform: translate(3px, 3px);
+        }
+
+        .neo-shadow:active::before {
+            transform: translate(1px, 1px);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(3deg); }
+        }
+
+        @keyframes slide-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotate-badge {
+            0%, 100% { transform: rotate(-6deg); }
+            50% { transform: rotate(6deg); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .animate-slide-up {
+            animation: slide-up 0.8s ease-out forwards;
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+
+        /* Custom Elements */
+        .badge-new {
+            display: inline-block;
+            transform: rotate(-6deg) translateY(-2px);
+            background: #FE4A60;
+            color: white;
+            font-weight: 700;
+            font-size: 10px;
+            padding: 2px 6px;
+            border: 2px solid #111827;
+            box-shadow: 2px 2px 0 0 rgba(0, 0, 0, 1);
+            animation: rotate-badge 2s ease-in-out infinite;
+        }
+
+        /* Grid Background */
+        .grid-bg {
+            background-image: 
+                linear-gradient(to right, #11182710 1px, transparent 1px),
+                linear-gradient(to bottom, #11182710 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Button Press Effect */
+        .btn-press {
+            transition: transform 0.1s ease-out;
+        }
+
+        .btn-press:active {
+            transform: translate(2px, 2px);
+        }
+
+        /* Sparkle Decorations */
+        .sparkle {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            pointer-events: none;
+        }
+
+        /* Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- Noise Overlay -->
+    <div class="noise-overlay"></div>
+
+    <!-- Navigation -->
+    <nav class="relative z-50 py-6 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-[#FE4A60] neo-border rounded-lg flex items-center justify-center font-mono font-bold text-white">
+                    P
+                </div>
+                <span class="font-display text-2xl">Proyecto</span>
+            </div>
+            
+            <div class="hidden md:flex gap-8 font-mono text-sm font-medium">
+                <a href="#features" class="hover:-translate-y-0.5 transition-transform duration-200">Características</a>
+                <a href="#pricing" class="hover:-translate-y-0.5 transition-transform duration-200">Precios</a>
+                <a href="#docs" class="hover:-translate-y-0.5 transition-transform duration-200">Docs</a>
+            </div>
+
+            <div class="relative neo-shadow">
+                <button class="neo-border bg-[#E8F0FE] px-6 py-2 rounded font-medium hover:bg-[#d4e4fd] transition-colors btn-press">
+                    Acceder
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-20 pb-32 px-6 md:px-12 grid-bg">
+        <!-- Decorative Sparkles -->
+        <svg class="sparkle animate-float" style="top: 15%; left: 10%;" viewBox="0 0 24 24" fill="none" stroke="#FE4A60" stroke-width="3">
+            <path d="M12 2L12 22M2 12L22 12"/>
+        </svg>
+        <svg class="sparkle animate-float" style="top: 25%; right: 15%; animation-delay: 1s;" viewBox="0 0 24 24" fill="none" stroke="#ffc480" stroke-width="3">
+            <circle cx="12" cy="12" r="4"/>
+        </svg>
+
+        <div class="max-w-4xl mx-auto text-center">
+            <!-- Badge -->
+            <div class="mb-8 opacity-0 animate-slide-up">
+                <span class="badge-new">NUEVO</span>
+                <span class="font-mono text-sm ml-3">Versión 2.0 disponible</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="font-display text-5xl md:text-7xl lg:text-8xl mb-8 opacity-0 animate-slide-up stagger-1">
+                Construye más rápido,
+                <br/>
+                <span class="relative inline-block">
+                    <span class="relative z-10">piensa mejor</span>
+                    <div class="absolute inset-0 bg-[#ffc480] -rotate-1 -z-10 transform translate-y-2"></div>
+                </span>
+            </h1>
+
+            <!-- Subheading -->
+            <p class="text-xl md:text-2xl text-gray-600 mb-12 max-w-2xl mx-auto opacity-0 animate-slide-up stagger-2">
+                La herramienta que transforma tu forma de trabajar con código y equipos distribuidos
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center opacity-0 animate-slide-up stagger-3">
+                <div class="relative neo-shadow">
+                    <button class="neo-border bg-[#ffc480] px-8 py-4 rounded-xl font-display text-lg font-bold hover:bg-[#ffb860] transition-colors btn-press">
+                        Comenzar gratis
+                    </button>
+                </div>
+
+                <div class="relative neo-shadow">
+                    <button class="neo-border bg-white px-8 py-4 rounded-xl font-medium hover:bg-gray-50 transition-colors btn-press">
+                        Ver demo →
+                    </button>
+                </div>
+            </div>
+
+            <!-- Trust Indicators -->
+            <div class="mt-16 opacity-0 animate-slide-up stagger-4">
+                <p class="font-mono text-sm text-gray-500 mb-4">Confiado por equipos en</p>
+                <div class="flex gap-8 justify-center items-center flex-wrap">
+                    <div class="px-6 py-3 neo-border bg-white rounded-lg font-mono font-bold">STARTUP_A</div>
+                    <div class="px-6 py-3 neo-border bg-white rounded-lg font-mono font-bold">COMPANY_B</div>
+                    <div class="px-6 py-3 neo-border bg-white rounded-lg font-mono font-bold">TECH_C</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-24 px-6 md:px-12 bg-[#fff4da]">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="font-display text-4xl md:text-6xl mb-4 text-center">
+                Todo lo que necesitas
+            </h2>
+            <p class="text-xl text-gray-600 text-center mb-16">Sin compromisos, sin complicaciones</p>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Feature Card 1 -->
+                <div class="relative neo-shadow bg-white neo-border rounded-xl p-8">
+                    <div class="w-16 h-16 bg-[#FE4A60] neo-border rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8" fill="none" stroke="white" stroke-width="3" viewBox="0 0 24 24">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl mb-3">Ultra rápido</h3>
+                    <p class="text-gray-600">Procesamiento instantáneo con tecnología de última generación</p>
+                </div>
+
+                <!-- Feature Card 2 -->
+                <div class="relative neo-shadow bg-white neo-border rounded-xl p-8">
+                    <div class="w-16 h-16 bg-[#E8F0FE] neo-border rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8" fill="none" stroke="#111827" stroke-width="3" viewBox="0 0 24 24">
+                            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl mb-3">Seguridad total</h3>
+                    <p class="text-gray-600">Encriptación end-to-end y cumplimiento GDPR</p>
+                </div>
+
+                <!-- Feature Card 3 -->
+                <div class="relative neo-shadow bg-white neo-border rounded-xl p-8">
+                    <div class="w-16 h-16 bg-[#ffc480] neo-border rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8" fill="none" stroke="#111827" stroke-width="3" viewBox="0 0 24 24">
+                            <path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-2xl mb-3">Colaborativo</h3>
+                    <p class="text-gray-600">Trabaja en tiempo real con tu equipo distribuido</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-24 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="font-display text-4xl md:text-6xl mb-4 text-center">
+                Precios transparentes
+            </h2>
+            <p class="text-xl text-gray-600 text-center mb-16">Elige el plan que se ajuste a tu equipo</p>
+
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <!-- Free Plan -->
+                <div class="relative neo-shadow bg-white neo-border rounded-xl p-8">
+                    <div class="font-mono text-sm font-bold text-gray-500 mb-2">GRATIS</div>
+                    <div class="font-display text-5xl mb-2">
+                        €0
+                        <span class="text-xl text-gray-500">/mes</span>
+                    </div>
+                    <p class="text-gray-600 mb-6">Para empezar</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#FE4A60]">✓</span>
+                            <span>5 proyectos</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#FE4A60]">✓</span>
+                            <span>1 GB almacenamiento</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#FE4A60]">✓</span>
+                            <span>Soporte comunidad</span>
+                        </li>
+                    </ul>
+                    <div class="relative neo-shadow">
+                        <button class="neo-border bg-[#EBDBB7] w-full py-3 rounded font-medium hover:bg-[#dcc9a0] transition-colors btn-press">
+                            Comenzar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pro Plan - Featured -->
+                <div class="relative neo-shadow bg-[#ffc480] neo-border rounded-xl p-8 transform md:scale-105">
+                    <div class="font-mono text-sm font-bold mb-2">PRO</div>
+                    <div class="font-display text-5xl mb-2">
+                        €29
+                        <span class="text-xl">/mes</span>
+                    </div>
+                    <p class="mb-6">Para profesionales</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2">
+                            <span>✓</span>
+                            <span>Proyectos ilimitados</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span>✓</span>
+                            <span>100 GB almacenamiento</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span>✓</span>
+                            <span>Soporte prioritario</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span>✓</span>
+                            <span>Analytics avanzados</span>
+                        </li>
+                    </ul>
+                    <div class="relative neo-shadow">
+                        <button class="neo-border bg-[#111827] text-white w-full py-3 rounded font-bold hover:bg-[#1f2937] transition-colors btn-press">
+                            Empezar prueba
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="relative neo-shadow bg-white neo-border rounded-xl p-8">
+                    <div class="font-mono text-sm font-bold text-gray-500 mb-2">ENTERPRISE</div>
+                    <div class="font-display text-5xl mb-2">
+                        Custom
+                    </div>
+                    <p class="text-gray-600 mb-6">Para equipos grandes</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#FE4A60]">✓</span>
+                            <span>Todo en Pro</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#FE4A60]">✓</span>
+                            <span>Almacenamiento ilimitado</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#FE4A60]">✓</span>
+                            <span>SLA dedicado</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="text-[#FE4A60]">✓</span>
+                            <span>Onboarding personalizado</span>
+                        </li>
+                    </ul>
+                    <div class="relative neo-shadow">
+                        <button class="neo-border bg-[#E8F0FE] w-full py-3 rounded font-medium hover:bg-[#d4e4fd] transition-colors btn-press">
+                            Contactar ventas
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-24 px-6 md:px-12 bg-[#fff4da]">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="font-display text-4xl md:text-6xl mb-6">
+                ¿Listo para empezar?
+            </h2>
+            <p class="text-xl text-gray-600 mb-12">
+                Únete a miles de equipos que ya están construyendo mejor
+            </p>
+            
+            <div class="relative neo-shadow inline-block">
+                <button class="neo-border bg-[#FE4A60] text-white px-12 py-5 rounded-xl font-display text-xl font-bold hover:bg-[#fe3550] transition-colors btn-press">
+                    Probar gratis ahora
+                </button>
+            </div>
+
+            <p class="mt-6 font-mono text-sm text-gray-500">
+                Sin tarjeta de crédito · Configuración en 2 minutos
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 px-6 md:px-12 border-t-[3px] border-gray-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-10 h-10 bg-[#FE4A60] neo-border rounded-lg flex items-center justify-center font-mono font-bold text-white">
+                            P
+                        </div>
+                        <span class="font-display text-2xl">Proyecto</span>
+                    </div>
+                    <p class="text-gray-600 text-sm">
+                        Construyendo el futuro del desarrollo colaborativo
+                    </p>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-4">Producto</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-gray-900">Características</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Precios</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Changelog</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Documentación</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-4">Empresa</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-gray-900">Sobre nosotros</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Blog</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Carreras</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="font-bold mb-4">Legal</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-gray-900">Privacidad</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Términos</a></li>
+                        <li><a href="#" class="hover:text-gray-900">Cookies</a></li>
+                        <li><a href="#" class="hover:text-gray-900">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t-[3px] border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="font-mono text-sm text-gray-600">
+                    © 2026 Proyecto. Todos los derechos reservados.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 neo-border bg-white rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
+                        <span class="font-mono font-bold">X</span>
+                    </a>
+                    <a href="#" class="w-10 h-10 neo-border bg-white rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
+                        <span class="font-mono font-bold">GH</span>
+                    </a>
+                    <a href="#" class="w-10 h-10 neo-border bg-white rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
+                        <span class="font-mono font-bold">LI</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax effect for sparkles
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const sparkles = document.querySelectorAll('.sparkle');
+            sparkles.forEach((sparkle, index) => {
+                const speed = 0.5 + (index * 0.2);
+                sparkle.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,13 +1,12 @@
 import { Sun, Moon, Monitor } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '~/components/ThemeContext'
-import { Button } from '~/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '~/components/ui/dropdown-menu'
+  NeoBrutalMenuRoot,
+  NeoBrutalMenuTrigger,
+  NeoBrutalMenuPopup,
+  NeoBrutalMenuItem,
+} from '~/components/neo-brutal'
 import type { ThemePreference } from '~/lib/theme'
 
 export function ThemeToggle() {
@@ -32,31 +31,33 @@ export function ThemeToggle() {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 w-8 p-0"
+    <NeoBrutalMenuRoot>
+      <div className="isolate relative group inline-block">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 rounded bg-neo-dark translate-x-1 translate-y-1 transition-transform duration-200 ease-out group-hover:translate-x-2 group-hover:translate-y-2"
+        />
+        <NeoBrutalMenuTrigger
           aria-label={t('theme_label')}
+          className="relative z-10 flex items-center justify-center p-2 border-[3px] border-neo-dark rounded bg-white text-neo-dark transition-transform duration-200 ease-out group-hover:-translate-x-px group-hover:-translate-y-px group-hover:bg-neo-panel"
         >
           {getIcon()}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => handleThemeChange('light')}>
+        </NeoBrutalMenuTrigger>
+      </div>
+      <NeoBrutalMenuPopup>
+        <NeoBrutalMenuItem onClick={() => handleThemeChange('light')}>
           <Sun className="mr-2 h-4 w-4" />
           {t('theme_light')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange('dark')}>
+        </NeoBrutalMenuItem>
+        <NeoBrutalMenuItem onClick={() => handleThemeChange('dark')}>
           <Moon className="mr-2 h-4 w-4" />
           {t('theme_dark')}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => handleThemeChange('system')}>
+        </NeoBrutalMenuItem>
+        <NeoBrutalMenuItem onClick={() => handleThemeChange('system')}>
           <Monitor className="mr-2 h-4 w-4" />
           {t('theme_system')}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </NeoBrutalMenuItem>
+      </NeoBrutalMenuPopup>
+    </NeoBrutalMenuRoot>
   )
 }

@@ -1,3 +1,3 @@
-export { HeroSection } from './HeroSection'
-export { EditorialDivider } from './EditorialDivider'
+export { BioLinqHero } from './BioLinqHero'
 export { Footer } from './Footer'
+export { Sparkle } from './Sparkle'

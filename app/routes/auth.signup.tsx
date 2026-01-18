@@ -5,9 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useTranslation } from 'react-i18next'
 import { signUp } from '~/lib/auth.client'
-import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
-import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
+import { NeoBrutalButton, NeoBrutalCard, NeoBrutalInput } from '~/components/neo-brutal'
 import {
   Form,
   FormControl,
@@ -75,95 +73,94 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl">{t('signup_title')}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <GoogleAuthButton mode="signup" callbackURL={searchParams.get('redirect') || '/'} />
+    <div className="min-h-screen bg-neo-canvas flex items-center justify-center px-4">
+      <NeoBrutalCard className="w-full max-w-md">
+        <h1 className="text-2xl font-bold tracking-tight mb-6 text-center">
+          {t('signup_title')}
+        </h1>
 
-          <div className="relative my-6">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-background px-4 text-muted-foreground">{t('or_divider')}</span>
-            </div>
+        <GoogleAuthButton mode="signup" callbackURL={searchParams.get('redirect') || '/'} />
+
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t-2 border-neo-dark" />
           </div>
+          <div className="relative flex justify-center">
+            <span className="bg-neo-panel px-2 text-sm font-mono">{t('or_divider')}</span>
+          </div>
+        </div>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('email_label')}</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder={t('email_placeholder')} {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('password_label')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t('password_placeholder_signup')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="confirmPassword"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t('confirm_password_label')}</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder={t('confirm_password_placeholder')}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {error && (
-                <div className="p-4 border border-destructive bg-destructive/10 text-sm">
-                  {error}
-                </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('email_label')}</FormLabel>
+                  <FormControl>
+                    <NeoBrutalInput type="email" placeholder={t('email_placeholder')} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
+            />
 
-              <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? t('creating_account') : t('signup_title')}
-              </Button>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('password_label')}</FormLabel>
+                  <FormControl>
+                    <NeoBrutalInput
+                      type="password"
+                      placeholder={t('password_placeholder_signup')}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <p className="text-center text-sm text-muted-foreground">
-                {t('have_account_prompt')}{' '}
-                <Link to="/auth/login" className="hover:underline font-medium">
-                  {t('login_link')}
-                </Link>
-              </p>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t('confirm_password_label')}</FormLabel>
+                  <FormControl>
+                    <NeoBrutalInput
+                      type="password"
+                      placeholder={t('confirm_password_placeholder')}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {error && (
+              <div className="p-4 border-[3px] border-neo-accent bg-neo-accent/10 text-sm">
+                {error}
+              </div>
+            )}
+
+            <NeoBrutalButton type="submit" disabled={isLoading} variant="primary" className="w-full">
+              {isLoading ? t('creating_account') : t('signup_title')}
+            </NeoBrutalButton>
+
+            <p className="text-center text-sm mt-6">
+              {t('have_account_prompt')}{' '}
+              <Link to="/auth/login" className="font-bold underline">
+                {t('login_link')}
+              </Link>
+            </p>
+          </form>
+        </Form>
+      </NeoBrutalCard>
     </div>
   )
 }

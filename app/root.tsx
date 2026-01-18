@@ -24,9 +24,10 @@ import {
 } from '~/lib/i18n'
 import { initI18nClientSync, getI18nInstance } from '~/lib/i18n.client'
 import { auth } from '~/lib/auth'
-import { Toaster } from '~/components/ui/sonner'
+import { NeoBrutalToastProvider } from '~/components/neo-brutal/NeoBrutalToast'
 import { ThemeProvider } from '~/components/ThemeContext'
 import { getThemeCookie, getThemeInitScript } from '~/lib/theme'
+import { Footer } from '~/components/landing'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
@@ -38,7 +39,7 @@ export const links: Route.LinksFunction = () => [
   },
   {
     rel: 'stylesheet',
-    href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap',
+    href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap',
   },
 ]
 
@@ -141,21 +142,34 @@ export default function App({ loaderData }: Route.ComponentProps) {
   if (!i18nInstance) {
     // Fallback during SSR if loader hasn't run yet (shouldn't happen normally)
     return (
-      <ThemeProvider initialPreference={themePreference}>
-        <Header session={loaderData?.session ?? null} user={loaderData?.user ?? null} />
-        <Outlet />
-      </ThemeProvider>
+      <NeoBrutalToastProvider>
+        <ThemeProvider initialPreference={themePreference}>
+          <div className="min-h-screen flex flex-col bg-neo-canvas">
+            <Header session={loaderData?.session ?? null} user={loaderData?.user ?? null} />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
+        </ThemeProvider>
+      </NeoBrutalToastProvider>
     )
   }
 
   return (
-    <ThemeProvider initialPreference={themePreference}>
-      <I18nextProvider i18n={i18nInstance}>
-        <Header session={loaderData.session} user={loaderData.user} />
-        <Outlet />
-        <Toaster />
-      </I18nextProvider>
-    </ThemeProvider>
+    <NeoBrutalToastProvider>
+      <ThemeProvider initialPreference={themePreference}>
+        <I18nextProvider i18n={i18nInstance}>
+          <div className="min-h-screen flex flex-col bg-neo-canvas">
+            <Header session={loaderData.session} user={loaderData.user} />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
+        </I18nextProvider>
+      </ThemeProvider>
+    </NeoBrutalToastProvider>
   )
 }
 

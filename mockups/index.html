@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Índice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': '#ffc480',
+              'brand-accent': '#FE4A60',
+              'ink-black': '#111827',
+              'canvas-bg': '#FFFDF8',
+              'panel-cream': '#fff4da',
+              'result-gray': '#fafafa',
+              'input-blue': '#E8F0FE',
+              'control-beige': '#EBDBB7',
+            },
+        boxShadow: {
+              'hard': '2px 2px 0 0 rgba(0,0,0,1)',
+              'hard-lg': '4px 4px 0 0 rgba(0,0,0,1)',
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      @layer components {
+        .badge-new {
+          @apply inline-block -rotate-6 -translate-y-1 mx-1 px-1 bg-[#FE4A60] border border-gray-900 text-white text-[10px] font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)];
+        }
+        .landing-page-title {
+          @apply inline-block w-full relative text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl sm:pt-20 lg:pt-5 font-bold tracking-tighter;
+        }
+        .pattern-select {
+          @apply min-w-max appearance-none pr-6 pl-2 py-2 bg-[#e6e8eb] border-r-[3px] border-gray-900 cursor-pointer focus:outline-none;
+        }
+      }
+      @layer utilities {
+        .link-bounce {
+          @apply transition-transform hover:-translate-y-0.5;
+        }
+        .no-drag {
+          @apply pointer-events-none select-none;
+          -webkit-user-drag: none;
+        }
+      }
+    </style>
+</head>
+<body class="bg-[#FFFDF8] text-gray-900 min-h-screen">
+  <main class="max-w-4xl mx-auto px-4 py-12">
+    <header class="text-center mb-16">
+      <h1 class="landing-page-title">
+        Gitingest
+        <span class="absolute -top-2 -right-8 badge-new">NEW</span>
+      </h1>
+      <p class="text-gray-600 mt-4 text-lg">Índice</p>
+    </header>
+
+    <nav class="bg-white border-[3px] border-gray-900 rounded-xl p-8 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+      <h2 class="text-2xl font-bold tracking-tight mb-6 border-b-4 border-gray-900 pb-2">Páginas</h2>
+      <ul class="space-y-4">
+        <li>
+          <a href="landing-page.html" class="group relative inline-block">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <span class="relative border-[3px] border-gray-900 bg-[#ffc480] text-gray-900 px-6 py-3 font-medium text-lg block group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-300 ease-out rounded">
+              Landing Page
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="blog-post.html" class="group relative inline-block">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <span class="relative border-[3px] border-gray-900 bg-[#ffc480] text-gray-900 px-6 py-3 font-medium text-lg block group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-300 ease-out rounded">
+              Blog Post
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="contact-form.html" class="group relative inline-block">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <span class="relative border-[3px] border-gray-900 bg-[#ffc480] text-gray-900 px-6 py-3 font-medium text-lg block group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-300 ease-out rounded">
+              Contact Form
+            </span>
+          </a>
+        </li>
+        <li>
+          <a href="mockup.html" class="group relative inline-block">
+            <div class="absolute inset-0 bg-gray-900 translate-x-1 translate-y-1 rounded"></div>
+            <span class="relative border-[3px] border-gray-900 bg-[#ffc480] text-gray-900 px-6 py-3 font-medium text-lg block group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-300 ease-out rounded">
+              Mockup
+            </span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="mt-12 text-center">
+      <a href="ds.html" class="inline-flex items-center gap-2 px-4 py-2 bg-[#E8F0FE] border-[3px] border-gray-900 rounded-lg font-medium hover:bg-[#ffc480] transition-colors">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+        </svg>
+        Ver Design System
+      </a>
+    </div>
+  </main>
+
+  <footer class="text-center py-8 text-gray-600 text-sm">
+    <p>Gitingest Design System — Soft Neo-Brutalism</p>
+  </footer>
+</body>
+</html>

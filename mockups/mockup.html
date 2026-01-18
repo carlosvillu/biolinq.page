@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BioLinq - Mockups</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            },
+            colors: {
+              primary: "#ffc480", // Ingest Orange
+              accent: "#FE4A60", // Alert Red
+              dark: "#111827", // Ink Black
+              canvas: "#FFFDF8", // Cream Paper
+              panel: "#fff4da", // Panel Yellow
+              input: "#E8F0FE", // Input Blue
+              control: "#EBDBB7", // Controls Beige
+            },
+            boxShadow: {
+              hard: "2px 2px 0 0 rgba(0,0,0,1)",
+              "hard-lg": "4px 4px 0 0 rgba(0,0,0,1)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style type="text/tailwindcss">
+      @layer components {
+        .neo-border {
+          @apply border-[3px] border-dark;
+        }
+
+        /* Textos */
+        .landing-title {
+          @apply text-5xl md:text-7xl font-bold tracking-tighter text-dark leading-[0.9];
+        }
+        .section-title {
+          @apply text-2xl font-bold tracking-tight text-dark;
+        }
+
+        /* Componentes Base */
+        .btn-primary {
+          @apply relative w-full h-full;
+        }
+        .btn-face {
+          @apply relative z-20 flex items-center justify-center w-full px-6 py-3.5 
+                       bg-primary text-dark font-bold text-lg border-[3px] border-dark rounded
+                       group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-200 ease-out;
+        }
+        .btn-shadow {
+          @apply absolute inset-0 bg-dark rounded translate-x-1 translate-y-1 z-10;
+        }
+
+        .btn-secondary-face {
+          @apply relative z-20 flex items-center justify-center w-full px-4 py-2 
+                       bg-white text-dark font-medium text-base border-[3px] border-dark rounded
+                       hover:-translate-y-px hover:-translate-x-px transition-transform duration-200;
+        }
+
+        /* Inputs */
+        .input-wrapper {
+          @apply relative w-full;
+        }
+        .input-shadow {
+          @apply absolute inset-0 bg-dark rounded translate-x-1 translate-y-1 z-0;
+        }
+        .input-field {
+          @apply relative z-10 w-full px-4 py-3 bg-input border-[3px] border-dark rounded
+                       text-dark font-medium focus:outline-none placeholder-gray-500;
+        }
+
+        /* Cards */
+        .neo-card {
+          @apply relative;
+        }
+        .card-shadow {
+          @apply absolute inset-0 bg-dark rounded-xl translate-x-2 translate-y-2 z-0;
+        }
+        .card-content {
+          @apply relative z-10 bg-panel border-[3px] border-dark rounded-xl p-6 md:p-8;
+        }
+
+        /* Badges */
+        .badge-new {
+          @apply inline-block -rotate-6 bg-accent border border-dark text-white 
+                       text-[10px] font-bold px-1.5 py-0.5 shadow-hard;
+        }
+        .badge-premium {
+          @apply inline-flex items-center gap-1 bg-dark text-primary px-2 py-0.5 rounded-sm text-xs font-bold font-mono tracking-wider;
+        }
+      }
+
+      .view-section {
+        display: none;
+      }
+      .view-section.active {
+        display: block;
+      }
+
+      /* Pattern background for preview */
+      .bg-pattern {
+        background-image: radial-gradient(#111827 1px, transparent 1px);
+        background-size: 20px 20px;
+      }
+    </style>
+  </head>
+  <body class="bg-canvas min-h-screen font-sans text-dark flex flex-col">
+    <!-- DEV TOOL: View Switcher -->
+    <div
+      class="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-white border-[3px] border-dark p-2 rounded-full shadow-hard flex gap-2 scale-90 md:scale-100"
+    >
+      <button
+        onclick="switchView('landing')"
+        class="px-4 py-1 hover:bg-input rounded font-bold text-sm border border-transparent hover:border-dark transition-all"
+      >
+        Landing
+      </button>
+      <button
+        onclick="switchView('dashboard')"
+        class="px-4 py-1 hover:bg-input rounded font-bold text-sm border border-transparent hover:border-dark transition-all"
+      >
+        Dashboard
+      </button>
+      <button
+        onclick="switchView('public')"
+        class="px-4 py-1 hover:bg-input rounded font-bold text-sm border border-transparent hover:border-dark transition-all"
+      >
+        Public Link
+      </button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 1: LANDING PAGE -->
+    <!-- ========================================== -->
+    <div id="landing" class="view-section active">
+      <!-- Header -->
+      <header class="sticky top-0 bg-canvas border-b-[3px] border-dark z-40">
+        <div
+          class="max-w-4xl mx-auto px-4 h-16 flex justify-between items-center"
+        >
+          <div class="flex items-center gap-1">
+            <span class="text-2xl font-black tracking-tighter">Bio</span
+            ><span class="text-2xl font-black text-accent tracking-tighter"
+              >Linq</span
+            >
+            <span
+              class="text-xs font-mono bg-control px-1 border border-dark ml-2"
+              >BETA</span
+            >
+          </div>
+          <nav class="hidden md:flex gap-6 font-medium">
+            <a href="#" class="hover:underline">Precios</a>
+            <a href="#" class="hover:underline">Login</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="max-w-4xl mx-auto px-4 py-16 md:py-24">
+        <!-- Hero Section -->
+        <div class="text-center mb-16 relative">
+          <!-- Sparkles Decorativos -->
+          <svg
+            class="absolute top-0 left-10 md:left-32 w-12 h-12 text-accent -translate-y-full animate-pulse"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"
+            />
+          </svg>
+          <svg
+            class="absolute bottom-0 right-10 md:right-32 w-8 h-8 text-primary translate-y-full"
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z"
+            />
+          </svg>
+
+          <h1 class="landing-title mb-6">
+            Less is more.<br />
+            <span
+              class="text-gray-500 text-3xl md:text-5xl font-bold tracking-tight block mt-2"
+              >Diferénciate siendo simple.</span
+            >
+          </h1>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+            El Linktree minimalista. Tu página carga en
+            <span
+              class="bg-control px-1 border border-dark text-sm font-mono font-bold"
+              >&lt;500ms</span
+            >.
+          </p>
+
+          <!-- Action Box -->
+          <div class="max-w-md mx-auto relative group">
+            <!-- Shadow Layer -->
+            <div
+              class="absolute inset-0 bg-dark rounded-xl translate-x-2 translate-y-2"
+            ></div>
+            <!-- Content Layer -->
+            <div
+              class="relative bg-panel border-[3px] border-dark rounded-xl p-8 flex flex-col gap-4"
+            >
+              <div class="input-wrapper">
+                <div class="input-shadow"></div>
+                <input
+                  type="text"
+                  placeholder="biolinq.page/usuario"
+                  class="input-field text-center"
+                />
+              </div>
+
+              <div class="relative group cursor-pointer h-14">
+                <div class="btn-shadow bg-gray-800"></div>
+                <button class="btn-face bg-accent text-white gap-3">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                      d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .533 5.347.533 12S5.867 24 12.48 24c3.44 0 6.013-1.133 8.053-3.24 2.08-2.08 2.72-5.3 2.72-7.96 0-.787-.067-1.453-.16-1.88H12.48z"
+                    />
+                  </svg>
+                  Crear mi BioLink
+                </button>
+              </div>
+              <p class="text-xs text-gray-500 font-mono">
+                Freemium • 5€ Lifetime Premium
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Value Props -->
+        <div class="grid md:grid-cols-3 gap-6 mt-20">
+          <div
+            class="border-[3px] border-dark bg-white p-6 rounded shadow-hard"
+          >
+            <div class="text-4xl mb-4">⚡</div>
+            <h3 class="font-bold text-lg mb-2">Ultra Rápido</h3>
+            <p class="text-gray-600">
+              Sin scripts pesados. Tus seguidores no esperarán.
+            </p>
+          </div>
+          <div
+            class="border-[3px] border-dark bg-white p-6 rounded shadow-hard"
+          >
+            <div class="text-4xl mb-4">🎨</div>
+            <h3 class="font-bold text-lg mb-2">Diseño Brutalista</h3>
+            <p class="text-gray-600">
+              4 temas profesionales que destacan por su simplicidad.
+            </p>
+          </div>
+          <div
+            class="border-[3px] border-dark bg-white p-6 rounded shadow-hard relative"
+          >
+            <span class="badge-new absolute -top-3 -right-2">BEST VALUE</span>
+            <div class="text-4xl mb-4">💸</div>
+            <h3 class="font-bold text-lg mb-2">Pago Único</h3>
+            <p class="text-gray-600">
+              Paga 5€ una vez. Sin suscripciones mensuales absurdas.
+            </p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 2: DASHBOARD (EDITOR) -->
+    <!-- ========================================== -->
+    <div id="dashboard" class="view-section bg-input/30 min-h-screen">
+      <!-- Dashboard Nav -->
+      <header class="bg-canvas border-b-[3px] border-dark">
+        <div
+          class="max-w-6xl mx-auto px-4 h-16 flex justify-between items-center"
+        >
+          <div class="flex items-center gap-4">
+            <span class="text-xl font-black">BioLinq</span>
+            <div class="h-6 w-[2px] bg-gray-300"></div>
+            <div class="flex items-center gap-2">
+              <div
+                class="w-8 h-8 rounded-full bg-gray-300 border-2 border-dark overflow-hidden"
+              >
+                <img
+                  src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                  alt="Avatar"
+                />
+              </div>
+              <span class="font-bold text-sm">@felix_design</span>
+              <span
+                class="bg-gray-200 text-[10px] px-1 border border-dark font-mono"
+                >FREE</span
+              >
+            </div>
+          </div>
+          <button
+            class="bg-accent text-white text-sm font-bold px-3 py-1 border-2 border-dark shadow-hard hover:-translate-y-px transition-transform"
+          >
+            ✨ Go Premium (5€)
+          </button>
+        </div>
+      </header>
+
+      <main
+        class="max-w-6xl mx-auto px-4 py-8 grid lg:grid-cols-[1.5fr_1fr] gap-8"
+      >
+        <!-- Left Column: Editor & Stats -->
+        <div class="space-y-8">
+          <!-- Stats Card -->
+          <div class="neo-card">
+            <div class="card-shadow bg-dark"></div>
+            <div
+              class="card-content bg-white flex justify-between items-center py-4"
+            >
+              <div>
+                <h3
+                  class="text-sm font-bold text-gray-500 uppercase tracking-wider"
+                >
+                  Visitas Totales
+                </h3>
+                <p class="text-3xl font-black mt-1">1,234</p>
+              </div>
+              <div
+                class="text-right opacity-50 blur-[1px] select-none group relative cursor-not-allowed"
+              >
+                <h3
+                  class="text-sm font-bold text-gray-500 uppercase tracking-wider"
+                >
+                  Clicks
+                </h3>
+                <p class="text-3xl font-black mt-1">567</p>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <span
+                    class="bg-accent text-white text-xs font-bold px-2 py-1 border border-dark shadow-sm"
+                    >PREMIUM</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Links Editor -->
+          <div class="neo-card">
+            <div class="card-shadow"></div>
+            <div class="card-content bg-panel space-y-6">
+              <div class="flex justify-between items-center">
+                <h2 class="section-title">Mis Links (3/5)</h2>
+                <button
+                  class="text-sm underline font-mono text-gray-600 hover:text-dark"
+                >
+                  Reordenar
+                </button>
+              </div>
+
+              <!-- Link Item 1 -->
+              <div class="relative group">
+                <div
+                  class="absolute inset-0 bg-white border-[3px] border-dark rounded translate-y-1 translate-x-1"
+                ></div>
+                <div
+                  class="relative bg-white border-[3px] border-dark rounded p-3 flex gap-3 items-center"
+                >
+                  <div class="cursor-move text-gray-400 hover:text-dark">
+                    ⋮⋮
+                  </div>
+                  <div
+                    class="w-10 h-10 bg-input border-2 border-dark rounded flex items-center justify-center text-xl cursor-pointer hover:bg-white"
+                  >
+                    🐦
+                  </div>
+                  <div class="flex-1 space-y-2">
+                    <input
+                      type="text"
+                      value="Twitter"
+                      class="w-full bg-transparent font-bold focus:outline-none border-b-2 border-transparent focus:border-accent"
+                      placeholder="Título"
+                    />
+                    <input
+                      type="text"
+                      value="https://twitter.com/felix"
+                      class="w-full bg-transparent text-xs font-mono text-gray-500 focus:outline-none focus:text-dark"
+                      placeholder="URL"
+                    />
+                  </div>
+                  <button class="text-gray-400 hover:text-accent p-2">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Link Item 2 -->
+              <div class="relative group">
+                <div
+                  class="absolute inset-0 bg-white border-[3px] border-dark rounded translate-y-1 translate-x-1"
+                ></div>
+                <div
+                  class="relative bg-white border-[3px] border-dark rounded p-3 flex gap-3 items-center"
+                >
+                  <div class="cursor-move text-gray-400 hover:text-dark">
+                    ⋮⋮
+                  </div>
+                  <div
+                    class="w-10 h-10 bg-input border-2 border-dark rounded flex items-center justify-center text-xl cursor-pointer hover:bg-white"
+                  >
+                    🌐
+                  </div>
+                  <div class="flex-1 space-y-2">
+                    <input
+                      type="text"
+                      value="Mi Portfolio"
+                      class="w-full bg-transparent font-bold focus:outline-none border-b-2 border-transparent focus:border-accent"
+                      placeholder="Título"
+                    />
+                    <input
+                      type="text"
+                      value="https://portfolio.com"
+                      class="w-full bg-transparent text-xs font-mono text-gray-500 focus:outline-none focus:text-dark"
+                      placeholder="URL"
+                    />
+                  </div>
+                  <button class="text-gray-400 hover:text-accent p-2">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Add Button -->
+              <div class="relative group cursor-pointer h-12">
+                <div class="btn-shadow bg-gray-800"></div>
+                <button class="btn-face bg-primary text-dark gap-2 text-base">
+                  <span>+</span> Añadir Link
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Themes -->
+          <div class="neo-card">
+            <div class="card-shadow"></div>
+            <div class="card-content bg-white">
+              <h2 class="section-title mb-4">Apariencia</h2>
+              <div class="grid grid-cols-2 gap-4">
+                <!-- Theme Option Active -->
+                <div class="cursor-pointer">
+                  <div
+                    class="h-20 border-[3px] border-accent bg-white rounded mb-2 relative overflow-hidden flex items-center justify-center"
+                  >
+                    <div
+                      class="absolute top-2 right-2 w-3 h-3 bg-accent rounded-full border border-dark"
+                    ></div>
+                    <span class="font-bold font-mono">Brutalist</span>
+                  </div>
+                  <p class="text-center font-bold text-sm">Brutalist</p>
+                </div>
+                <!-- Theme Option -->
+                <div class="cursor-pointer opacity-60 hover:opacity-100">
+                  <div
+                    class="h-20 border-[3px] border-gray-300 bg-gray-50 rounded mb-2 relative overflow-hidden flex items-center justify-center"
+                  >
+                    <span class="font-bold font-mono text-gray-400"
+                      >Minimal</span
+                    >
+                  </div>
+                  <p class="text-center font-bold text-sm text-gray-500">
+                    Light
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Preview Phone -->
+        <div
+          class="hidden lg:flex flex-col items-center sticky top-8 h-[calc(100vh-4rem)]"
+        >
+          <div class="flex items-center gap-2 mb-4">
+            <div
+              class="w-3 h-3 bg-green-500 rounded-full border border-dark animate-pulse"
+            ></div>
+            <span class="font-mono text-sm">Vista Previa en vivo</span>
+          </div>
+
+          <!-- Phone Frame -->
+          <div
+            class="relative w-[320px] h-[640px] border-[4px] border-dark rounded-[2.5rem] bg-dark shadow-hard-lg overflow-hidden p-2"
+          >
+            <!-- Screen -->
+            <div
+              class="w-full h-full bg-white rounded-[2rem] overflow-y-auto overflow-x-hidden relative no-scrollbar"
+            >
+              <!-- IFRAME SIMULATION (Content of View 3) -->
+              <div class="w-full min-h-full flex flex-col p-6 items-center">
+                <div
+                  class="w-20 h-20 rounded-full border-[3px] border-dark overflow-hidden mb-4 shadow-hard"
+                >
+                  <img
+                    src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                    alt="Avatar"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+                <h1 class="text-xl font-black mb-1">Felix Design</h1>
+                <p class="text-sm text-gray-600 mb-8 text-center max-w-[200px]">
+                  Product Designer & No-Code Maker.
+                </p>
+
+                <div class="w-full space-y-4 flex-1">
+                  <!-- Link -->
+                  <a
+                    href="#"
+                    class="block w-full bg-white border-[3px] border-dark p-3 text-center font-bold shadow-[4px_4px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#000] transition-all"
+                  >
+                    🐦 Twitter
+                  </a>
+                  <a
+                    href="#"
+                    class="block w-full bg-white border-[3px] border-dark p-3 text-center font-bold shadow-[4px_4px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#000] transition-all"
+                  >
+                    🌐 Portfolio
+                  </a>
+                  <a
+                    href="#"
+                    class="block w-full bg-white border-[3px] border-dark p-3 text-center font-bold shadow-[4px_4px_0_0_#000] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0_0_#000] transition-all"
+                  >
+                    📧 Contacto
+                  </a>
+                </div>
+
+                <div
+                  class="mt-8 text-[10px] text-gray-400 font-mono text-center"
+                >
+                  Made with BioLink.page
+                </div>
+              </div>
+            </div>
+            <!-- Notch -->
+            <div
+              class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-dark rounded-b-xl z-20"
+            ></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VIEW 3: PUBLIC PROFILE (THE PRODUCT) -->
+    <!-- ========================================== -->
+    <div
+      id="public"
+      class="view-section min-h-screen bg-white flex justify-center py-12 md:py-20"
+    >
+      <div class="w-full max-w-md px-6 flex flex-col items-center">
+        <!-- Avatar -->
+        <div class="relative mb-6 group">
+          <div
+            class="absolute inset-0 bg-accent rounded-full translate-x-1 translate-y-1"
+          ></div>
+          <div
+            class="w-24 h-24 md:w-32 md:h-32 rounded-full border-[3px] border-dark overflow-hidden relative z-10 bg-gray-100"
+          >
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+              alt="Avatar"
+              class="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+
+        <!-- Header Info -->
+        <h1 class="text-3xl font-black mb-2 tracking-tight">Felix Design</h1>
+        <p class="text-gray-600 text-center mb-10 max-w-xs leading-relaxed">
+          Diseñador de Productos Digitales. Escribo sobre UX, UI y No-Code.
+        </p>
+
+        <!-- Link Stack -->
+        <div class="w-full space-y-5">
+          <!-- Link Component Public -->
+          <a href="#" class="group relative block w-full">
+            <div
+              class="absolute inset-0 bg-dark rounded translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+            ></div>
+            <div
+              class="relative z-10 bg-white border-[3px] border-dark rounded p-4 flex items-center justify-center gap-3 transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5"
+            >
+              <span class="text-xl">🐦</span>
+              <span class="font-bold text-lg">Twitter</span>
+            </div>
+          </a>
+
+          <a href="#" class="group relative block w-full">
+            <div
+              class="absolute inset-0 bg-dark rounded translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+            ></div>
+            <div
+              class="relative z-10 bg-white border-[3px] border-dark rounded p-4 flex items-center justify-center gap-3 transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5"
+            >
+              <span class="text-xl">📸</span>
+              <span class="font-bold text-lg">Instagram</span>
+            </div>
+          </a>
+
+          <a href="#" class="group relative block w-full">
+            <div
+              class="absolute inset-0 bg-dark rounded translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+            ></div>
+            <div
+              class="relative z-10 bg-white border-[3px] border-dark rounded p-4 flex items-center justify-center gap-3 transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5"
+            >
+              <span class="text-xl">🌐</span>
+              <span class="font-bold text-lg">Mi Portfolio</span>
+            </div>
+          </a>
+
+          <a href="#" class="group relative block w-full">
+            <div
+              class="absolute inset-0 bg-dark rounded translate-x-1.5 translate-y-1.5 transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+            ></div>
+            <div
+              class="relative z-10 bg-primary border-[3px] border-dark rounded p-4 flex items-center justify-center gap-3 transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5"
+            >
+              <span class="text-xl">📧</span>
+              <span class="font-bold text-lg">Contáctame</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Watermark -->
+        <a
+          href="#"
+          class="mt-16 inline-flex items-center gap-1 opacity-50 hover:opacity-100 transition-opacity"
+        >
+          <span class="text-xs font-mono font-bold text-dark"
+            >Made with BioLinq.page</span
+          >
+        </a>
+      </div>
+    </div>
+
+    <script>
+      function switchView(viewId) {
+        // Hide all views
+        document
+          .querySelectorAll(".view-section")
+          .forEach((el) => el.classList.remove("active"));
+        // Show selected view
+        document.getElementById(viewId).classList.add("active");
+      }
+    </script>
+  </body>
+</html>
