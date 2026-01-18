@@ -68,5 +68,15 @@
   "links_error_not_found": "Link not found",
   "links_error_invalid_ids": "Invalid link order",
   "links_error_invalid_url": "Please enter a valid HTTPS URL",
-  "links_error_invalid_emoji": "Please enter a valid emoji"
+  "links_error_invalid_emoji": "Please enter a valid emoji",
+
+  "premium_banner_message": "Unlock analytics, custom colors & remove watermark",
+  "premium_banner_cta": "Go Premium — 5€",
+  "dashboard_total_views": "Total Views",
+  "dashboard_clicks": "Clicks",
+  "dashboard_live_preview": "Live Preview",
+  "dashboard_my_links": "My Links",
+  "dashboard_links_coming_soon": "Links editor coming in Task 2.3...",
+  "dashboard_preview_bio_placeholder": "Your bio will appear here",
+  "dashboard_preview_no_links": "Add your first link!"
 }

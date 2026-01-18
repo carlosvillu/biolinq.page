@@ -72,5 +72,15 @@
   "links_error_not_found": "Link no encontrado",
   "links_error_invalid_ids": "Orden de links inválido",
   "links_error_invalid_url": "Por favor ingresa una URL HTTPS válida",
-  "links_error_invalid_emoji": "Por favor ingresa un emoji válido"
+  "links_error_invalid_emoji": "Por favor ingresa un emoji válido",
+
+  "premium_banner_message": "Desbloquea analíticas, colores personalizados y quita la marca de agua",
+  "premium_banner_cta": "Hazte Premium — 5€",
+  "dashboard_total_views": "Visitas Totales",
+  "dashboard_clicks": "Clicks",
+  "dashboard_live_preview": "Vista Previa en vivo",
+  "dashboard_my_links": "Mis Links",
+  "dashboard_links_coming_soon": "Editor de links próximamente...",
+  "dashboard_preview_bio_placeholder": "Tu bio aparecerá aquí",
+  "dashboard_preview_no_links": "¡Añade tu primer link!"
 }

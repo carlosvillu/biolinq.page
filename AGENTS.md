@@ -6,7 +6,7 @@
 
 ## Tech Stack
 
-React Router 7 | React 19 | Vite | Tailwind CSS 4 | shadcn/ui | TypeScript | Playwright + TestContainers | PostgreSQL | Drizzle ORM | Better Auth
+React Router 7 | React 19 | Vite | Tailwind CSS 4 | shadcn/ui | Base UI | TypeScript | Playwright + TestContainers | PostgreSQL | Drizzle ORM | Better Auth
 
 ## Commands
 

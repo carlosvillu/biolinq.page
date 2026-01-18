@@ -183,7 +183,16 @@ Antes de empezar, necesitas tener configurado:
 - [x] Implement `reorderLinks(biolinkId, linkIds[])` function
 - [x] Validate max 5 links per biolink
 
-#### Task 2.2: Create Link Editor Component
+#### Task 2.2: Create Dashboard Layout
+
+- [ ] Create `/dashboard` route with loader (require auth, fetch biolink + links)
+- [ ] Create dashboard header with logo, username badge, and premium status
+- [ ] Create responsive layout (editor left, preview right on desktop)
+- [ ] Add "Go Premium" button for free users
+- [ ] Add i18n keys for dashboard texts
+- [ ] E2E test: Dashboard loads correctly for authenticated user with biolink
+
+#### Task 2.3: Create Link Editor Component
 
 - [ ] Create `app/components/dashboard/LinkEditor.tsx` (single link item)
 - [ ] Implement inline emoji picker (native OS or simple picker)
@@ -193,7 +202,7 @@ Antes de empezar, necesitas tener configurado:
 - [ ] Implement drag handle for reordering
 - [ ] Create Zod schema for link validation
 
-#### Task 2.3: Create Links List Component
+#### Task 2.4: Create Links List Component
 
 - [ ] Create `app/components/dashboard/LinksList.tsx`
 - [ ] Implement drag & drop reordering with `@dnd-kit/core` or similar
@@ -202,14 +211,6 @@ Antes de empezar, necesitas tener configurado:
 - [ ] Implement auto-save with debounce (500ms)
 - [ ] Add loading states for save operations
 - [ ] Add i18n keys for link editor texts
-
-#### Task 2.4: Create Dashboard Layout
-
-- [ ] Create `/dashboard` route with loader (require auth, fetch biolink + links)
-- [ ] Create dashboard header with logo, username badge, and premium status
-- [ ] Create responsive layout (editor left, preview right on desktop)
-- [ ] Add "Go Premium" button for free users
-- [ ] Add i18n keys for dashboard texts
 - [ ] E2E test: User can add, edit, reorder, and delete links
 - [ ] E2E test: Cannot add more than 5 links
 
@@ -537,9 +538,9 @@ Sequential list of all tasks in recommended order:
 7. Task 1.3 - Create Username Registration Route
 8. Task 1.4 - Update Auth Flow Redirect
 9. Task 2.1 - Create Links Service
-10. Task 2.2 - Create Link Editor Component
-11. Task 2.3 - Create Links List Component
-12. Task 2.4 - Create Dashboard Layout
+10. Task 2.2 - Create Dashboard Layout
+11. Task 2.3 - Create Link Editor Component
+12. Task 2.4 - Create Links List Component
 13. Task 3.1 - Define Theme Configuration
 14. Task 3.2 - Create Theme Selector Component
 15. Task 3.3 - Create Theme Service
@@ -607,9 +608,9 @@ Sequential list of all tasks in recommended order:
 | 1     | 1.3   | ⬜ Not Started | Username route                      |
 | 1     | 1.4   | ⬜ Not Started | Auth flow redirect                  |
 | 2     | 2.1   | ⬜ Not Started | Links service                       |
-| 2     | 2.2   | ⬜ Not Started | Link editor component               |
-| 2     | 2.3   | ⬜ Not Started | Links list component                |
-| 2     | 2.4   | ⬜ Not Started | Dashboard layout                    |
+| 2     | 2.2   | ⬜ Not Started | Dashboard layout                    |
+| 2     | 2.3   | ⬜ Not Started | Link editor component               |
+| 2     | 2.4   | ⬜ Not Started | Links list component                |
 | 3     | 3.1   | ⬜ Not Started | Theme configuration                 |
 | 3     | 3.2   | ⬜ Not Started | Theme selector                      |
 | 3     | 3.3   | ⬜ Not Started | Theme service                       |

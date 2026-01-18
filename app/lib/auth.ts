@@ -15,6 +15,16 @@ export const auth = betterAuth({
     usePlural: true,
   }),
 
+  user: {
+    additionalFields: {
+      isPremium: {
+        type: 'boolean',
+        defaultValue: false,
+        required: true,
+      },
+    },
+  },
+
   basePath: '/api/auth',
 
   trustedOrigins: [
