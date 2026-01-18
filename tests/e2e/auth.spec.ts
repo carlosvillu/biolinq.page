@@ -2,53 +2,15 @@ import { test, expect } from '../fixtures/app.fixture'
 import { createAuthSession, setAuthCookie } from '../helpers/auth'
 
 test.describe('Authentication', () => {
-  test('should allow user signup via email', async ({ page }) => {
+  test('should allow user creation via API for testing', async ({ baseURL }) => {
     const timestamp = Date.now()
-    const email = `test-signup-${timestamp}@example.com`
-    const password = 'TestPassword123!'
-
-    // Go to signup page
-    await page.goto('/auth/signup')
-
-    // Fill signup form
-    await page.fill('input[name="email"]', email)
-    await page.fill('input[name="password"]', password)
-    await page.fill('input[name="confirmPassword"]', password)
-
-    // Submit form
-    await page.click('button[type="submit"]')
-
-    // Should redirect to home page after signup
-    await page.waitForURL('/', { timeout: 10000 })
-
-    // Verify user is logged in by checking if we can access protected content
-    // (In a generic template, this might just mean the user is redirected to home)
-    expect(page.url()).toContain('/')
-  })
-
-  test('should allow user login via email', async ({ page, baseURL }) => {
-    // First create a user via API
-    const timestamp = Date.now()
-    const email = `test-login-${timestamp}@example.com`
+    const email = `test-api-${timestamp}@example.com`
     const password = 'TestPassword123!'
 
     await createAuthSession(baseURL!, {
       email,
       password,
     })
-
-    // Now test login UI
-    await page.goto('/auth/login')
-
-    await page.fill('input[name="email"]', email)
-    await page.fill('input[name="password"]', password)
-
-    await page.click('button[type="submit"]')
-
-    // Should redirect to home page after login
-    await page.waitForURL('/', { timeout: 10000 })
-
-    expect(page.url()).toContain('/')
   })
 
   test('should persist session across page refreshes', async ({ page, context, baseURL }) => {
@@ -76,11 +38,30 @@ test.describe('Authentication', () => {
     expect(page.url()).toContain('/')
   })
 
-  test('should display Google OAuth button', async ({ page }) => {
-    await page.goto('/auth/signup')
+  test('should display Google OAuth button on login page', async ({ page }) => {
+    await page.goto('/auth/login')
 
     // Check that Google auth button is present
-    const googleButton = await page.locator('button:has-text("Google")')
+    const googleButton = page.locator('button:has-text("Google")')
+    await expect(googleButton).toBeVisible()
+  })
+
+  test('signup page returns 404', async ({ page }) => {
+    const response = await page.goto('/auth/signup')
+
+    // Signup page should not exist
+    expect(response?.status()).toBe(404)
+  })
+
+  test('login page shows only Google OAuth option', async ({ page }) => {
+    await page.goto('/auth/login')
+
+    // Verify that the email/password form is NOT present
+    const emailInput = page.locator('input[name="email"]')
+    await expect(emailInput).toHaveCount(0)
+
+    // Verify that the Google button IS present
+    const googleButton = page.locator('button:has-text("Google")')
     await expect(googleButton).toBeVisible()
   })
 })

@@ -62,12 +62,12 @@ Según `docs/KNOWN_ISSUES.md`, no es práctico escribir tests E2E automatizados 
 
 ## 2.1. Architecture Gate
 
-- **Pages are puzzles:** La ruta `/auth/login` es un módulo de ruta que compone componentes existentes (`Card`, `GoogleAuthButton`). No contiene lógica de negocio.
+- **Pages are puzzles:** La ruta `/auth/login` es un módulo de ruta que compone componentes existentes (`NeoBrutalCard`, `GoogleAuthButton`). No contiene lógica de negocio.
 - **Loaders/actions are thin:** Esta tarea no requiere loaders ni actions ya que Google OAuth es manejado completamente por Better Auth via `/api/auth/*`.
 - **Business logic is not in components:** La autenticación es manejada por Better Auth (servicio externo). Los componentes solo orquestan la UI.
 
 **Componentes afectados:**
-- `app/routes/auth.login.tsx` → Compone `Card`, `GoogleAuthButton`. No tiene lógica de negocio.
+- `app/routes/auth.login.tsx` → Compone `NeoBrutalCard`, `NeoBrutalButton`, `GoogleAuthButton`. No tiene lógica de negocio.
 - `app/components/GoogleAuthButton.tsx` → Solo orquesta el llamado a `signIn.social()` de Better Auth.
 
 ---
@@ -119,29 +119,35 @@ DELETE FILE
 
 **Objetivo:** Simplificar para mostrar solo Google OAuth
 
+**Estado actual:** Ya usa componentes Neo-Brutal (`NeoBrutalCard`, `NeoBrutalButton`, `NeoBrutalInput`)
+
 **Pseudocode:**
 ```pseudocode
 COMPONENT LoginPage
   // ELIMINAR: useState para error, isLoading
-  // ELIMINAR: useForm, form handling
+  // ELIMINAR: useForm, form handling, zodResolver
   // ELIMINAR: onSubmit handler
-  // ELIMINAR: loginSchema
+  // ELIMINAR: createLoginSchema
+  // ELIMINAR: imports de Form, FormControl, FormField, FormItem, FormLabel, FormMessage
+  // ELIMINAR: imports de NeoBrutalInput (ya no hay formulario)
 
   // MANTENER:
   useTranslation para t()
   useSearchParams para leer redirect
 
   RENDER:
-    Container centrado (min-h-screen flex items-center justify-center)
-      Card con border y bg-paper
-        CardHeader
-          CardTitle con t('login_title')
-        CardContent
-          GoogleAuthButton con callbackURL={redirect || '/'}
-          // ELIMINAR: divider "or"
-          // ELIMINAR: Form con email/password
-          // ELIMINAR: error display
-          // ELIMINAR: link a signup
+    <div className="min-h-screen bg-neo-canvas flex items-center justify-center px-4">
+      <NeoBrutalCard className="w-full max-w-md">
+        <h1 className="text-2xl font-bold tracking-tight mb-6 text-center">
+          {t('login_title')}
+        </h1>
+        <GoogleAuthButton callbackURL={searchParams.get('redirect') || '/'} />
+        // ELIMINAR: divider "or" con t('or_divider')
+        // ELIMINAR: <Form> con email/password fields
+        // ELIMINAR: error display
+        // ELIMINAR: link a signup con t('no_account_prompt')
+      </NeoBrutalCard>
+    </div>
 END
 ```
 
@@ -150,6 +156,8 @@ END
 ### `app/components/GoogleAuthButton.tsx`
 
 **Objetivo:** Simplificar eliminando el prop `mode` ya que siempre hace lo mismo
+
+**Estado actual:** Ya usa `NeoBrutalButton` con variant="accent"
 
 **Pseudocode:**
 ```pseudocode
@@ -166,14 +174,16 @@ COMPONENT GoogleAuthButton
     TRY:
       // Ya no hay distinción entre signup y login
       // Siempre permite creación de usuario (disableImplicitSignUp: false en servidor)
+      // ELIMINAR: condicional if (mode === 'signup') con requestSignUp
       signIn.social({ provider: 'google', callbackURL })
     CATCH:
       setIsLoading(false)
 
   RENDER:
-    Button type="button" variant="secondary" className="w-full"
-      Google SVG icon
-      Text: isLoading ? t('google_connecting') : t('google_continue')
+    <NeoBrutalButton type="button" variant="accent" className="w-full gap-3">
+      <svg> Google icon </svg>
+      {isLoading ? t('google_connecting') : t('google_continue')}
+    </NeoBrutalButton>
 END
 ```
 

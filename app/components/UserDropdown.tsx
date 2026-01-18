@@ -39,20 +39,13 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
           <div className="w-6 h-6 rounded-full bg-neo-dark text-white flex items-center justify-center text-xs font-bold">
             {initials}
           </div>
-
-          {/* Email: desktop only */}
-          <span className="hidden md:block text-sm font-medium truncate max-w-[150px]">
-            {user.email}
-          </span>
         </button>
       </NeoBrutalMenuTrigger>
 
       <NeoBrutalMenuPopup>
-        {/* Email completo */}
         <div className="px-4 py-2 border-b-2 border-neo-dark">
           <p className="text-sm font-medium truncate">{user.email}</p>
         </div>
-
         {/* Link a dashboard */}
         <NeoBrutalMenuItem>
           <Link to="/dashboard" className="w-full">

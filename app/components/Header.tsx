@@ -34,8 +34,6 @@ export function Header({ session, user }: HeaderProps) {
 
         {/* Right section */}
         <div className="flex items-center gap-2">
-          <LanguageSelector />
-
           {session && user ? (
             <UserDropdown user={user} onLogout={handleLogout} />
           ) : (
@@ -43,6 +41,7 @@ export function Header({ session, user }: HeaderProps) {
               <Link to="/auth/login">{t('login')}</Link>
             </NeoBrutalButton>
           )}
+          <LanguageSelector />
         </div>
       </div>
     </header>

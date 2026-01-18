@@ -4,29 +4,17 @@ import { signIn } from '~/lib/auth.client'
 import { NeoBrutalButton } from '~/components/neo-brutal'
 
 interface GoogleAuthButtonProps {
-  mode: 'signup' | 'login'
   callbackURL?: string
 }
 
-export function GoogleAuthButton({ mode, callbackURL = '/' }: GoogleAuthButtonProps) {
+export function GoogleAuthButton({ callbackURL = '/' }: GoogleAuthButtonProps) {
   const { t } = useTranslation()
   const [isLoading, setIsLoading] = useState(false)
 
   const handleClick = async () => {
     setIsLoading(true)
     try {
-      if (mode === 'signup') {
-        // Signup: allow user creation
-        await signIn.social({
-          provider: 'google',
-          requestSignUp: true,
-          callbackURL,
-        })
-      } else {
-        // Login: only existing users (disableImplicitSignUp in server config)
-        await signIn.social({ provider: 'google', callbackURL })
-      }
-      // Better Auth handles redirect automatically
+      await signIn.social({ provider: 'google', callbackURL })
     } catch {
       setIsLoading(false)
     }
