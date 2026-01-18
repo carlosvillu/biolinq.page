@@ -175,13 +175,13 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 2.1: Create Links Service
 
-- [ ] Create `app/services/links.server.ts`
-- [ ] Implement `getLinksByBiolinkId(biolinkId)` function
-- [ ] Implement `createLink(biolinkId, data)` function with position management
-- [ ] Implement `updateLink(linkId, data)` function
-- [ ] Implement `deleteLink(linkId)` function with position reordering
-- [ ] Implement `reorderLinks(biolinkId, linkIds[])` function
-- [ ] Validate max 5 links per biolink
+- [x] Create `app/services/links.server.ts`
+- [x] Implement `getLinksByBiolinkId(biolinkId)` function
+- [x] Implement `createLink(biolinkId, data)` function with position management
+- [x] Implement `updateLink(linkId, data)` function
+- [x] Implement `deleteLink(linkId)` function with position reordering
+- [x] Implement `reorderLinks(biolinkId, linkIds[])` function
+- [x] Validate max 5 links per biolink
 
 #### Task 2.2: Create Link Editor Component
 
@@ -602,42 +602,42 @@ Sequential list of all tasks in recommended order:
 | 0     | 0.1   | ✅ Complete    | Configure Google OAuth auto sign-up |
 | 0     | 0.2   | ✅ Complete    | Create DB schema                    |
 | 0     | 0.3   | ⬜ Not Started | Configure env vars                  |
-| 1     | 1.1  | ⬜ Not Started | Username modal                      |
-| 1     | 1.2  | ⬜ Not Started | Username service                    |
-| 1     | 1.3  | ⬜ Not Started | Username route                      |
-| 1     | 1.4  | ⬜ Not Started | Auth flow redirect                  |
-| 2     | 2.1  | ⬜ Not Started | Links service                       |
-| 2     | 2.2  | ⬜ Not Started | Link editor component               |
-| 2     | 2.3  | ⬜ Not Started | Links list component                |
-| 2     | 2.4  | ⬜ Not Started | Dashboard layout                    |
-| 3     | 3.1  | ⬜ Not Started | Theme configuration                 |
-| 3     | 3.2  | ⬜ Not Started | Theme selector                      |
-| 3     | 3.3  | ⬜ Not Started | Theme service                       |
-| 3     | 3.4  | ⬜ Not Started | Theme integration                   |
-| 4     | 4.1  | ⬜ Not Started | Public page route                   |
-| 4     | 4.2  | ⬜ Not Started | Public profile components           |
-| 4     | 4.3  | ⬜ Not Started | Click tracking                      |
-| 4     | 4.4  | ⬜ Not Started | View tracking                       |
-| 4     | 4.5  | ⬜ Not Started | Performance optimization            |
-| 5     | 5.1  | ⬜ Not Started | Analytics service                   |
-| 5     | 5.2  | ⬜ Not Started | Stats components                    |
-| 5     | 5.3  | ⬜ Not Started | Stats integration                   |
-| 6     | 6.1  | ⬜ Not Started | Stripe configuration                |
-| 6     | 6.2  | ⬜ Not Started | Checkout flow                       |
-| 6     | 6.3  | ⬜ Not Started | Webhook handler                     |
-| 6     | 6.4  | ⬜ Not Started | Premium feature gating              |
-| 7     | 7.1  | ⬜ Not Started | Account page                        |
-| 7     | 7.2  | ⬜ Not Started | Account deletion                    |
-| 8     | 8.1  | ⬜ Not Started | Landing components                  |
-| 8     | 8.2  | ⬜ Not Started | Landing route                       |
-| 8     | 8.3  | ⬜ Not Started | Polish & animations                 |
-| 9     | 9.1  | ⬜ Not Started | Setup Google Analytics 4            |
-| 9     | 9.2  | ⬜ Not Started | Custom events                       |
-| 9     | 9.3  | ⬜ Not Started | Ecommerce tracking (Stripe)         |
-| 9     | 9.4  | ⬜ Not Started | Dashboard tracking                  |
-| 9     | 9.5  | ⬜ Not Started | Consent & privacy                   |
-| 10    | 10.1 | ⬜ Not Started | Error handling                      |
-| 10    | 10.2 | ⬜ Not Started | E2E test suite                      |
-| 10    | 10.3 | ⬜ Not Started | Final checks                        |
+| 1     | 1.1   | ⬜ Not Started | Username modal                      |
+| 1     | 1.2   | ⬜ Not Started | Username service                    |
+| 1     | 1.3   | ⬜ Not Started | Username route                      |
+| 1     | 1.4   | ⬜ Not Started | Auth flow redirect                  |
+| 2     | 2.1   | ⬜ Not Started | Links service                       |
+| 2     | 2.2   | ⬜ Not Started | Link editor component               |
+| 2     | 2.3   | ⬜ Not Started | Links list component                |
+| 2     | 2.4   | ⬜ Not Started | Dashboard layout                    |
+| 3     | 3.1   | ⬜ Not Started | Theme configuration                 |
+| 3     | 3.2   | ⬜ Not Started | Theme selector                      |
+| 3     | 3.3   | ⬜ Not Started | Theme service                       |
+| 3     | 3.4   | ⬜ Not Started | Theme integration                   |
+| 4     | 4.1   | ⬜ Not Started | Public page route                   |
+| 4     | 4.2   | ⬜ Not Started | Public profile components           |
+| 4     | 4.3   | ⬜ Not Started | Click tracking                      |
+| 4     | 4.4   | ⬜ Not Started | View tracking                       |
+| 4     | 4.5   | ⬜ Not Started | Performance optimization            |
+| 5     | 5.1   | ⬜ Not Started | Analytics service                   |
+| 5     | 5.2   | ⬜ Not Started | Stats components                    |
+| 5     | 5.3   | ⬜ Not Started | Stats integration                   |
+| 6     | 6.1   | ⬜ Not Started | Stripe configuration                |
+| 6     | 6.2   | ⬜ Not Started | Checkout flow                       |
+| 6     | 6.3   | ⬜ Not Started | Webhook handler                     |
+| 6     | 6.4   | ⬜ Not Started | Premium feature gating              |
+| 7     | 7.1   | ⬜ Not Started | Account page                        |
+| 7     | 7.2   | ⬜ Not Started | Account deletion                    |
+| 8     | 8.1   | ⬜ Not Started | Landing components                  |
+| 8     | 8.2   | ⬜ Not Started | Landing route                       |
+| 8     | 8.3   | ⬜ Not Started | Polish & animations                 |
+| 9     | 9.1   | ⬜ Not Started | Setup Google Analytics 4            |
+| 9     | 9.2   | ⬜ Not Started | Custom events                       |
+| 9     | 9.3   | ⬜ Not Started | Ecommerce tracking (Stripe)         |
+| 9     | 9.4   | ⬜ Not Started | Dashboard tracking                  |
+| 9     | 9.5   | ⬜ Not Started | Consent & privacy                   |
+| 10    | 10.1  | ⬜ Not Started | Error handling                      |
+| 10    | 10.2  | ⬜ Not Started | E2E test suite                      |
+| 10    | 10.3  | ⬜ Not Started | Final checks                        |
 
 **Status Legend:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked

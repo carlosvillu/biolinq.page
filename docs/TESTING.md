@@ -348,6 +348,115 @@ test('logged out user is redirected', async ({ page, context }) => {
 
 **Reference:** https://github.com/better-auth/better-auth/issues/3743
 
+## Testing Services Without UI (Test API Routes)
+
+When a service has no UI yet (e.g., `links.server.ts` before the dashboard exists), use **test-only API routes** to expose service functions for E2E testing.
+
+### Pattern: `api/__test__.[service].tsx`
+
+Create a route at `app/routes/api.__test__.[service].tsx` that:
+
+1. **Only works in test environment** - Returns 404 if `DB_TEST_URL` is not set
+2. **Exposes service functions** via loader (GET) and action (POST/DELETE)
+3. **Uses Zod validation** for request bodies
+4. **Returns JSON responses** with proper status codes
+
+### Example: Testing Premium Service
+
+```typescript
+// app/routes/api.__test__.premium.tsx
+import { type LoaderFunctionArgs, type ActionFunctionArgs } from 'react-router'
+import { z } from 'zod'
+import { getPremiumStatus, grantPremium } from '~/services/premium.server'
+
+const grantSchema = z.object({
+  userId: z.string().uuid(),
+  stripeCustomerId: z.string(),
+})
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  // Only available in test environment
+  if (!process.env.DB_TEST_URL) {
+    throw new Response('Not Found', { status: 404 })
+  }
+
+  const url = new URL(request.url)
+  const userId = url.searchParams.get('userId')
+
+  if (!userId) {
+    throw new Response('userId is required', { status: 400 })
+  }
+
+  const status = await getPremiumStatus(userId)
+  return Response.json(status)
+}
+
+export async function action({ request }: ActionFunctionArgs) {
+  if (request.method !== 'POST') {
+    throw new Response('Method Not Allowed', { status: 405 })
+  }
+
+  // Only available in test environment
+  if (!process.env.DB_TEST_URL) {
+    throw new Response('Not Found', { status: 404 })
+  }
+
+  const body = await request.json()
+  const result = grantSchema.safeParse(body)
+  
+  if (!result.success) {
+    throw new Response('Invalid request body', { status: 400 })
+  }
+
+  await grantPremium(result.data.userId, result.data.stripeCustomerId)
+  return Response.json({ success: true })
+}
+```
+
+### Using in E2E Tests
+
+```typescript
+import { test, expect } from '../fixtures'
+
+test('premium service grants premium status', async ({ request, appServer, dbContext }) => {
+  const baseUrl = `http://localhost:${appServer.port}`
+  
+  // Seed a user first
+  const userId = await seedUser(dbContext, 'testUser')
+  
+  // Call the test API route
+  const response = await request.post(`${baseUrl}/api/__test__/premium`, {
+    data: { userId, stripeCustomerId: 'cus_test123' },
+  })
+  
+  expect(response.ok()).toBe(true)
+  
+  // Verify via GET
+  const statusResponse = await request.get(
+    `${baseUrl}/api/__test__/premium?userId=${userId}`
+  )
+  const status = await statusResponse.json()
+  
+  expect(status.isPremium).toBe(true)
+})
+```
+
+### Key Points
+
+- **Security:** The `DB_TEST_URL` check ensures these routes are **never accessible in production**
+- **Route registration:** Add to `app/routes.ts` like any other route
+- **Naming convention:** Use `api.__test__.[service]` for clarity
+- **No UI dependency:** Tests can run before UI components exist
+
+### When to Use This Pattern
+
+- Testing a new service before its UI is built
+- Testing complex service logic that's hard to trigger via UI
+- Testing edge cases (e.g., max limits, ownership validation)
+- Integration testing between multiple services
+
+---
+
 ## Rules (MUST FOLLOW)
 
 1. **Import from `../fixtures`** - Never from `@playwright/test` directly

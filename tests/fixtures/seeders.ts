@@ -99,6 +99,22 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
     ctx,
     `CREATE INDEX IF NOT EXISTS idx_biolinks_username ON biolinks(username)`
   )
+
+  // Create links table
+  await executeSQL(
+    ctx,
+    `CREATE TABLE IF NOT EXISTS links (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      biolink_id UUID NOT NULL REFERENCES biolinks(id) ON DELETE CASCADE,
+      emoji VARCHAR(10),
+      title VARCHAR(50) NOT NULL,
+      url TEXT NOT NULL,
+      position INTEGER NOT NULL,
+      total_clicks INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMP NOT NULL DEFAULT now(),
+      updated_at TIMESTAMP NOT NULL DEFAULT now()
+    )`
+  )
 }
 
 /**
@@ -157,6 +173,50 @@ export async function seedAccount(
      VALUES ($1, $2, $3, $4)
      RETURNING id`,
     [relations.userId, data.accountId, data.providerId, data.password]
+  )
+  return result.rows[0].id
+}
+
+/**
+ * Seed a biolink
+ */
+export async function seedBiolink(
+  ctx: DbContext,
+  data: {
+    userId: string
+    username: string
+    theme?: 'brutalist' | 'light_minimal' | 'dark_mode' | 'colorful'
+  }
+): Promise<string> {
+  const result = await executeSQL(
+    ctx,
+    `INSERT INTO biolinks (user_id, username, theme)
+     VALUES ($1, $2, $3)
+     RETURNING id`,
+    [data.userId, data.username, data.theme ?? 'light_minimal']
+  )
+  return result.rows[0].id
+}
+
+/**
+ * Seed a link
+ */
+export async function seedLink(
+  ctx: DbContext,
+  data: {
+    biolinkId: string
+    emoji?: string
+    title: string
+    url: string
+    position: number
+  }
+): Promise<string> {
+  const result = await executeSQL(
+    ctx,
+    `INSERT INTO links (biolink_id, emoji, title, url, position)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id`,
+    [data.biolinkId, data.emoji ?? null, data.title, data.url, data.position]
   )
   return result.rows[0].id
 }

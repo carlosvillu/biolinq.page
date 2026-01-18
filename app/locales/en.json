@@ -61,5 +61,12 @@
   "pricing_feature_history": "30-day history",
   "pricing_feature_custom_colors": "Custom colors",
   "pricing_feature_no_watermark": "No watermark",
-  "pricing_premium_cta": "Get Premium"
+  "pricing_premium_cta": "Get Premium",
+
+  "links_error_not_owner": "You don't have permission to modify this biolink",
+  "links_error_max_reached": "You've reached the maximum number of links (5)",
+  "links_error_not_found": "Link not found",
+  "links_error_invalid_ids": "Invalid link order",
+  "links_error_invalid_url": "Please enter a valid HTTPS URL",
+  "links_error_invalid_emoji": "Please enter a valid emoji"
 }
