@@ -9,7 +9,7 @@ export interface NeoBrutalMenuPopupProps extends ComponentPropsWithoutRef<typeof
 export function NeoBrutalMenuPopup({ children, className, ...props }: NeoBrutalMenuPopupProps) {
   return (
     <Menu.Portal>
-      <Menu.Positioner sideOffset={8}>
+      <Menu.Positioner sideOffset={8} className="z-50">
         <Menu.Popup
           className={cn(
             'bg-white text-neo-dark border-[3px] border-neo-dark rounded shadow-hard-lg',

@@ -98,3 +98,13 @@ export async function registerUsername(
     }
   })
 }
+
+export async function getUserBiolink(userId: string): Promise<Biolink | null> {
+  const result = await db
+    .select()
+    .from(biolinks)
+    .where(eq(biolinks.userId, userId))
+    .limit(1)
+
+  return result[0] ?? null
+}

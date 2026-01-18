@@ -134,14 +134,20 @@ Antes de empezar, necesitas tener configurado:
 **🔴 Antes:** Usuario hace login con Google y llega al home genérico.
 **🟢 Después:** Usuario hace login, se le pide elegir username único, y se crea su biolink.
 
-#### Task 1.1: Create Username Selection Modal
+#### Task 1.1: Username Claim from Home
 
-- [ ] Create `app/components/UsernameModal.tsx` component
-- [ ] Implement username validation (3-20 chars, alphanumeric + hyphens, no start/end hyphen)
-- [ ] Implement real-time availability check with debounce (500ms)
-- [ ] Add validation error messages (too short, too long, invalid chars, reserved, taken)
-- [ ] Add i18n keys for username modal texts
-- [ ] Create Zod schema for username validation
+- [ ] Create `app/lib/username-validation.ts` with Zod schema
+- [ ] Create `app/hooks/useUsernameClaim.ts` hook
+- [ ] Create `/api/username/check` route
+- [ ] Create `/api/username/claim` route
+- [ ] Modify `home.tsx` loader to redirect users with biolink + handle OAuth callback
+- [ ] Modify `BioLinqHero.tsx` to use functional username input
+- [ ] Add `getUserBiolink()` to username service
+- [ ] Add i18n keys for username validation/errors
+- [ ] E2E test: Validation errors shown for invalid username
+- [ ] E2E test: Reserved/taken username shows error
+- [ ] E2E test: Logged-in user can claim username and go to dashboard
+- [ ] E2E test: User with biolink is redirected to dashboard from home
 
 #### Task 1.2: Create Username Service
 
@@ -151,22 +157,14 @@ Antes de empezar, necesitas tener configurado:
 - [x] Implement reserved words check against constant list
 - [x] Add index on `biolinks.username` for fast lookups
 
-#### Task 1.3: Create Username Registration Route
+#### Task 1.3: ~~Create Username Registration Route~~ (REMOVED)
 
-- [ ] Create `/dashboard/choose-username` route
-- [ ] Implement loader that checks if user already has biolink (redirect to dashboard if yes)
-- [ ] Implement action to register username
-- [ ] On success, redirect to `/dashboard`
-- [ ] Add i18n keys for success/error messages
-- [ ] E2E test: New user registers username successfully
-- [ ] E2E test: Cannot use reserved or taken username
+> **Note:** This task was removed. Username registration now happens directly from the home page. See Task 1.1.
 
 #### Task 1.4: Update Auth Flow Redirect
 
-- [ ] Modify Google OAuth callback to check if user has biolink
-- [ ] If no biolink, redirect to `/dashboard/choose-username`
-- [ ] If has biolink, redirect to `/dashboard`
-- [ ] E2E test: New user is redirected to username selection after first login
+- [ ] OAuth callback reads `?username` param and creates biolink automatically (handled in Task 1.1)
+- [ ] E2E test: New user coming from OAuth with username gets biolink created
 
 ---
 

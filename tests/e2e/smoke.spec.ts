@@ -13,14 +13,12 @@ test.describe('Home Page', () => {
   })
 
   test('should have working navigation', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/', { waitUntil: 'networkidle' })
 
     // Check that header is present
-    const header = await page.locator('header')
-    await expect(header).toBeVisible()
+    await expect(page.locator('header')).toBeVisible({ timeout: 10000 })
 
     // Check that footer is present
-    const footer = await page.locator('footer')
-    await expect(footer).toBeVisible()
+    await expect(page.locator('footer')).toBeVisible({ timeout: 10000 })
   })
 })

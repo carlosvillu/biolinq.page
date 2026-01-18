@@ -15,6 +15,7 @@ export function NeoBrutalButton({
   size = 'md',
   className,
   asChild = false,
+  disabled,
   ...props
 }: NeoBrutalButtonProps) {
   const Comp = asChild ? Slot : 'button'
@@ -32,26 +33,35 @@ export function NeoBrutalButton({
   }
 
   return (
-    <div className="relative group inline-block">
+    <div className={cn('relative group inline-block', disabled && 'cursor-not-allowed')}>
       {/* Shadow Layer */}
       <div
-        className="absolute inset-0 bg-neo-dark rounded translate-x-1 translate-y-1
-          transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+        className={cn(
+          'absolute inset-0 rounded translate-x-1 translate-y-1 transition-transform',
+          disabled
+            ? 'bg-gray-300'
+            : 'bg-neo-dark group-hover:translate-x-2 group-hover:translate-y-2'
+        )}
       />
 
       {/* Button Face */}
       <Comp
         className={cn(
-          'relative z-10 font-bold border-[3px] border-neo-dark rounded',
+          'relative z-10 font-bold border-[3px] rounded',
           'transition-transform duration-200 ease-out',
-          'group-hover:-translate-y-px group-hover:-translate-x-px',
-          'active:translate-x-[2px] active:translate-y-[2px]',
-          'disabled:opacity-50 disabled:cursor-not-allowed',
           'flex items-center justify-center',
-          variantClasses[variant],
+          disabled
+            ? 'border-gray-300 bg-gray-100 text-gray-400 cursor-not-allowed'
+            : cn(
+                'border-neo-dark',
+                'group-hover:-translate-y-px group-hover:-translate-x-px',
+                'active:translate-x-[2px] active:translate-y-[2px]',
+                variantClasses[variant]
+              ),
           sizeClasses[size],
           className
         )}
+        disabled={disabled}
         {...props}
       >
         {children}
