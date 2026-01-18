@@ -37,35 +37,35 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 0.0.1: Migrate UI to Neo-Brutal Design System
 
-- [ ] Configure Neo-Brutal color system in `app/app.css` (Tailwind CSS v4)
-- [ ] Add JetBrains Mono font to root layout
-- [ ] Create `NeoBrutalButton` component with solid shadow + press effect
-- [ ] Create `NeoBrutalInput` component with solid shadow
-- [ ] Create `NeoBrutalCard` component with solid shadow
-- [ ] Migrate `Header.tsx` to Neo-Brutal design (BioLinq logo + Login button)
-- [ ] Migrate `Footer.tsx` to Neo-Brutal design (Terms, Privacy + Copyright)
-- [ ] Create `BioLinqHero.tsx` component based on mockup
-- [ ] Create `Sparkle.tsx` decorative component
-- [ ] Update `home.tsx` to use new landing components
-- [ ] Apply Neo-Brutal styles to `auth.login.tsx`
-- [ ] Apply Neo-Brutal styles to `auth.signup.tsx`
-- [ ] Create `/dashboard` route with placeholder ("Coming soon")
-- [ ] Move Footer to global layout in `root.tsx`
-- [ ] Add new i18n keys for landing page texts
-- [ ] Delete unused components: `HeroSection.tsx`, `EditorialDivider.tsx`
-- [ ] E2E test: Landing page renders with Neo-Brutal design
-- [ ] E2E test: Auth pages render with Neo-Brutal design
-- [ ] E2E test: Dashboard placeholder accessible for authenticated users
+- [x] Configure Neo-Brutal color system in `app/app.css` (Tailwind CSS v4)
+- [x] Add JetBrains Mono font to root layout
+- [x] Create `NeoBrutalButton` component with solid shadow + press effect
+- [x] Create `NeoBrutalInput` component with solid shadow
+- [x] Create `NeoBrutalCard` component with solid shadow
+- [x] Migrate `Header.tsx` to Neo-Brutal design (BioLinq logo + Login button)
+- [x] Migrate `Footer.tsx` to Neo-Brutal design (Terms, Privacy + Copyright)
+- [x] Create `BioLinqHero.tsx` component based on mockup
+- [x] Create `Sparkle.tsx` decorative component
+- [x] Update `home.tsx` to use new landing components
+- [x] Apply Neo-Brutal styles to `auth.login.tsx`
+- [x] Apply Neo-Brutal styles to `auth.signup.tsx`
+- [x] Create `/dashboard` route with placeholder ("Coming soon")
+- [x] Move Footer to global layout in `root.tsx`
+- [x] Add new i18n keys for landing page texts
+- [x] Delete unused components: `HeroSection.tsx`, `EditorialDivider.tsx`
+- [x] E2E test: Landing page renders with Neo-Brutal design
+- [x] E2E test: Auth pages render with Neo-Brutal design
+- [x] E2E test: Dashboard placeholder accessible for authenticated users
 
 #### Task 0.1: Configure Google OAuth Auto Sign-Up
 
-- [ ] Remove email/password configuration from `app/lib/auth.ts`
-- [ ] Set `disableImplicitSignUp: false` in Google OAuth config (enable auto user creation)
-- [ ] Remove `/auth/signup` route and related components
-- [ ] Update `/auth/login` route to only show Google OAuth button
-- [ ] Update i18n keys to remove email/password related literals
-- [ ] E2E test: New user can login with Google and user is auto-created in DB
-- [ ] E2E test: Login page only shows Google OAuth option
+- [x] Remove email/password configuration from `app/lib/auth.ts`
+- [x] Set `disableImplicitSignUp: false` in Google OAuth config (enable auto user creation)
+- [x] Remove `/auth/signup` route and related components
+- [x] Update `/auth/login` route to only show Google OAuth button
+- [x] Update i18n keys to remove email/password related literals
+- [x] E2E test: New user can login with Google and user is auto-created in DB
+- [x] E2E test: Login page only shows Google OAuth option
 
 #### Task 0.2: Create BioLinq Database Schema
 
@@ -600,8 +600,8 @@ Sequential list of all tasks in recommended order:
 
 | Phase | Task  | Status         | Notes                               |
 | ----- | ----- | -------------- | ----------------------------------- |
-| 0     | 0.0.1 | ⬜ Not Started | Migrate UI to Neo-Brutal design     |
-| 0     | 0.1   | ⬜ Not Started | Configure Google OAuth auto sign-up |
+| 0     | 0.0.1 | ✅ Complete    | Migrate UI to Neo-Brutal design     |
+| 0     | 0.1   | ✅ Complete    | Configure Google OAuth auto sign-up |
 | 0     | 0.2   | ⬜ Not Started | Create DB schema                    |
 | 0     | 0.3   | ⬜ Not Started | Configure env vars                  |
 | 1     | 1.1  | ⬜ Not Started | Username modal                      |
