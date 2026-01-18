@@ -1,13 +1,18 @@
-import { redirect } from 'react-router'
-import type { LoaderFunctionArgs } from 'react-router'
-import { useLoaderData } from 'react-router'
+import { redirect, data } from 'react-router'
+import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router'
+import { useLoaderData, useActionData } from 'react-router'
 import { getCurrentUser } from '~/lib/auth.server'
 import { getUserBiolink } from '~/services/username.server'
-import { getLinksByBiolinkId } from '~/services/links.server'
+import {
+  getLinksByBiolinkId,
+  createLink,
+  deleteLink,
+} from '~/services/links.server'
+import { getMaxLinks } from '~/lib/constants'
 import {
   PremiumBanner,
   StatsCard,
-  LinksEditorPlaceholder,
+  LinksList,
   PhonePreview,
 } from '~/components/dashboard'
 
@@ -38,8 +43,57 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 }
 
+export async function action({ request }: ActionFunctionArgs) {
+  const authSession = await getCurrentUser(request)
+
+  if (!authSession?.user) {
+    return redirect('/auth/login')
+  }
+
+  const formData = await request.formData()
+  const intent = formData.get('intent')
+
+  if (intent === 'create') {
+    const emoji = formData.get('emoji') as string | null
+    const title = formData.get('title') as string
+    const url = formData.get('url') as string
+    const biolinkId = formData.get('biolinkId') as string
+
+    const result = await createLink(authSession.user.id, biolinkId, {
+      emoji: emoji || undefined,
+      title,
+      url,
+    })
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    return redirect('/dashboard')
+  }
+
+  if (intent === 'delete') {
+    const linkId = formData.get('linkId') as string
+
+    const result = await deleteLink(authSession.user.id, linkId)
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    return redirect('/dashboard')
+  }
+
+  return data({ error: 'UNKNOWN_INTENT' })
+}
+
 export default function DashboardPage() {
   const { user, biolink, links } = useLoaderData<typeof loader>()
+  const actionData = useActionData<typeof action>() as
+    | { error: string }
+    | undefined
+
+  const maxLinks = getMaxLinks(user.isPremium)
 
   return (
     <div className="min-h-screen bg-neo-input/30">
@@ -49,7 +103,12 @@ export default function DashboardPage() {
         {/* Left Column */}
         <div className="space-y-8">
           <StatsCard totalViews={biolink.totalViews} isPremium={user.isPremium} />
-          <LinksEditorPlaceholder linkCount={links.length} />
+          <LinksList
+            links={links}
+            biolinkId={biolink.id}
+            maxLinks={maxLinks}
+            error={actionData?.error}
+          />
         </div>
 
         {/* Right Column (hidden on mobile) */}

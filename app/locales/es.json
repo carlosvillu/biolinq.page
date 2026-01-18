@@ -82,5 +82,19 @@
   "dashboard_my_links": "Mis Links",
   "dashboard_links_coming_soon": "Editor de links próximamente...",
   "dashboard_preview_bio_placeholder": "Tu bio aparecerá aquí",
-  "dashboard_preview_no_links": "¡Añade tu primer link!"
+  "dashboard_preview_no_links": "¡Añade tu primer link!",
+  "dashboard_add_link": "Añadir Link",
+  "dashboard_add_link_title": "Añadir nuevo link",
+  "dashboard_link_emoji_label": "Emoji",
+  "dashboard_emoji_hint": "Presiona Ctrl+. (Win) o Cmd+Ctrl+Space (Mac)",
+  "dashboard_link_title_label": "Título",
+  "dashboard_link_title_placeholder": "Mi Sitio Web",
+  "dashboard_link_url_label": "URL",
+  "dashboard_save_link": "Guardar",
+  "dashboard_delete_link": "Eliminar link",
+  "dashboard_delete_link_title": "¿Eliminar link?",
+  "dashboard_delete_link_confirm": "\"{{title}}\" se eliminará permanentemente.",
+  "dashboard_delete_link_button": "Eliminar",
+  "dashboard_no_links": "Sin links todavía. ¡Añade el primero!",
+  "cancel": "Cancelar"
 }

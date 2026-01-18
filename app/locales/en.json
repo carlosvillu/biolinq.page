@@ -78,5 +78,19 @@
   "dashboard_my_links": "My Links",
   "dashboard_links_coming_soon": "Links editor coming in Task 2.3...",
   "dashboard_preview_bio_placeholder": "Your bio will appear here",
-  "dashboard_preview_no_links": "Add your first link!"
+  "dashboard_preview_no_links": "Add your first link!",
+  "dashboard_add_link": "Add Link",
+  "dashboard_add_link_title": "Add new link",
+  "dashboard_link_emoji_label": "Emoji",
+  "dashboard_emoji_hint": "Press Ctrl+. (Win) or Cmd+Ctrl+Space (Mac)",
+  "dashboard_link_title_label": "Title",
+  "dashboard_link_title_placeholder": "My Website",
+  "dashboard_link_url_label": "URL",
+  "dashboard_save_link": "Save",
+  "dashboard_delete_link": "Delete link",
+  "dashboard_delete_link_title": "Delete link?",
+  "dashboard_delete_link_confirm": "\"{{title}}\" will be permanently deleted.",
+  "dashboard_delete_link_button": "Delete",
+  "dashboard_no_links": "No links yet. Add your first one!",
+  "cancel": "Cancel"
 }
