@@ -185,34 +185,34 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 2.2: Create Dashboard Layout
 
-- [ ] Create `/dashboard` route with loader (require auth, fetch biolink + links)
-- [ ] Create dashboard header with logo, username badge, and premium status
-- [ ] Create responsive layout (editor left, preview right on desktop)
-- [ ] Add "Go Premium" button for free users
-- [ ] Add i18n keys for dashboard texts
-- [ ] E2E test: Dashboard loads correctly for authenticated user with biolink
+- [x] Create `/dashboard` route with loader (require auth, fetch biolink + links)
+- [x] Create dashboard header with logo, username badge, and premium status
+- [x] Create responsive layout (editor left, preview right on desktop)
+- [x] Add "Go Premium" button for free users
+- [x] Add i18n keys for dashboard texts
+- [x] E2E test: Dashboard loads correctly for authenticated user with biolink
 
 #### Task 2.3: Create Link Editor Component
 
-- [ ] Create `app/components/dashboard/LinkEditor.tsx` (single link item)
-- [ ] Implement inline emoji picker (native OS or simple picker)
-- [ ] Implement title input (max 50 chars)
-- [ ] Implement URL input with validation (auto-prepend https:// if missing)
-- [ ] Implement delete button with confirmation
-- [ ] Implement drag handle for reordering
-- [ ] Create Zod schema for link validation
+- [x] Create `app/components/dashboard/LinkEditor.tsx` (single link item)
+- [x] Implement inline emoji picker (native OS or simple picker)
+- [x] Implement title input (max 50 chars)
+- [x] Implement URL input with validation (auto-prepend https:// if missing)
+- [x] Implement delete button with confirmation
+- [x] Implement drag handle for reordering
+- [x] Create Zod schema for link validation
 
 #### Task 2.4: Create Links List Component
 
-- [ ] Create `app/components/dashboard/LinksList.tsx`
-- [ ] Implement drag & drop reordering with `@dnd-kit/core` or similar
-- [ ] Show link count (e.g., "3/5")
-- [ ] Show "Add Link" button (disabled when at 5 links)
-- [ ] Implement auto-save with debounce (500ms)
-- [ ] Add loading states for save operations
-- [ ] Add i18n keys for link editor texts
-- [ ] E2E test: User can add, edit, reorder, and delete links
-- [ ] E2E test: Cannot add more than 5 links
+- [x] Create `app/components/dashboard/LinksList.tsx`
+- [x] Implement drag & drop reordering with `@dnd-kit/core` or similar
+- [x] Show link count (e.g., "3/5")
+- [x] Show "Add Link" button (disabled when at 5 links)
+- [x] Implement auto-save with debounce (500ms)
+- [x] Add loading states for save operations
+- [x] Add i18n keys for link editor texts
+- [x] E2E test: User can add, edit, reorder, and delete links
+- [x] E2E test: Cannot add more than 5 links
 
 ---
 

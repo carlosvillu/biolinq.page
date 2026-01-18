@@ -96,5 +96,8 @@
   "dashboard_delete_link_confirm": "\"{{title}}\" se eliminará permanentemente.",
   "dashboard_delete_link_button": "Eliminar",
   "dashboard_no_links": "Sin links todavía. ¡Añade el primero!",
+  "dashboard_save_order": "Guardar orden",
+  "dashboard_drag_link": "Arrastrar para reordenar",
+  "saving": "Guardando...",
   "cancel": "Cancelar"
 }

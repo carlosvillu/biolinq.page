@@ -2,12 +2,14 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Link } from '~/db/schema/links'
 import { DeleteLinkDialog } from './DeleteLinkDialog'
+import { DragHandleIcon } from './DragHandleIcon'
 
 interface LinkItemProps {
   link: Link
+  dragHandleProps?: Record<string, unknown>
 }
 
-export function LinkItem({ link }: LinkItemProps) {
+export function LinkItem({ link, dragHandleProps }: LinkItemProps) {
   const { t } = useTranslation()
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 
@@ -22,12 +24,24 @@ export function LinkItem({ link }: LinkItemProps) {
 
   return (
     <>
-      <div className="relative group">
+      <div className="relative group" data-testid="link-item">
         {/* Shadow layer */}
         <div className="absolute inset-0 bg-white border-[3px] border-neo-dark rounded translate-y-1 translate-x-1" />
 
         {/* Card content */}
         <div className="relative bg-white border-[3px] border-neo-dark rounded p-3 flex gap-3 items-center">
+          {/* Drag Handle */}
+          {dragHandleProps ? (
+            <button
+              type="button"
+              className="cursor-grab active:cursor-grabbing p-1 text-gray-400 hover:text-neo-dark touch-none"
+              {...dragHandleProps}
+              aria-label={t('dashboard_drag_link')}
+            >
+              <DragHandleIcon className="w-5 h-5" />
+            </button>
+          ) : null}
+
           {/* Emoji display */}
           <div className="w-10 h-10 bg-neo-input border-2 border-neo-dark rounded flex items-center justify-center text-xl flex-shrink-0">
             {link.emoji || '🔗'}
@@ -36,9 +50,7 @@ export function LinkItem({ link }: LinkItemProps) {
           {/* Link info */}
           <div className="flex-1 min-w-0">
             <p className="font-bold truncate">{link.title}</p>
-            <p className="text-xs font-mono text-gray-500 truncate">
-              {displayUrl}
-            </p>
+            <p className="text-xs font-mono text-gray-500 truncate">{displayUrl}</p>
           </div>
 
           {/* Delete button */}

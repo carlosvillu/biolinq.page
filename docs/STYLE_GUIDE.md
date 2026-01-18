@@ -6,9 +6,10 @@ This design system implements **Soft Neo-Brutalism**, a contemporary evolution o
 
 ### Component Architecture Strategy
 
-BioLinq uses **Base UI** (`@base-ui-components/react`) as the foundation for all interactive components. Base UI provides unstyled, accessible, and composable primitives that we style with our Soft Neo-Brutalism aesthetic.
+BioLinq uses **Base UI** (`@base-ui/react`) as the foundation for all interactive components. Base UI provides unstyled, accessible, and composable primitives that we style with our Soft Neo-Brutalism aesthetic.
 
 **Why Base UI?**
+
 - ✅ **Unstyled by design** - Perfect canvas for custom aesthetics
 - ✅ **Accessibility built-in** - WCAG AA compliance out of the box
 - ✅ **Composable & flexible** - Fits any design system
@@ -16,6 +17,7 @@ BioLinq uses **Base UI** (`@base-ui-components/react`) as the foundation for all
 - ✅ **From MUI team** - Production-tested, well-maintained
 
 **Implementation Philosophy:**
+
 1. **Never build from scratch** what Base UI already provides (Checkbox, Dialog, Select, etc.)
 2. **Wrap Base UI components** with Soft Neo-Brutalism styling (borders, shadows, colors)
 3. **Maintain visual consistency** while leveraging Base UI's accessibility and behavior
@@ -39,7 +41,7 @@ BioLinq uses **Base UI** (`@base-ui-components/react`) as the foundation for all
 - [Z-Index System](#z-index-system)
 - [CSS Variables](#css-variables)
 - [Common Tailwind CSS Usage](#common-tailwind-css-usage)
-- [Example Components](#example-components)
+- [Example Components](#example)
 - [Accessibility](#accessibility)
 - [Implementation Best Practices](#implementation-best-practices)
 - [Common Patterns to Avoid](#common-patterns-to-avoid)
@@ -64,6 +66,7 @@ app/components/        # Custom components
 ```
 
 **Questions to ask:**
+
 - Does this component already exist in the project?
 - Can I reuse or extend an existing component?
 - Is there a similar pattern I can follow?
@@ -73,6 +76,7 @@ app/components/        # Custom components
 If you need a new component, determine which Base UI component to use:
 
 **Available Base UI Components:**
+
 - **Forms:** Checkbox, Checkbox Group, Radio, Switch, Input, Number Field, Select, Slider, Field, Fieldset, Form
 - **Overlays:** Dialog, Popover, Tooltip, Menu, Context Menu, Menubar
 - **Navigation:** Tabs, Navigation Menu, Toolbar
@@ -83,6 +87,7 @@ If you need a new component, determine which Base UI component to use:
 - **Layout:** Separator
 
 **When to consult Context7 MCP:**
+
 - You're unsure which Base UI component fits your needs
 - You need to understand the API and props of a Base UI component
 - You want to see usage examples from Base UI documentation
@@ -100,11 +105,11 @@ Wrap the Base UI component with our design system:
 
 ```tsx
 // ❌ DON'T: Use Base UI components directly without styling
-import { Checkbox } from '@base-ui-components/react/checkbox';
-<Checkbox />
+import { Checkbox } from '@base-ui/react/checkbox'
+;<Checkbox />
 
 // ✅ DO: Wrap with Soft Neo-Brutalism layer
-import { Checkbox as BaseCheckbox } from '@base-ui-components/react/checkbox';
+import { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox'
 
 export function Checkbox({ children, ...props }) {
   return (
@@ -114,18 +119,17 @@ export function Checkbox({ children, ...props }) {
         <div className="absolute inset-0 bg-dark translate-x-0.5 translate-y-0.5 rounded-sm" />
 
         {/* Base UI Component */}
-        <BaseCheckbox
-          className="peer sr-only"
-          {...props}
-        />
+        <BaseCheckbox className="peer sr-only" {...props} />
 
         {/* Custom Visual - Neo-Brutal styling */}
-        <div className="relative w-5 h-5 bg-white border-[3px] border-dark rounded-sm
-          peer-checked:bg-primary transition-all" />
+        <div
+          className="relative w-5 h-5 bg-white border-[3px] border-dark rounded-sm
+          peer-checked:bg-primary transition-all"
+        />
       </div>
       <span className="font-medium">{children}</span>
     </label>
-  );
+  )
 }
 ```
 
@@ -134,6 +138,7 @@ export function Checkbox({ children, ...props }) {
 Every styled Base UI component MUST follow these rules:
 
 **Required Elements:**
+
 1. **3px borders** with `border-dark` (#111827)
 2. **Solid offset shadows** (translate-x/y pattern)
 3. **Colors from palette** (primary, accent, panel, input, etc.)
@@ -141,12 +146,15 @@ Every styled Base UI component MUST follow these rules:
 5. **Accessibility** preserved from Base UI
 
 **Example Pattern:**
+
 ```tsx
 // Standard wrapper structure for interactive components
 <div className="relative group">
   {/* 1. Shadow Layer */}
-  <div className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1
-    transition-transform group-hover:translate-x-2 group-hover:translate-y-2" />
+  <div
+    className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1
+    transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+  />
 
   {/* 2. Base UI Component with Neo-Brutal styling */}
   <BaseUIComponent
@@ -163,6 +171,7 @@ Every styled Base UI component MUST follow these rules:
 ### 5. Document Component Usage
 
 Add examples to this style guide showing:
+
 - Base UI component used
 - Styling applied
 - Props available
@@ -191,17 +200,17 @@ Add examples to this style guide showing:
 
 > **Note:** Dark mode is currently disabled. The application always uses light theme.
 
-| Name                 | Light Mode (HSL)     | Usage               |
-| -------------------- | -------------------- | ------------------- |
-| Background           | `0 0% 100%`          | Main background     |
-| Foreground           | `0 0% 3.9%`          | Primary text        |
-| Muted                | `0 0% 96.1%`         | Secondary surfaces  |
-| Muted Foreground     | `0 0% 45.1%`         | Secondary text      |
-| Primary              | `0 0% 9%`            | Primary actions     |
-| Primary Foreground   | `0 0% 98%`           | Text on primary     |
-| Destructive          | `0 84.2% 60.2%`      | Error/danger states |
-| Border               | `0 0% 89.8%`         | Default borders     |
-| Ring                 | `0 0% 3.9%`          | Focus rings         |
+| Name               | Light Mode (HSL) | Usage               |
+| ------------------ | ---------------- | ------------------- |
+| Background         | `0 0% 100%`      | Main background     |
+| Foreground         | `0 0% 3.9%`      | Primary text        |
+| Muted              | `0 0% 96.1%`     | Secondary surfaces  |
+| Muted Foreground   | `0 0% 45.1%`     | Secondary text      |
+| Primary            | `0 0% 9%`        | Primary actions     |
+| Primary Foreground | `0 0% 98%`       | Text on primary     |
+| Destructive        | `0 84.2% 60.2%`  | Error/danger states |
+| Border             | `0 0% 89.8%`     | Default borders     |
+| Ring               | `0 0% 3.9%`      | Focus rings         |
 
 ### Color Usage Examples
 
@@ -229,35 +238,35 @@ Add examples to this style guide showing:
 
 ### Font Families
 
-| Name        | Value                                                   | CSS Class     | Usage                         |
-| ----------- | ------------------------------------------------------- | ------------- | ----------------------------- |
-| Display     | `Cabinet Grotesk`, sans-serif                           | `font-display`| Headlines, hero text          |
-| Sans        | `Inter`, system-ui, -apple-system, sans-serif           | `font-sans`   | Body text, UI elements        |
-| Mono        | `Space Mono`, `JetBrains Mono`, monospace               | `font-mono`   | Code, badges, technical text  |
+| Name    | Value                                         | CSS Class      | Usage                        |
+| ------- | --------------------------------------------- | -------------- | ---------------------------- |
+| Display | `Cabinet Grotesk`, sans-serif                 | `font-display` | Headlines, hero text         |
+| Sans    | `Inter`, system-ui, -apple-system, sans-serif | `font-sans`    | Body text, UI elements       |
+| Mono    | `Space Mono`, `JetBrains Mono`, monospace     | `font-mono`    | Code, badges, technical text |
 
 ### Font Sizes (Neo-Brutal Scale)
 
-| Name    | Size        | Line Height | Tracking         | Usage                |
-| ------- | ----------- | ----------- | ---------------- | -------------------- |
-| Hero    | `text-7xl`  | 0.9         | `tracking-tighter` | Landing hero titles |
-| Display | `text-5xl`  | 0.9         | `tracking-tighter` | Page titles         |
-| H1      | `text-4xl`  | 1.1         | `tracking-tight`   | Section headers     |
-| H2      | `text-2xl`  | 1.2         | `tracking-tight`   | Subsection headers  |
-| H3      | `text-xl`   | 1.3         | normal           | Card titles          |
-| Lead    | `text-lg`   | 1.6         | normal           | Lead paragraphs      |
-| Body    | `text-base` | 1.7         | normal           | Standard body text   |
-| Small   | `text-sm`   | 1.5         | normal           | Secondary text, meta |
-| Micro   | `text-xs`   | 1.4         | normal           | Labels, timestamps   |
-| Badge   | `text-[10px]`| 1.2        | normal           | NEW badges only      |
+| Name    | Size          | Line Height | Tracking           | Usage                |
+| ------- | ------------- | ----------- | ------------------ | -------------------- |
+| Hero    | `text-7xl`    | 0.9         | `tracking-tighter` | Landing hero titles  |
+| Display | `text-5xl`    | 0.9         | `tracking-tighter` | Page titles          |
+| H1      | `text-4xl`    | 1.1         | `tracking-tight`   | Section headers      |
+| H2      | `text-2xl`    | 1.2         | `tracking-tight`   | Subsection headers   |
+| H3      | `text-xl`     | 1.3         | normal             | Card titles          |
+| Lead    | `text-lg`     | 1.6         | normal             | Lead paragraphs      |
+| Body    | `text-base`   | 1.7         | normal             | Standard body text   |
+| Small   | `text-sm`     | 1.5         | normal             | Secondary text, meta |
+| Micro   | `text-xs`     | 1.4         | normal             | Labels, timestamps   |
+| Badge   | `text-[10px]` | 1.2         | normal             | NEW badges only      |
 
 ### Font Weights
 
-| Name      | Value | CSS Class        | Usage                      |
-| --------- | ----- | ---------------- | -------------------------- |
-| Normal    | 400   | `font-normal`    | Body text                  |
-| Medium    | 500   | `font-medium`    | UI labels, inputs          |
-| Bold      | 700   | `font-bold`      | Headlines, buttons         |
-| Black     | 900   | `font-black`     | Hero text (display font)   |
+| Name   | Value | CSS Class     | Usage                    |
+| ------ | ----- | ------------- | ------------------------ |
+| Normal | 400   | `font-normal` | Body text                |
+| Medium | 500   | `font-medium` | UI labels, inputs        |
+| Bold   | 700   | `font-bold`   | Headlines, buttons       |
+| Black  | 900   | `font-black`  | Hero text (display font) |
 
 ### Typography Examples
 
@@ -291,20 +300,20 @@ Add examples to this style guide showing:
 
 ### Base Spacing Scale
 
-| Name | Value     | Pixels | Usage                          |
-| ---- | --------- | ------ | ------------------------------ |
-| 1    | 0.25rem   | 4px    | Tight element spacing          |
-| 2    | 0.5rem    | 8px    | Small gaps, icon spacing       |
-| 3    | 0.75rem   | 12px   | Default inline gaps            |
-| 4    | 1rem      | 16px   | Standard card padding          |
-| 5    | 1.25rem   | 20px   | Medium spacing                 |
-| 6    | 1.5rem    | 24px   | Section internal padding       |
-| 8    | 2rem      | 32px   | Large card padding             |
-| 10   | 2.5rem    | 40px   | Section vertical spacing       |
-| 12   | 3rem      | 48px   | Hero section padding           |
-| 16   | 4rem      | 64px   | Major section margins          |
-| 20   | 5rem      | 80px   | Hero vertical padding          |
-| 24   | 6rem      | 96px   | Extra large section spacing    |
+| Name | Value   | Pixels | Usage                       |
+| ---- | ------- | ------ | --------------------------- |
+| 1    | 0.25rem | 4px    | Tight element spacing       |
+| 2    | 0.5rem  | 8px    | Small gaps, icon spacing    |
+| 3    | 0.75rem | 12px   | Default inline gaps         |
+| 4    | 1rem    | 16px   | Standard card padding       |
+| 5    | 1.25rem | 20px   | Medium spacing              |
+| 6    | 1.5rem  | 24px   | Section internal padding    |
+| 8    | 2rem    | 32px   | Large card padding          |
+| 10   | 2.5rem  | 40px   | Section vertical spacing    |
+| 12   | 3rem    | 48px   | Hero section padding        |
+| 16   | 4rem    | 64px   | Major section margins       |
+| 20   | 5rem    | 80px   | Hero vertical padding       |
+| 24   | 6rem    | 96px   | Extra large section spacing |
 
 ### Common Spacing Patterns
 
@@ -338,10 +347,12 @@ Add examples to this style guide showing:
   {/* Shadow Layer */}
   <div className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1" />
   {/* Button Face */}
-  <button className="relative z-10 w-full h-full flex items-center justify-center px-6 py-3.5
+  <button
+    className="relative z-10 w-full h-full flex items-center justify-center px-6 py-3.5
     bg-primary text-dark font-bold text-lg border-[3px] border-dark rounded
     group-hover:-translate-y-px group-hover:-translate-x-px
-    transition-transform duration-200 ease-out">
+    transition-transform duration-200 ease-out"
+  >
     Button Text
   </button>
 </div>
@@ -352,10 +363,12 @@ Add examples to this style guide showing:
 ```tsx
 <div className="relative group">
   <div className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1" />
-  <button className="relative z-10 border-[3px] border-dark bg-white text-dark
+  <button
+    className="relative z-10 border-[3px] border-dark bg-white text-dark
     px-6 py-3 font-medium rounded
     hover:-translate-y-px hover:-translate-x-px
-    transition-transform duration-200">
+    transition-transform duration-200"
+  >
     Secondary Action
   </button>
 </div>
@@ -430,9 +443,7 @@ Add examples to this style guide showing:
 #### White Card Variant
 
 ```tsx
-<div className="bg-white border-[3px] border-dark rounded-xl p-6 shadow-hard">
-  Content
-</div>
+<div className="bg-white border-[3px] border-dark rounded-xl p-6 shadow-hard">Content</div>
 ```
 
 ### Badges
@@ -440,9 +451,11 @@ Add examples to this style guide showing:
 #### NEW Badge (Rotated)
 
 ```tsx
-<span className="inline-block -rotate-6 -translate-y-1 px-1.5 py-0.5
+<span
+  className="inline-block -rotate-6 -translate-y-1 px-1.5 py-0.5
   bg-accent border border-dark text-white text-[10px] font-bold
-  shadow-hard">
+  shadow-hard"
+>
   NEW
 </span>
 ```
@@ -450,8 +463,10 @@ Add examples to this style guide showing:
 #### Tag Badge
 
 ```tsx
-<span className="px-3 py-1 bg-input border-[3px] border-dark text-dark
-  font-medium rounded text-sm">
+<span
+  className="px-3 py-1 bg-input border-[3px] border-dark text-dark
+  font-medium rounded text-sm"
+>
   FRONTEND
 </span>
 ```
@@ -459,8 +474,10 @@ Add examples to this style guide showing:
 #### Premium Badge
 
 ```tsx
-<span className="inline-flex items-center gap-1 bg-dark text-primary
-  px-2 py-0.5 rounded-sm text-xs font-bold font-mono tracking-wider">
+<span
+  className="inline-flex items-center gap-1 bg-dark text-primary
+  px-2 py-0.5 rounded-sm text-xs font-bold font-mono tracking-wider"
+>
   PREMIUM
 </span>
 ```
@@ -474,8 +491,10 @@ Add examples to this style guide showing:
   <div className="relative w-6 h-6">
     <div className="absolute inset-0 bg-dark translate-x-0.5 translate-y-0.5 rounded-sm" />
     <input type="checkbox" className="peer sr-only" />
-    <div className="relative w-5 h-5 bg-white border-[3px] border-dark rounded-sm
-      peer-checked:bg-primary transition-all" />
+    <div
+      className="relative w-5 h-5 bg-white border-[3px] border-dark rounded-sm
+      peer-checked:bg-primary transition-all"
+    />
   </div>
   <span className="font-medium">Label text</span>
 </label>
@@ -485,9 +504,12 @@ Add examples to this style guide showing:
 
 ```tsx
 <label className="flex items-center gap-3 cursor-pointer p-2 hover:bg-input rounded">
-  <input type="radio" name="budget"
+  <input
+    type="radio"
+    name="budget"
     className="w-6 h-6 border-[3px] border-dark rounded-full bg-white
-      checked:bg-accent appearance-none cursor-pointer" />
+      checked:bg-accent appearance-none cursor-pointer"
+  />
   <span className="font-mono text-sm">Option</span>
 </label>
 ```
@@ -497,8 +519,10 @@ Add examples to this style guide showing:
 ```tsx
 <div className="relative">
   <div className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1" />
-  <select className="relative z-10 min-w-[160px] appearance-none pr-8 pl-4 py-3
-    bg-[#e6e8eb] border-[3px] border-dark cursor-pointer focus:outline-none rounded">
+  <select
+    className="relative z-10 min-w-[160px] appearance-none pr-8 pl-4 py-3
+    bg-[#e6e8eb] border-[3px] border-dark cursor-pointer focus:outline-none rounded"
+  >
     <option>Option 1</option>
     <option>Option 2</option>
   </select>
@@ -511,11 +535,11 @@ Add examples to this style guide showing:
 
 ### Neo-Brutal Shadow System
 
-| Name      | CSS Value                         | Tailwind Class | Usage                     |
-| --------- | --------------------------------- | -------------- | ------------------------- |
-| Hard      | `2px 2px 0 0 rgba(0,0,0,1)`       | `shadow-hard`  | Buttons, inputs, badges   |
-| Hard LG   | `4px 4px 0 0 rgba(0,0,0,1)`       | `shadow-hard-lg` | Cards, panels           |
-| Offset    | Element with `translate-x/y`      | N/A            | Dynamic button shadows    |
+| Name    | CSS Value                    | Tailwind Class   | Usage                   |
+| ------- | ---------------------------- | ---------------- | ----------------------- |
+| Hard    | `2px 2px 0 0 rgba(0,0,0,1)`  | `shadow-hard`    | Buttons, inputs, badges |
+| Hard LG | `4px 4px 0 0 rgba(0,0,0,1)`  | `shadow-hard-lg` | Cards, panels           |
+| Offset  | Element with `translate-x/y` | N/A              | Dynamic button shadows  |
 
 ### Shadow Implementation Patterns
 
@@ -558,21 +582,21 @@ Add examples to this style guide showing:
 
 ### Duration Scale
 
-| Name          | Duration | Usage                       |
-| ------------- | -------- | --------------------------- |
-| `duration-100`| 100ms    | Quick micro-interactions    |
-| `duration-150`| 150ms    | Default hover transitions   |
-| `duration-200`| 200ms    | Button press, transforms    |
-| `duration-300`| 300ms    | Standard animations         |
-| `duration-500`| 500ms    | Slow reveals, large motions |
-| `duration-600`| 600ms    | Slide-up animations         |
+| Name           | Duration | Usage                       |
+| -------------- | -------- | --------------------------- |
+| `duration-100` | 100ms    | Quick micro-interactions    |
+| `duration-150` | 150ms    | Default hover transitions   |
+| `duration-200` | 200ms    | Button press, transforms    |
+| `duration-300` | 300ms    | Standard animations         |
+| `duration-500` | 500ms    | Slow reveals, large motions |
+| `duration-600` | 600ms    | Slide-up animations         |
 
 ### Easing Functions
 
-| Name           | Value                            | Usage                   |
-| -------------- | -------------------------------- | ----------------------- |
-| `ease-out`     | `cubic-bezier(0, 0, 0.2, 1)`     | Enter animations        |
-| `ease-in-out`  | `cubic-bezier(0.4, 0, 0.2, 1)`   | Default transitions     |
+| Name          | Value                          | Usage               |
+| ------------- | ------------------------------ | ------------------- |
+| `ease-out`    | `cubic-bezier(0, 0, 0.2, 1)`   | Enter animations    |
+| `ease-in-out` | `cubic-bezier(0.4, 0, 0.2, 1)` | Default transitions |
 
 ### Common Animations
 
@@ -633,15 +657,15 @@ className="transition-transform hover:-translate-y-0.5"
 
 ### Radius Scale
 
-| Name           | Value     | Usage                      |
-| -------------- | --------- | -------------------------- |
-| `rounded-sm`   | 0.125rem  | Subtle rounding (badges)   |
-| `rounded`      | 0.25rem   | Buttons, inputs            |
-| `rounded-md`   | 0.375rem  | Default elements           |
-| `rounded-lg`   | 0.5rem    | Small cards                |
-| `rounded-xl`   | 0.75rem   | Cards, panels              |
-| `rounded-2xl`  | 1rem      | Large panels, hero cards   |
-| `rounded-full` | 9999px    | Avatars, pills, icons      |
+| Name           | Value    | Usage                    |
+| -------------- | -------- | ------------------------ |
+| `rounded-sm`   | 0.125rem | Subtle rounding (badges) |
+| `rounded`      | 0.25rem  | Buttons, inputs          |
+| `rounded-md`   | 0.375rem | Default elements         |
+| `rounded-lg`   | 0.5rem   | Small cards              |
+| `rounded-xl`   | 0.75rem  | Cards, panels            |
+| `rounded-2xl`  | 1rem     | Large panels, hero cards |
+| `rounded-full` | 9999px   | Avatars, pills, icons    |
 
 ### Neo-Brutal Default
 
@@ -653,12 +677,12 @@ Neo-Brutal favors minimal rounding. Use `rounded` (4px) for most interactive ele
 
 ### Border Width
 
-| Width        | Usage                              |
-| ------------ | ---------------------------------- |
-| `border`     | Subtle separators (shadcn/ui)      |
-| `border-2`   | Code blocks, secondary elements    |
-| `border-[3px]`| **Neo-Brutal default** - all UI    |
-| `border-4`   | Section dividers, emphasis         |
+| Width          | Usage                           |
+| -------------- | ------------------------------- |
+| `border`       | Subtle separators (shadcn/ui)   |
+| `border-2`     | Code blocks, secondary elements |
+| `border-[3px]` | **Neo-Brutal default** - all UI |
+| `border-4`     | Section dividers, emphasis      |
 
 ### Border Color
 
@@ -681,25 +705,25 @@ Always use `border-dark` (`#111827`) for Neo-Brutal components. This creates the
 
 ### Opacity Scale
 
-| Value         | Usage                          |
-| ------------- | ------------------------------ |
-| `opacity-0`   | Hidden elements                |
-| `opacity-50`  | Disabled states, watermarks    |
-| `opacity-60`  | Inactive theme options         |
-| `opacity-75`  | Secondary decorative elements  |
-| `opacity-100` | Default                        |
+| Value         | Usage                         |
+| ------------- | ----------------------------- |
+| `opacity-0`   | Hidden elements               |
+| `opacity-50`  | Disabled states, watermarks   |
+| `opacity-60`  | Inactive theme options        |
+| `opacity-75`  | Secondary decorative elements |
+| `opacity-100` | Default                       |
 
 ### Background Opacity Patterns
 
 ```tsx
 // Header Backdrop
-className="bg-paper/90 backdrop-blur-sm"
+className = 'bg-paper/90 backdrop-blur-sm'
 
 // Modal Overlay
-className="bg-ink/80"
+className = 'bg-ink/80'
 
 // Disabled/Locked Content
-className="opacity-50 blur-[1px] select-none cursor-not-allowed"
+className = 'opacity-50 blur-[1px] select-none cursor-not-allowed'
 ```
 
 ---
@@ -708,13 +732,13 @@ className="opacity-50 blur-[1px] select-none cursor-not-allowed"
 
 ### 4-Layer System
 
-| Layer    | Z-Index  | Usage                                  |
-| -------- | -------- | -------------------------------------- |
-| Base     | `0`      | Default content                        |
-| Elevated | `10`     | Shadow elements, card layers           |
-| Sticky   | `40`     | Sticky headers                         |
-| Overlay  | `50`     | Modals, dialogs, dropdowns             |
-| Top      | `100`    | Toasts, reading progress, noise overlay|
+| Layer    | Z-Index | Usage                                   |
+| -------- | ------- | --------------------------------------- |
+| Base     | `0`     | Default content                         |
+| Elevated | `10`    | Shadow elements, card layers            |
+| Sticky   | `40`    | Sticky headers                          |
+| Overlay  | `50`    | Modals, dialogs, dropdowns              |
+| Top      | `100`   | Toasts, reading progress, noise overlay |
 
 ### Usage Examples
 
@@ -779,13 +803,13 @@ tailwind.config = {
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
-        primary: '#ffc480',    // Ingest Orange
-        accent: '#FE4A60',     // Alert Red
-        dark: '#111827',       // Ink Black
-        canvas: '#FFFDF8',     // Cream Paper
-        panel: '#fff4da',      // Panel Yellow
-        input: '#E8F0FE',      // Input Blue
-        control: '#EBDBB7',    // Controls Beige
+        primary: '#ffc480', // Ingest Orange
+        accent: '#FE4A60', // Alert Red
+        dark: '#111827', // Ink Black
+        canvas: '#FFFDF8', // Cream Paper
+        panel: '#fff4da', // Panel Yellow
+        input: '#E8F0FE', // Input Blue
+        control: '#EBDBB7', // Controls Beige
       },
       boxShadow: {
         hard: '2px 2px 0 0 rgba(0,0,0,1)',
@@ -804,22 +828,22 @@ tailwind.config = {
 
 ```tsx
 // Neo-Brutal Borders
-"border-[3px] border-dark"
-"border-[3px] border-gray-900"
+'border-[3px] border-dark'
+'border-[3px] border-gray-900'
 
 // Tracking (letter-spacing)
-"tracking-tighter"  // -0.05em - Hero headlines
-"tracking-tight"    // -0.025em - Section titles
+'tracking-tighter' // -0.05em - Hero headlines
+'tracking-tight' // -0.025em - Section titles
 
 // Font Weights
-"font-bold"         // 700 - Most text
-"font-black"        // 900 - Display text only
-"font-medium"       // 500 - Body, buttons
+'font-bold' // 700 - Most text
+'font-black' // 900 - Display text only
+'font-medium' // 500 - Body, buttons
 
 // Transitions
-"transition-transform duration-200 ease-out"
-"transition-colors duration-150"
-"transition-all duration-200"
+'transition-transform duration-200 ease-out'
+'transition-colors duration-150'
+'transition-all duration-200'
 ```
 
 ### Layout Patterns
@@ -868,13 +892,17 @@ tailwind.config = {
 ```tsx
 <a href="#" className="group relative block w-full">
   {/* Shadow Layer - Expands on hover */}
-  <div className="absolute inset-0 bg-dark rounded translate-x-1.5 translate-y-1.5
-    transition-transform group-hover:translate-x-2 group-hover:translate-y-2" />
+  <div
+    className="absolute inset-0 bg-dark rounded translate-x-1.5 translate-y-1.5
+    transition-transform group-hover:translate-x-2 group-hover:translate-y-2"
+  />
 
   {/* Card Face - Lifts on hover */}
-  <div className="relative z-10 bg-white border-[3px] border-dark rounded p-4
+  <div
+    className="relative z-10 bg-white border-[3px] border-dark rounded p-4
     flex items-center justify-center gap-3
-    transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5">
+    transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5"
+  >
     <span className="text-xl">🐦</span>
     <span className="font-bold text-lg">Twitter</span>
   </div>
@@ -925,10 +953,12 @@ tailwind.config = {
       {/* Submit Button */}
       <div className="relative group cursor-pointer h-14">
         <div className="absolute inset-0 bg-gray-800 rounded translate-x-1 translate-y-1" />
-        <button className="relative z-10 w-full h-full flex items-center justify-center
+        <button
+          className="relative z-10 w-full h-full flex items-center justify-center
           bg-primary text-dark font-bold text-lg border-[3px] border-dark rounded
           group-hover:-translate-y-px group-hover:-translate-x-px
-          transition-transform duration-200">
+          transition-transform duration-200"
+        >
           Enviar
         </button>
       </div>
@@ -940,8 +970,10 @@ tailwind.config = {
 ### Reference Component: Pricing Card (Featured)
 
 ```tsx
-<div className="relative bg-primary border-[3px] border-dark rounded-xl p-8
-  transform md:scale-105">
+<div
+  className="relative bg-primary border-[3px] border-dark rounded-xl p-8
+  transform md:scale-105"
+>
   {/* Plan Name */}
   <div className="font-mono text-sm font-bold mb-2">PRO</div>
 
@@ -965,8 +997,10 @@ tailwind.config = {
   {/* CTA Button */}
   <div className="relative">
     <div className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1" />
-    <button className="relative z-10 w-full py-3 bg-dark text-white border-[3px] border-dark
-      rounded font-bold hover:bg-[#1f2937] transition-colors">
+    <button
+      className="relative z-10 w-full py-3 bg-dark text-white border-[3px] border-dark
+      rounded font-bold hover:bg-[#1f2937] transition-colors"
+    >
       Empezar prueba
     </button>
   </div>
@@ -983,13 +1017,13 @@ This design system targets WCAG 2.1 AA guidelines with built-in high contrast.
 
 ### Contrast Ratios
 
-| Element          | Foreground  | Background  | Ratio  | Status |
-| ---------------- | ----------- | ----------- | ------ | ------ |
-| Body text        | `#111827`   | `#FFFDF8`   | 16.1:1 | ✅     |
-| Body text        | `#111827`   | `#fff4da`   | 14.5:1 | ✅     |
-| Button text      | `#111827`   | `#ffc480`   | 8.9:1  | ✅     |
-| Badge text       | `#FFFFFF`   | `#FE4A60`   | 4.6:1  | ✅     |
-| Muted text       | `#4B5563`   | `#FFFDF8`   | 7.5:1  | ✅     |
+| Element     | Foreground | Background | Ratio  | Status |
+| ----------- | ---------- | ---------- | ------ | ------ |
+| Body text   | `#111827`  | `#FFFDF8`  | 16.1:1 | ✅     |
+| Body text   | `#111827`  | `#fff4da`  | 14.5:1 | ✅     |
+| Button text | `#111827`  | `#ffc480`  | 8.9:1  | ✅     |
+| Badge text  | `#FFFFFF`  | `#FE4A60`  | 4.6:1  | ✅     |
+| Muted text  | `#4B5563`  | `#FFFDF8`  | 7.5:1  | ✅     |
 
 ### Focus States
 
@@ -1070,10 +1104,10 @@ className="outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
 
 ```tsx
 // Good - Predictable hover behavior
-className="transition-transform duration-200 hover:-translate-y-px hover:-translate-x-px"
+className = 'transition-transform duration-200 hover:-translate-y-px hover:-translate-x-px'
 
 // Bad - Inconsistent timing/easing
-className="transition duration-500 hover:-translate-y-2"
+className = 'transition duration-500 hover:-translate-y-2'
 ```
 
 ### 5. Semantic Color Usage
@@ -1238,7 +1272,7 @@ Neo-Brutal favors flat colors. Avoid gradients on interactive elements.
 
 ## Version History
 
-| Version | Date       | Changes                                                                    |
-| ------- | ---------- | -------------------------------------------------------------------------- |
-| 1.1.0   | 2026-01-18 | Added Base UI component architecture strategy and development workflow     |
-| 1.0.0   | 2026-01-17 | Initial style guide - Soft Neo-Brutalism system                            |
+| Version | Date       | Changes                                                                |
+| ------- | ---------- | ---------------------------------------------------------------------- |
+| 1.1.0   | 2026-01-18 | Added Base UI component architecture strategy and development workflow |
+| 1.0.0   | 2026-01-17 | Initial style guide - Soft Neo-Brutalism system                        |

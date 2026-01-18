@@ -3,9 +3,11 @@
 ## 1. Natural Language Description
 
 ### Current State
+
 El dashboard (`/dashboard`) es un placeholder mínimo que muestra un mensaje "Coming soon" con el email del usuario autenticado. No tiene funcionalidad ni el diseño Neo-Brutal del mockup.
 
 ### Expected End State
+
 El dashboard tendrá el layout completo basado en el mockup `mockups/mockup.html` (sección "Dashboard"):
 
 1. **Header del sitio** - Reutiliza el `Header` existente (`app/components/Header.tsx`):
@@ -41,6 +43,7 @@ El dashboard tendrá el layout completo basado en el mockup `mockups/mockup.html
 ## 2. Technical Description
 
 ### High-Level Approach
+
 - Reutilizar el `Header` existente del sitio (consistencia visual)
 - Usar los componentes Neo-Brutal existentes (`NeoBrutalCard`, `NeoBrutalButton`)
 - Crear componentes específicos del dashboard en `app/components/dashboard/`
@@ -48,13 +51,15 @@ El dashboard tendrá el layout completo basado en el mockup `mockups/mockup.html
 - Usar Base UI Avatar para el avatar en el PhonePreview
 
 ### Architecture Decisions
+
 - **Header compartido**: El dashboard reutiliza el `Header` existente (`app/components/Header.tsx`) que ya tiene `UserDropdown` y `LanguageSelector`
 - **No nested routes**: El dashboard es una ruta plana, no usa layout anidado
 - **Componentes presentacionales**: Los componentes del dashboard son puramente visuales
 - **Datos del preview**: Los datos para el PhonePreview vienen directamente del loader
 
 ### Dependencies
-- `@base-ui-components/react` - Para el componente Avatar accesible
+
+- `@base-ui/react` - Para el componente Avatar accesible
 - Componentes Neo-Brutal existentes
 
 ---
@@ -70,30 +75,33 @@ El dashboard tendrá el layout completo basado en el mockup `mockups/mockup.html
 ### Route Module Breakdown
 
 **`app/routes/dashboard.tsx`**
+
 - **Loader**: Llama a `getCurrentUser()`, `getUserBiolink()`, `getLinksByBiolinkId()`
 - **Action**: No se implementa en esta tarea
 - **Component**: Compone `Header`, columna izquierda (stats + placeholder), columna derecha (preview)
 
 ### Component Breakdown
 
-| Component | Hooks Used | Business Logic |
-|-----------|-----------|----------------|
-| `Header` (existente) | `useNavigate`, `useTranslation` | NINGUNA - usa `UserDropdown` |
-| `PremiumBanner` | ninguno | NINGUNA - visual puro, CTA disabled |
-| `DashboardAvatar` | ninguno | NINGUNA - wrapper de Base UI Avatar |
-| `StatsCard` | ninguno | NINGUNA - solo renderiza totalViews |
-| `PremiumBadge` | ninguno | NINGUNA - visual puro |
-| `PhonePreview` | ninguno | NINGUNA - renderiza datos del biolink |
-| `LinksEditorPlaceholder` | ninguno | NINGUNA - placeholder visual |
+| Component                | Hooks Used                      | Business Logic                        |
+| ------------------------ | ------------------------------- | ------------------------------------- |
+| `Header` (existente)     | `useNavigate`, `useTranslation` | NINGUNA - usa `UserDropdown`          |
+| `PremiumBanner`          | ninguno                         | NINGUNA - visual puro, CTA disabled   |
+| `DashboardAvatar`        | ninguno                         | NINGUNA - wrapper de Base UI Avatar   |
+| `StatsCard`              | ninguno                         | NINGUNA - solo renderiza totalViews   |
+| `PremiumBadge`           | ninguno                         | NINGUNA - visual puro                 |
+| `PhonePreview`           | ninguno                         | NINGUNA - renderiza datos del biolink |
+| `LinksEditorPlaceholder` | ninguno                         | NINGUNA - placeholder visual          |
 
 ---
 
 ## 3. Files to Change/Create
 
 ### `app/routes/dashboard.tsx`
+
 **Objective:** Ruta del dashboard con layout de dos columnas, Header del sitio y preview del iPhone.
 
 **Pseudocode:**
+
 ```pseudocode
 // LOADER
 FUNCTION loader(request)
@@ -147,9 +155,11 @@ END
 ---
 
 ### `app/components/dashboard/PremiumBanner.tsx`
+
 **Objective:** Banner fullwidth Neo-Brutal para incentivar upgrade a Premium.
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT PremiumBanner
   { t } = useTranslation()
@@ -182,9 +192,11 @@ END
 ---
 
 ### `app/components/dashboard/DashboardAvatar.tsx`
+
 **Objective:** Wrapper de Base UI Avatar con estilo Neo-Brutal.
 
 **Pseudocode:**
+
 ```pseudocode
 INTERFACE DashboardAvatarProps
   src: string | null
@@ -217,9 +229,11 @@ END
 ---
 
 ### `app/components/dashboard/PremiumBadge.tsx`
+
 **Objective:** Badge que muestra FREE o PREMIUM según estado del usuario.
 
 **Pseudocode:**
+
 ```pseudocode
 INTERFACE PremiumBadgeProps
   isPremium: boolean
@@ -243,9 +257,11 @@ END
 ---
 
 ### `app/components/dashboard/StatsCard.tsx`
+
 **Objective:** Card que muestra estadísticas básicas (views) y bloqueadas (clicks para premium).
 
 **Pseudocode:**
+
 ```pseudocode
 INTERFACE StatsCardProps
   totalViews: number
@@ -292,9 +308,11 @@ END
 ---
 
 ### `app/components/dashboard/PhonePreview.tsx`
+
 **Objective:** Preview del biolink en un frame de iPhone.
 
 **Pseudocode:**
+
 ```pseudocode
 INTERFACE PhonePreviewProps
   username: string
@@ -376,9 +394,11 @@ END
 ---
 
 ### `app/components/dashboard/LinksEditorPlaceholder.tsx`
+
 **Objective:** Placeholder visual para el editor de links (implementado en Task 2.3/2.4).
 
 **Pseudocode:**
+
 ```pseudocode
 INTERFACE LinksEditorPlaceholderProps
   linkCount: number
@@ -408,9 +428,11 @@ END
 ---
 
 ### `app/components/dashboard/index.ts`
+
 **Objective:** Barrel export de componentes del dashboard.
 
 **Pseudocode:**
+
 ```pseudocode
 EXPORT:
   - PremiumBanner
@@ -424,9 +446,11 @@ EXPORT:
 ---
 
 ### `app/lib/format.ts`
+
 **Objective:** Utilidades de formateo de números.
 
 **Pseudocode:**
+
 ```pseudocode
 FUNCTION formatNumber(num: number): string
   IF num >= 1000000 THEN
@@ -442,21 +466,22 @@ END
 ## 4. I18N
 
 ### Existing keys to reuse
+
 - `login` - Para posible link de login si no autenticado
 
 ### New keys to create
 
-| Key | English | Spanish |
-|-----|---------|---------|
-| `premium_banner_message` | Unlock analytics, custom colors & remove watermark | Desbloquea analíticas, colores personalizados y quita la marca de agua |
-| `premium_banner_cta` | Go Premium — 5€ | Hazte Premium — 5€ |
-| `dashboard_total_views` | Total Views | Visitas Totales |
-| `dashboard_clicks` | Clicks | Clicks |
-| `dashboard_live_preview` | Live Preview | Vista Previa en vivo |
-| `dashboard_my_links` | My Links | Mis Links |
-| `dashboard_links_coming_soon` | Links editor coming in Task 2.3... | Editor de links próximamente... |
-| `dashboard_preview_bio_placeholder` | Your bio will appear here | Tu bio aparecerá aquí |
-| `dashboard_preview_no_links` | Add your first link! | ¡Añade tu primer link! |
+| Key                                 | English                                            | Spanish                                                                |
+| ----------------------------------- | -------------------------------------------------- | ---------------------------------------------------------------------- |
+| `premium_banner_message`            | Unlock analytics, custom colors & remove watermark | Desbloquea analíticas, colores personalizados y quita la marca de agua |
+| `premium_banner_cta`                | Go Premium — 5€                                    | Hazte Premium — 5€                                                     |
+| `dashboard_total_views`             | Total Views                                        | Visitas Totales                                                        |
+| `dashboard_clicks`                  | Clicks                                             | Clicks                                                                 |
+| `dashboard_live_preview`            | Live Preview                                       | Vista Previa en vivo                                                   |
+| `dashboard_my_links`                | My Links                                           | Mis Links                                                              |
+| `dashboard_links_coming_soon`       | Links editor coming in Task 2.3...                 | Editor de links próximamente...                                        |
+| `dashboard_preview_bio_placeholder` | Your bio will appear here                          | Tu bio aparecerá aquí                                                  |
+| `dashboard_preview_no_links`        | Add your first link!                               | ¡Añade tu primer link!                                                 |
 
 ---
 
@@ -568,5 +593,5 @@ END
 Instalar Base UI para el componente Avatar:
 
 ```bash
-npm install @base-ui-components/react
+npm install @base-ui/react
 ```

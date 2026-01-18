@@ -50,17 +50,20 @@
 ### Notas de Implementación
 
 **Cambios arquitectónicos:**
+
 - Componentes Neo-Brutal organizados con un componente por archivo (ESLint `react/no-multi-comp`)
 - Base UI usado para componentes interactivos (Menu, Toast)
 - shadcn/ui Form mantenido para react-hook-form integration
 - Toda la lógica de negocio mantenida sin cambios
 
 **Archivos creados:**
+
 - `app/components/neo-brutal/` (7 archivos)
 - `app/components/landing/ValuePropCard.tsx`
 - `app/routes/dashboard.tsx`
 
 **Archivos modificados:**
+
 - Todos los componentes de header/footer/landing
 - Rutas de auth y home
 - `app.css`, `root.tsx`, `routes.ts`
@@ -71,7 +74,9 @@
 ## 1. Natural Language Description
 
 ### Estado Actual
+
 La aplicación tiene un look and feel genérico proveniente del template SaaS:
+
 - **shadcn/ui components** usados actualmente:
   - `Button` (en Header, Login, Signup, GoogleAuthButton, ThemeToggle, LanguageSelector, HeroSection)
   - `Input` (en Login, Signup)
@@ -86,7 +91,8 @@ La aplicación tiene un look and feel genérico proveniente del template SaaS:
 - Sistema de colores basado en variables shadcn/ui estándar
 
 ### Estado Esperado
-Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** usando **Base UI** (`@base-ui-components/react`) como foundation:
+
+Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** usando **Base UI** (`@base-ui/react`) como foundation:
 
 1. **Migración de shadcn/ui → Base UI + Neo-Brutal styling:**
    - `Button` → Nuevo `NeoBrutalButton` (componente custom con sombra sólida)
@@ -107,6 +113,7 @@ Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** us
 **Funcionalidad:** Todo seguirá funcionando exactamente igual. Es una migración puramente visual.
 
 **Layout compartido:**
+
 - Header Neo-Brutal: Logo BioLinq + ThemeToggle + LanguageSelector + Login/UserDropdown
 - Footer Neo-Brutal: Términos, Privacidad + Copyright
 - Header y Footer se muestran en: Landing, Login, Signup, Dashboard (placeholder)
@@ -117,7 +124,8 @@ Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** us
 ## 2. Technical Description
 
 ### Enfoque
-1. **Instalar Base UI:** `npm install @base-ui-components/react`
+
+1. **Instalar Base UI:** `npm install @base-ui/react`
 2. **Configurar sistema de colores Neo-Brutal en Tailwind CSS v4** (archivo `app/app.css`)
 3. **Crear componentes Neo-Brutal** usando Base UI como foundation:
    - `NeoBrutalButton` - Botón con sombra sólida y efecto press
@@ -133,6 +141,7 @@ Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** us
 9. **Eliminar componentes shadcn/ui** que ya no se usen
 
 ### Decisiones Arquitectónicas
+
 - Los colores Neo-Brutal se definen como variables CSS custom y clases Tailwind
 - Los componentes Neo-Brutal son **nuevos componentes** que wrappean Base UI primitives
 - El Header y Footer son componentes compartidos que se renderizan en `root.tsx`
@@ -142,23 +151,26 @@ Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** us
 - Nosotros proporcionamos: estilos Neo-Brutal
 
 ### Dependencias
-- **Nueva:** `@base-ui-components/react`
+
+- **Nueva:** `@base-ui/react`
 - Fuentes: Inter (ya incluida), JetBrains Mono (añadir)
 
 ### Componentes Base UI a usar
-| shadcn/ui actual | Base UI replacement | Uso en BioLinq |
-|------------------|---------------------|----------------|
-| `DropdownMenu` | `Menu` | ThemeToggle, LanguageSelector, UserDropdown |
-| `Sonner` | `Toast` | Notificaciones globales |
-| `AlertDialog` | `AlertDialog` | Confirmaciones (futuro) |
-| `Dialog` | `Dialog` | Modales (futuro) |
+
+| shadcn/ui actual | Base UI replacement | Uso en BioLinq                              |
+| ---------------- | ------------------- | ------------------------------------------- |
+| `DropdownMenu`   | `Menu`              | ThemeToggle, LanguageSelector, UserDropdown |
+| `Sonner`         | `Toast`             | Notificaciones globales                     |
+| `AlertDialog`    | `AlertDialog`       | Confirmaciones (futuro)                     |
+| `Dialog`         | `Dialog`            | Modales (futuro)                            |
 
 ### Componentes custom (sin Base UI)
-| Componente | Razón |
-|------------|-------|
+
+| Componente        | Razón                                                      |
+| ----------------- | ---------------------------------------------------------- |
 | `NeoBrutalButton` | Botón es elemento nativo `<button>`, no necesita primitivo |
-| `NeoBrutalInput` | Input es elemento nativo `<input>`, no necesita primitivo |
-| `NeoBrutalCard` | Card es solo `<div>` con estilos |
+| `NeoBrutalInput`  | Input es elemento nativo `<input>`, no necesita primitivo  |
+| `NeoBrutalCard`   | Card es solo `<div>` con estilos                           |
 
 ---
 
@@ -169,12 +181,14 @@ Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** us
 - **Business logic is not in components:** Esta tarea es puramente UI. No hay lógica de negocio involucrada.
 
 ### Detalle por ruta:
+
 - `home.tsx`: Compone `<BioLinqHero />` + layout
 - `auth.login.tsx`: Compone `<LoginForm />` (existente, con estilos actualizados)
 - `auth.signup.tsx`: Compone `<SignupForm />` (existente, con estilos actualizados)
 - `dashboard.tsx` (nuevo): Compone placeholder con mensaje "Coming soon"
 
 ### Componentes creados/modificados:
+
 - `Header.tsx`: Usa hooks existentes (`useSession`). Renderiza logo + theme/language + login.
 - `Footer.tsx`: Puro componente de presentación. Sin hooks de negocio.
 - `NeoBrutalButton.tsx`, `NeoBrutalInput.tsx`, `NeoBrutalCard.tsx`: Componentes de presentación puros.
@@ -187,20 +201,24 @@ Toda la UI visible será migrada al sistema de diseño **Soft Neo-Brutalism** us
 ## 3. Files to Change/Create
 
 ### `package.json`
+
 **Objective:** Añadir dependencia de Base UI
 
 **Pseudocode:**
+
 ```pseudocode
 ADD dependency:
-  "@base-ui-components/react": "^1.0.0"
+  "@base-ui/react": "^1.0.0"
 ```
 
 ---
 
 ### `app/app.css`
+
 **Objective:** Añadir variables CSS para colores Neo-Brutal y utilidades custom
 
 **Pseudocode:**
+
 ```pseudocode
 @theme {
   // Mantener fuentes existentes
@@ -236,9 +254,11 @@ ADD dependency:
 ---
 
 ### `app/components/neo-brutal/NeoBrutalButton.tsx`
+
 **Objective:** Botón reutilizable con estilo Neo-Brutal (sombra sólida + efecto press)
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT NeoBrutalButton
   PROPS:
@@ -279,9 +299,11 @@ END
 ---
 
 ### `app/components/neo-brutal/NeoBrutalInput.tsx`
+
 **Objective:** Input reutilizable con estilo Neo-Brutal
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT NeoBrutalInput
   PROPS:
@@ -313,9 +335,11 @@ END
 ---
 
 ### `app/components/neo-brutal/NeoBrutalCard.tsx`
+
 **Objective:** Card reutilizable con estilo Neo-Brutal
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT NeoBrutalCard
   PROPS:
@@ -343,11 +367,13 @@ END
 ---
 
 ### `app/components/neo-brutal/NeoBrutalMenu.tsx`
+
 **Objective:** Wrapper de Base UI Menu con estilos Neo-Brutal para dropdowns
 
 **Pseudocode:**
+
 ```pseudocode
-IMPORT { Menu } from '@base-ui-components/react/menu'
+IMPORT { Menu } from '@base-ui/react/menu'
 
 // Re-export subcomponentes con estilos Neo-Brutal
 EXPORT NeoBrutalMenuRoot = Menu.Root
@@ -413,11 +439,13 @@ END
 ---
 
 ### `app/components/neo-brutal/NeoBrutalToast.tsx`
+
 **Objective:** Sistema de Toast con Base UI y estilos Neo-Brutal
 
 **Pseudocode:**
+
 ```pseudocode
-IMPORT { Toast } from '@base-ui-components/react/toast'
+IMPORT { Toast } from '@base-ui/react/toast'
 IMPORT { createContext, useContext } from 'react'
 
 // Context para acceso global al toast
@@ -466,9 +494,11 @@ EXPORT useToast() {
 ---
 
 ### `app/components/neo-brutal/index.ts`
+
 **Objective:** Barrel export para componentes Neo-Brutal
 
 **Pseudocode:**
+
 ```pseudocode
 EXPORT * from './NeoBrutalButton'
 EXPORT * from './NeoBrutalInput'
@@ -480,9 +510,11 @@ EXPORT * from './NeoBrutalToast'
 ---
 
 ### `app/components/Header.tsx`
+
 **Objective:** Migrar al diseño Neo-Brutal. Logo BioLinq + ThemeToggle + LanguageSelector + Login/UserDropdown
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT Header
   PROPS: session, user (como actualmente)
@@ -520,9 +552,11 @@ END
 ---
 
 ### `app/components/ThemeToggle.tsx`
+
 **Objective:** Migrar de shadcn/ui DropdownMenu a Base UI Menu con estilos Neo-Brutal
 
 **Pseudocode:**
+
 ```pseudocode
 IMPORT { NeoBrutalMenuRoot, NeoBrutalMenuTrigger, NeoBrutalMenuPopup, NeoBrutalMenuItem }
 
@@ -554,9 +588,11 @@ END
 ---
 
 ### `app/components/LanguageSelector.tsx`
+
 **Objective:** Migrar de shadcn/ui DropdownMenu a Base UI Menu con RadioGroup
 
 **Pseudocode:**
+
 ```pseudocode
 IMPORT { NeoBrutalMenuRoot, NeoBrutalMenuTrigger, NeoBrutalMenuPopup, NeoBrutalMenuRadioGroup, NeoBrutalMenuRadioItem }
 
@@ -583,9 +619,11 @@ END
 ---
 
 ### `app/components/UserDropdown.tsx`
+
 **Objective:** Migrar de shadcn/ui DropdownMenu a Base UI Menu
 
 **Pseudocode:**
+
 ```pseudocode
 IMPORT { NeoBrutalMenuRoot, NeoBrutalMenuTrigger, NeoBrutalMenuPopup, NeoBrutalMenuItem, NeoBrutalMenuSeparator }
 
@@ -618,9 +656,11 @@ END
 ---
 
 ### `app/components/landing/Footer.tsx`
+
 **Objective:** Migrar al diseño Neo-Brutal mínimo (2 links + copyright)
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT Footer
   RENDER:
@@ -644,9 +684,11 @@ END
 ---
 
 ### `app/components/landing/BioLinqHero.tsx`
+
 **Objective:** Hero section específica de BioLinq basada en el mockup
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT BioLinqHero
   RENDER:
@@ -718,9 +760,11 @@ END
 ---
 
 ### `app/components/landing/Sparkle.tsx`
+
 **Objective:** Elemento decorativo SVG para el hero
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT Sparkle
   PROPS: position: 'top-left' | 'bottom-right', color: 'accent' | 'primary'
@@ -746,9 +790,11 @@ END
 ---
 
 ### `app/components/landing/index.ts`
+
 **Objective:** Actualizar exports
 
 **Pseudocode:**
+
 ```pseudocode
 EXPORT BioLinqHero from './BioLinqHero'
 EXPORT Footer from './Footer'
@@ -759,9 +805,11 @@ EXPORT Sparkle from './Sparkle'
 ---
 
 ### `app/routes/home.tsx`
+
 **Objective:** Usar nuevos componentes de landing
 
 **Pseudocode:**
+
 ```pseudocode
 LOADER:
   user = await getCurrentUser(request)
@@ -780,9 +828,11 @@ END
 ---
 
 ### `app/routes/auth.login.tsx`
+
 **Objective:** Aplicar estilos Neo-Brutal al formulario de login (manteniendo react-hook-form)
 
 **Pseudocode:**
+
 ```pseudocode
 LOADER: (sin cambios - maneja OAuth errors)
 
@@ -862,9 +912,11 @@ END
 ---
 
 ### `app/routes/auth.signup.tsx`
+
 **Objective:** Aplicar estilos Neo-Brutal al formulario de signup (similar a login)
 
 **Pseudocode:**
+
 ```pseudocode
 // Mismo patrón que login.tsx pero con campos adicionales (name, confirm password)
 // Mantener react-hook-form, cambiar componentes visuales a Neo-Brutal
@@ -873,9 +925,11 @@ END
 ---
 
 ### `app/routes/dashboard.tsx` (NUEVO)
+
 **Objective:** Crear placeholder para dashboard con layout Neo-Brutal
 
 **Pseudocode:**
+
 ```pseudocode
 LOADER:
   user = await getCurrentUser(request)
@@ -905,9 +959,11 @@ END
 ---
 
 ### `app/routes.ts`
+
 **Objective:** Añadir ruta /dashboard
 
 **Pseudocode:**
+
 ```pseudocode
 // Añadir a la lista de rutas existentes:
 route("/dashboard", "routes/dashboard.tsx")
@@ -916,9 +972,11 @@ route("/dashboard", "routes/dashboard.tsx")
 ---
 
 ### `app/root.tsx`
+
 **Objective:** Reemplazar Sonner por NeoBrutalToastProvider. Añadir fuente JetBrains Mono. Renderizar Footer globalmente.
 
 **Pseudocode:**
+
 ```pseudocode
 // En links():
 AÑADIR link para JetBrains Mono de Google Fonts
@@ -949,6 +1007,7 @@ END
 ### Archivos a ELIMINAR (shadcn/ui que ya no se usarán)
 
 **Pseudocode:**
+
 ```pseudocode
 DELETE app/components/ui/button.tsx  // Reemplazado por NeoBrutalButton
 DELETE app/components/ui/input.tsx  // Reemplazado por NeoBrutalInput
@@ -972,6 +1031,7 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
 ## 4. I18N
 
 ### Existing keys to reuse
+
 - `login` - Para botón login en header
 - `login_title` - Título página login
 - `signup_title` - Título página signup
@@ -983,27 +1043,28 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
 
 ### New keys to create
 
-| Key | English | Spanish |
-|-----|---------|---------|
-| `hero_tagline` | Stand out by being simple. | Diferénciate siendo simple. |
-| `hero_description` | The minimalist Linktree. Your page loads in | El Linktree minimalista. Tu página carga en |
-| `hero_cta` | Create my BioLink | Crear mi BioLink |
-| `hero_pricing_note` | Freemium • 5€ Lifetime Premium | Freemium • 5€ Premium de por vida |
-| `value_speed_title` | Ultra Fast | Ultra Rápido |
-| `value_speed_desc` | No heavy scripts. Your followers won't wait. | Sin scripts pesados. Tus seguidores no esperarán. |
-| `value_design_title` | Brutalist Design | Diseño Brutalista |
-| `value_design_desc` | 4 professional themes that stand out for their simplicity. | 4 temas profesionales que destacan por su simplicidad. |
-| `value_price_title` | One-time Payment | Pago Único |
-| `value_price_desc` | Pay 5€ once. No ridiculous monthly subscriptions. | Paga 5€ una vez. Sin suscripciones mensuales absurdas. |
-| `footer_terms` | Terms | Términos |
-| `footer_privacy` | Privacy | Privacidad |
-| `footer_rights` | All rights reserved. | Todos los derechos reservados. |
+| Key                  | English                                                    | Spanish                                                |
+| -------------------- | ---------------------------------------------------------- | ------------------------------------------------------ |
+| `hero_tagline`       | Stand out by being simple.                                 | Diferénciate siendo simple.                            |
+| `hero_description`   | The minimalist Linktree. Your page loads in                | El Linktree minimalista. Tu página carga en            |
+| `hero_cta`           | Create my BioLink                                          | Crear mi BioLink                                       |
+| `hero_pricing_note`  | Freemium • 5€ Lifetime Premium                             | Freemium • 5€ Premium de por vida                      |
+| `value_speed_title`  | Ultra Fast                                                 | Ultra Rápido                                           |
+| `value_speed_desc`   | No heavy scripts. Your followers won't wait.               | Sin scripts pesados. Tus seguidores no esperarán.      |
+| `value_design_title` | Brutalist Design                                           | Diseño Brutalista                                      |
+| `value_design_desc`  | 4 professional themes that stand out for their simplicity. | 4 temas profesionales que destacan por su simplicidad. |
+| `value_price_title`  | One-time Payment                                           | Pago Único                                             |
+| `value_price_desc`   | Pay 5€ once. No ridiculous monthly subscriptions.          | Paga 5€ una vez. Sin suscripciones mensuales absurdas. |
+| `footer_terms`       | Terms                                                      | Términos                                               |
+| `footer_privacy`     | Privacy                                                    | Privacidad                                             |
+| `footer_rights`      | All rights reserved.                                       | Todos los derechos reservados.                         |
 
 ---
 
 ## 5. E2E Test Plan
 
 ### Test: Landing page renders with Neo-Brutal design
+
 - **Preconditions:** User is not logged in
 - **Steps:** Navigate to `/`
 - **Expected:**
@@ -1013,6 +1074,7 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
   - Footer shows Terms and Privacy links
 
 ### Test: Login page renders with Neo-Brutal design
+
 - **Preconditions:** User is not logged in
 - **Steps:** Navigate to `/auth/login`
 - **Expected:**
@@ -1022,11 +1084,13 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
   - Form fields have Neo-Brutal input styling
 
 ### Test: Signup page renders with Neo-Brutal design
+
 - **Preconditions:** User is not logged in
 - **Steps:** Navigate to `/auth/signup`
 - **Expected:** Similar to login page with additional fields
 
 ### Test: Dashboard placeholder renders for authenticated user
+
 - **Preconditions:** User is logged in
 - **Steps:** Navigate to `/dashboard`
 - **Expected:**
@@ -1035,21 +1099,25 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
   - Header shows UserDropdown (not Login button)
 
 ### Test: Dashboard redirects to login for unauthenticated user
+
 - **Preconditions:** User is NOT logged in
 - **Steps:** Navigate to `/dashboard`
 - **Expected:** Redirected to `/auth/login`
 
 ### Test: Header and Footer appear on all pages
+
 - **Preconditions:** N/A
 - **Steps:** Navigate to `/`, `/auth/login`, `/auth/signup`, `/dashboard` (authenticated)
 - **Expected:** Header and Footer visible on all pages
 
 ### Test: Theme toggle works with Neo-Brutal Menu
+
 - **Preconditions:** User is on any page
 - **Steps:** Click theme toggle button, select "Dark"
 - **Expected:** Theme changes, menu closes
 
 ### Test: Language selector works with Neo-Brutal Menu
+
 - **Preconditions:** User is on any page
 - **Steps:** Click language selector, select "Español"
 - **Expected:** Language changes, menu closes, UI text updates
@@ -1059,6 +1127,7 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
 ## 6. Files Summary
 
 ### New Files
+
 - `app/components/neo-brutal/NeoBrutalButton.tsx`
 - `app/components/neo-brutal/NeoBrutalInput.tsx`
 - `app/components/neo-brutal/NeoBrutalCard.tsx`
@@ -1070,7 +1139,8 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
 - `app/routes/dashboard.tsx`
 
 ### Modified Files
-- `package.json` - Añadir @base-ui-components/react
+
+- `package.json` - Añadir @base-ui/react
 - `app/app.css` - Añadir colores y utilidades Neo-Brutal
 - `app/root.tsx` - Añadir fuente, cambiar Toast provider, Footer global
 - `app/routes.ts` - Añadir ruta /dashboard
@@ -1087,6 +1157,7 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
 - `app/locales/es.json` - Añadir nuevas keys
 
 ### Files to Delete
+
 - `app/components/ui/button.tsx`
 - `app/components/ui/input.tsx`
 - `app/components/ui/card.tsx`
@@ -1101,4 +1172,5 @@ DELETE app/components/landing/EditorialDivider.tsx  // No se usa en el nuevo dis
 - `app/components/landing/EditorialDivider.tsx`
 
 ### Files to Keep (shadcn/ui)
+
 - `app/components/ui/form.tsx` - Necesario para react-hook-form integration

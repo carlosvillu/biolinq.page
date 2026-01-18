@@ -7,6 +7,7 @@ import {
   getLinksByBiolinkId,
   createLink,
   deleteLink,
+  reorderLinks,
 } from '~/services/links.server'
 import { getMaxLinks } from '~/lib/constants'
 import {
@@ -76,6 +77,26 @@ export async function action({ request }: ActionFunctionArgs) {
     const linkId = formData.get('linkId') as string
 
     const result = await deleteLink(authSession.user.id, linkId)
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    return redirect('/dashboard')
+  }
+
+  if (intent === 'reorder') {
+    const biolinkId = formData.get('biolinkId') as string
+    const linkIdsRaw = formData.get('linkIds') as string
+
+    let linkIds: string[]
+    try {
+      linkIds = JSON.parse(linkIdsRaw)
+    } catch {
+      return data({ error: 'INVALID_LINK_IDS' })
+    }
+
+    const result = await reorderLinks(authSession.user.id, biolinkId, linkIds)
 
     if (!result.success) {
       return data({ error: result.error })
