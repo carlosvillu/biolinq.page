@@ -136,18 +136,18 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 1.1: Username Claim from Home
 
-- [ ] Create `app/lib/username-validation.ts` with Zod schema
-- [ ] Create `app/hooks/useUsernameClaim.ts` hook
-- [ ] Create `/api/username/check` route
-- [ ] Create `/api/username/claim` route
-- [ ] Modify `home.tsx` loader to redirect users with biolink + handle OAuth callback
-- [ ] Modify `BioLinqHero.tsx` to use functional username input
-- [ ] Add `getUserBiolink()` to username service
-- [ ] Add i18n keys for username validation/errors
-- [ ] E2E test: Validation errors shown for invalid username
-- [ ] E2E test: Reserved/taken username shows error
-- [ ] E2E test: Logged-in user can claim username and go to dashboard
-- [ ] E2E test: User with biolink is redirected to dashboard from home
+- [x] Create `app/lib/username-validation.ts` with Zod schema
+- [x] Create `app/hooks/useUsernameClaim.ts` hook
+- [x] Create `/api/username/check` route
+- [x] Create `/api/username/claim` route
+- [x] Modify `home.tsx` loader to redirect users with biolink + handle OAuth callback
+- [x] Modify `BioLinqHero.tsx` to use functional username input
+- [x] Add `getUserBiolink()` to username service
+- [x] Add i18n keys for username validation/errors
+- [x] E2E test: Validation errors shown for invalid username
+- [x] E2E test: Reserved/taken username shows error
+- [x] E2E test: Logged-in user can claim username and go to dashboard
+- [x] E2E test: User with biolink is redirected to dashboard from home
 
 #### Task 1.2: Create Username Service
 
@@ -163,8 +163,8 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 1.4: Update Auth Flow Redirect
 
-- [ ] OAuth callback reads `?username` param and creates biolink automatically (handled in Task 1.1)
-- [ ] E2E test: New user coming from OAuth with username gets biolink created
+- [x] OAuth callback reads `?username` param and creates biolink automatically (handled in Task 1.1)
+- [x] E2E test: New user coming from OAuth with username gets biolink created
 
 ---
 

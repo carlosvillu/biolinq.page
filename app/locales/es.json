@@ -46,5 +46,24 @@
   "value_price_desc": "Paga 5€ una vez. Sin suscripciones mensuales absurdas.",
   "footer_terms": "Términos",
   "footer_privacy": "Privacidad",
-  "footer_rights": "Todos los derechos reservados."
+  "footer_rights": "Todos los derechos reservados.",
+
+  "pricing_title": "Precios Simples",
+  "pricing_subtitle": "Sin trucos. Sin cuotas mensuales. Solo lo que necesitas.",
+  "pricing_free_name": "GRATIS",
+  "pricing_free_price": "€0",
+  "pricing_free_note": "Gratis para siempre",
+  "pricing_premium_name": "PREMIUM",
+  "pricing_premium_price": "€5",
+  "pricing_premium_note": "Pago único, acceso de por vida",
+  "pricing_premium_badge": "MEJOR VALOR",
+  "pricing_feature_links": "Hasta 5 links",
+  "pricing_feature_themes": "4 temas profesionales",
+  "pricing_feature_themes_custom": "4 temas + colores custom",
+  "pricing_feature_total_views": "Visitas totales",
+  "pricing_feature_clicks_per_link": "Clicks por link",
+  "pricing_feature_history": "Histórico 30 días",
+  "pricing_feature_custom_colors": "Colores personalizados",
+  "pricing_feature_no_watermark": "Sin watermark",
+  "pricing_premium_cta": "Obtener Premium"
 }
