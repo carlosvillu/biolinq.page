@@ -15,6 +15,8 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
       name TEXT,
       email_verified BOOLEAN DEFAULT false,
       image TEXT,
+      is_premium BOOLEAN NOT NULL DEFAULT false,
+      stripe_customer_id TEXT,
       created_at TIMESTAMP NOT NULL DEFAULT now(),
       updated_at TIMESTAMP NOT NULL DEFAULT now()
     )`
@@ -66,6 +68,36 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
       created_at TIMESTAMP NOT NULL DEFAULT now(),
       updated_at TIMESTAMP NOT NULL DEFAULT now()
     )`
+  )
+
+  // Create biolink_theme enum and biolinks table
+  await executeSQL(
+    ctx,
+    `DO $$ BEGIN
+      CREATE TYPE biolink_theme AS ENUM ('brutalist', 'light_minimal', 'dark_mode', 'colorful');
+    EXCEPTION
+      WHEN duplicate_object THEN null;
+    END $$`
+  )
+
+  await executeSQL(
+    ctx,
+    `CREATE TABLE IF NOT EXISTS biolinks (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      user_id UUID NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+      username VARCHAR(20) NOT NULL UNIQUE,
+      theme biolink_theme NOT NULL DEFAULT 'light_minimal',
+      custom_primary_color VARCHAR(7),
+      custom_bg_color VARCHAR(7),
+      total_views INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMP NOT NULL DEFAULT now(),
+      updated_at TIMESTAMP NOT NULL DEFAULT now()
+    )`
+  )
+
+  await executeSQL(
+    ctx,
+    `CREATE INDEX IF NOT EXISTS idx_biolinks_username ON biolinks(username)`
   )
 }
 

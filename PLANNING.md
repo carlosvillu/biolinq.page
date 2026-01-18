@@ -124,8 +124,8 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 0.3: Configure Environment Variables
 
-- [ ] Update `.env.example` with all required variables (Stripe, Google OAuth)
-- [ ] Document required environment variables in README or a setup guide
+- [x] Update `.env.example` with all required variables (Stripe, Google OAuth)
+- [x] Document required environment variables in README or a setup guide
 
 ---
 
@@ -145,11 +145,11 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 1.2: Create Username Service
 
-- [ ] Create `app/services/username.server.ts`
-- [ ] Implement `checkUsernameAvailability(username)` function
-- [ ] Implement `registerUsername(userId, username)` function (creates biolink)
-- [ ] Implement reserved words check against constant list
-- [ ] Add index on `biolinks.username` for fast lookups
+- [x] Create `app/services/username.server.ts`
+- [x] Implement `checkUsernameAvailability(username)` function
+- [x] Implement `registerUsername(userId, username)` function (creates biolink)
+- [x] Implement reserved words check against constant list
+- [x] Add index on `biolinks.username` for fast lookups
 
 #### Task 1.3: Create Username Registration Route
 
