@@ -232,14 +232,22 @@ export async function seedBiolink(
     userId: string
     username: string
     theme?: 'brutalist' | 'light_minimal' | 'dark_mode' | 'colorful'
+    customPrimaryColor?: string | null
+    customBgColor?: string | null
   }
 ): Promise<string> {
   const result = await executeSQL(
     ctx,
-    `INSERT INTO biolinks (user_id, username, theme)
-     VALUES ($1, $2, $3)
+    `INSERT INTO biolinks (user_id, username, theme, custom_primary_color, custom_bg_color)
+     VALUES ($1, $2, $3, $4, $5)
      RETURNING id`,
-    [data.userId, data.username, data.theme ?? 'light_minimal']
+    [
+      data.userId,
+      data.username,
+      data.theme ?? 'brutalist',
+      data.customPrimaryColor ?? null,
+      data.customBgColor ?? null,
+    ]
   )
   return result.rows[0].id
 }

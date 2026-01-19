@@ -285,13 +285,19 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 4.1: Define Theme Configuration
 
-- [ ] Create `app/lib/themes.ts` with 4 theme definitions:
+- [x] Create `app/lib/themes.ts` with 4 theme definitions:
   - Brutalist: white bg, black borders, bold typography
   - Light Minimal: light bg, subtle shadows, clean sans-serif
   - Dark Mode: dark bg (#121212), light text, gray accents
   - Colorful: soft gradients, vibrant colors
-- [ ] Define CSS variables for each theme
-- [ ] Define TypeScript types for theme configuration
+- [x] Define CSS variables for each theme
+- [x] Define TypeScript types for theme configuration
+
+#### Task 4.3: Create Theme Service
+
+- [ ] Create `app/services/theme.server.ts`
+- [ ] Implement `updateBiolinkTheme(biolinkId, theme, customColors?)` function
+- [ ] Validate custom colors only for premium users
 
 #### Task 4.2: Create Theme Selector Component
 
@@ -301,12 +307,6 @@ Antes de empezar, necesitas tener configurado:
 - [ ] For premium users: show color pickers for primary and background
 - [ ] For free users: lock custom colors with "Premium" badge
 - [ ] Add i18n keys for theme names
-
-#### Task 4.3: Create Theme Service
-
-- [ ] Create `app/services/theme.server.ts`
-- [ ] Implement `updateBiolinkTheme(biolinkId, theme, customColors?)` function
-- [ ] Validate custom colors only for premium users
 
 #### Task 4.4: Integrate Theme in Dashboard
 
@@ -633,7 +633,7 @@ Sequential list of all tasks in recommended order:
 | 3     | 3.4   | ✅ Complete    | View tracking                           |
 | 3     | 3.5   | ⬜ Not Started | Performance optimization                |
 | 3     | 3.6   | ✅ Complete    | Live iframe preview in dashboard        |
-| 4     | 4.1   | ⬜ Not Started | Theme configuration                     |
+| 4     | 4.1   | ✅ Complete    | Theme configuration                     |
 | 4     | 4.2   | ⬜ Not Started | Theme selector                          |
 | 4     | 4.3   | ⬜ Not Started | Theme service                           |
 | 4     | 4.4   | ⬜ Not Started | Theme integration                       |

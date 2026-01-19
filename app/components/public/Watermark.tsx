@@ -1,4 +1,12 @@
-export function Watermark() {
+import type { Theme } from '~/lib/themes'
+
+type WatermarkProps = {
+  theme: Theme
+}
+
+export function Watermark({ theme }: WatermarkProps) {
+  const isDarkTheme = theme.id === 'dark_mode'
+
   return (
     <div className="fixed bottom-4 right-4 z-40">
       <a
@@ -6,13 +14,20 @@ export function Watermark() {
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 px-3 py-1.5
-          bg-neo-dark text-white text-xs font-mono
-          border-[2px] border-neo-dark rounded-full
-          shadow-[2px_2px_0_0_rgba(0,0,0,0.3)]
-          hover:bg-gray-800 transition-colors"
+          text-xs font-mono rounded-full transition-opacity
+          opacity-60 hover:opacity-100"
+        style={{
+          backgroundColor: isDarkTheme ? 'var(--theme-card-bg)' : 'var(--theme-text)',
+          color: isDarkTheme ? 'var(--theme-text)' : 'var(--theme-card-bg)',
+          borderWidth: '1px',
+          borderStyle: 'solid',
+          borderColor: 'var(--theme-border)',
+        }}
       >
         <span>Powered by</span>
-        <span className="font-bold text-neo-primary">BioLinq</span>
+        <span className="font-bold" style={{ color: 'var(--theme-primary)' }}>
+          BioLinq
+        </span>
       </a>
     </div>
   )

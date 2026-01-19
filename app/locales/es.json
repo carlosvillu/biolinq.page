@@ -107,5 +107,10 @@
   "public_not_found_title": "Perfil no encontrado",
   "public_not_found_description": "Este usuario no existe todavía. ¿Quieres reclamarlo?",
   "public_not_found_cta": "Crea tu BioLink",
-  "public_no_links": "Aún no hay enlaces"
+  "public_no_links": "Aún no hay enlaces",
+
+  "theme_brutalist": "Brutalista",
+  "theme_light_minimal": "Minimalista Claro",
+  "theme_dark_mode": "Modo Oscuro",
+  "theme_colorful": "Colorido"
 }

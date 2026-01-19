@@ -25,7 +25,7 @@ export const biolinks = pgTable(
       .unique()
       .references(() => users.id, { onDelete: 'cascade' }),
     username: varchar('username', { length: 20 }).notNull().unique(),
-    theme: biolinkTheme('theme').notNull().default('light_minimal'),
+    theme: biolinkTheme('theme').notNull().default('brutalist'),
     customPrimaryColor: varchar('custom_primary_color', { length: 7 }),
     customBgColor: varchar('custom_bg_color', { length: 7 }),
     totalViews: integer('total_views').notNull().default(0),
