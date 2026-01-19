@@ -216,12 +216,72 @@ Antes de empezar, necesitas tener configurado:
 
 ---
 
-### Phase 3: Theme System
+### Phase 3: Public BioLink Page
+
+**🔴 Antes:** No hay página pública para el biolink.
+**🟢 Después:** Cada usuario tiene una página pública en `/:username` con su perfil y links.
+
+#### Task 3.1: Create Public Page Route
+
+- [ ] Create `/:username` route (dynamic route for public profiles)
+- [ ] Implement loader to fetch biolink by username (404 if not found)
+- [ ] Fetch user data (name, avatar) and links
+- [ ] Return data for SSR rendering
+
+#### Task 3.2: Create Public Profile Components
+
+- [ ] Create `app/components/public/ProfileHeader.tsx` (avatar, name)
+- [ ] Create `app/components/public/LinkCard.tsx` (single link with emoji, title)
+- [ ] Create `app/components/public/Watermark.tsx` (for free users)
+- [ ] Apply selected theme styles dynamically
+- [ ] Implement click tracking redirect through `/go/:linkId`
+
+#### Task 3.3: Implement Click Tracking
+
+- [ ] Create `/go/:linkId` route
+- [ ] Implement loader that increments click count and redirects to target URL
+- [ ] Update `links.total_clicks` counter
+- [ ] Update `daily_link_clicks` for premium analytics
+- [ ] Redirect with 302 status code
+
+#### Task 3.4: Implement View Tracking
+
+- [ ] Create middleware or loader logic to track unique views
+- [ ] Use session cookie to prevent counting page refreshes
+- [ ] Increment `biolinks.total_views` counter
+- [ ] Update `daily_stats` for premium analytics
+- [ ] E2E test: Public page renders correctly with user data
+- [ ] E2E test: Link click redirects and increments counter
+
+#### Task 3.5: Performance Optimization
+
+- [ ] Ensure LCP < 500ms on public pages
+- [ ] Minimize JavaScript bundle for public pages
+- [ ] Optimize avatar loading (use Google's CDN URL)
+- [ ] Inline critical CSS for above-the-fold content
+- [ ] Add meta tags for SEO (title, description, OpenGraph)
+
+#### Task 3.6: Replace Dashboard Preview with Live Iframe
+
+- [ ] Remove or deprecate the static `Preview` component from dashboard
+- [ ] Create `app/components/dashboard/LivePreview.tsx` component
+- [ ] Use the existing iPhone frame component to wrap the iframe
+- [ ] Point iframe `src` to `/:username` (user's public page)
+- [ ] Add "Refresh Preview" button (manual refresh only)
+- [ ] Handle iframe loading state (spinner while loading)
+- [ ] Ensure iframe is sandboxed appropriately for security
+- [ ] Add i18n key for "Refresh Preview" button
+- [ ] E2E test: Dashboard shows live iframe preview of user's public page
+- [ ] E2E test: Refresh button reloads the iframe content
+
+---
+
+### Phase 4: Theme System
 
 **🔴 Antes:** Solo un estilo para la página pública.
 **🟢 Después:** Usuario puede elegir entre 4 temas, premium users pueden customizar colores.
 
-#### Task 3.1: Define Theme Configuration
+#### Task 4.1: Define Theme Configuration
 
 - [ ] Create `app/lib/themes.ts` with 4 theme definitions:
   - Brutalist: white bg, black borders, bold typography
@@ -231,7 +291,7 @@ Antes de empezar, necesitas tener configurado:
 - [ ] Define CSS variables for each theme
 - [ ] Define TypeScript types for theme configuration
 
-#### Task 3.2: Create Theme Selector Component
+#### Task 4.2: Create Theme Selector Component
 
 - [ ] Create `app/components/dashboard/ThemeSelector.tsx`
 - [ ] Show 4 theme preview cards (2x2 grid)
@@ -240,66 +300,19 @@ Antes de empezar, necesitas tener configurado:
 - [ ] For free users: lock custom colors with "Premium" badge
 - [ ] Add i18n keys for theme names
 
-#### Task 3.3: Create Theme Service
+#### Task 4.3: Create Theme Service
 
 - [ ] Create `app/services/theme.server.ts`
 - [ ] Implement `updateBiolinkTheme(biolinkId, theme, customColors?)` function
 - [ ] Validate custom colors only for premium users
 
-#### Task 3.4: Integrate Theme in Dashboard
+#### Task 4.4: Integrate Theme in Dashboard
 
 - [ ] Add theme selector section to dashboard
 - [ ] Implement action to update theme
-- [ ] Update preview to reflect selected theme in real-time
-- [ ] E2E test: User can change theme and see preview update
+- [ ] Live iframe preview reflects selected theme after refresh
+- [ ] E2E test: User can change theme and see preview update (after refresh)
 - [ ] E2E test: Free user cannot save custom colors
-
----
-
-### Phase 4: Public BioLink Page
-
-**🔴 Antes:** No hay página pública para el biolink.
-**🟢 Después:** Cada usuario tiene una página pública en `/:username` con su perfil y links.
-
-#### Task 4.1: Create Public Page Route
-
-- [ ] Create `/:username` route (dynamic route for public profiles)
-- [ ] Implement loader to fetch biolink by username (404 if not found)
-- [ ] Fetch user data (name, avatar) and links
-- [ ] Return data for SSR rendering
-
-#### Task 4.2: Create Public Profile Components
-
-- [ ] Create `app/components/public/ProfileHeader.tsx` (avatar, name)
-- [ ] Create `app/components/public/LinkCard.tsx` (single link with emoji, title)
-- [ ] Create `app/components/public/Watermark.tsx` (for free users)
-- [ ] Apply selected theme styles dynamically
-- [ ] Implement click tracking redirect through `/go/:linkId`
-
-#### Task 4.3: Implement Click Tracking
-
-- [ ] Create `/go/:linkId` route
-- [ ] Implement loader that increments click count and redirects to target URL
-- [ ] Update `links.total_clicks` counter
-- [ ] Update `daily_link_clicks` for premium analytics
-- [ ] Redirect with 302 status code
-
-#### Task 4.4: Implement View Tracking
-
-- [ ] Create middleware or loader logic to track unique views
-- [ ] Use session cookie to prevent counting page refreshes
-- [ ] Increment `biolinks.total_views` counter
-- [ ] Update `daily_stats` for premium analytics
-- [ ] E2E test: Public page renders correctly with user data
-- [ ] E2E test: Link click redirects and increments counter
-
-#### Task 4.5: Performance Optimization
-
-- [ ] Ensure LCP < 500ms on public pages
-- [ ] Minimize JavaScript bundle for public pages
-- [ ] Optimize avatar loading (use Google's CDN URL)
-- [ ] Inline critical CSS for above-the-fold content
-- [ ] Add meta tags for SEO (title, description, OpenGraph)
 
 ---
 
@@ -541,35 +554,36 @@ Sequential list of all tasks in recommended order:
 10. Task 2.2 - Create Dashboard Layout
 11. Task 2.3 - Create Link Editor Component
 12. Task 2.4 - Create Links List Component
-13. Task 3.1 - Define Theme Configuration
-14. Task 3.2 - Create Theme Selector Component
-15. Task 3.3 - Create Theme Service
-16. Task 3.4 - Integrate Theme in Dashboard
-17. Task 4.1 - Create Public Page Route
-18. Task 4.2 - Create Public Profile Components
-19. Task 4.3 - Implement Click Tracking
-20. Task 4.4 - Implement View Tracking
-21. Task 4.5 - Performance Optimization
-22. Task 5.1 - Create Analytics Service
-23. Task 5.2 - Create Stats Components
-24. Task 5.3 - Integrate Stats in Dashboard
-25. Task 6.1 - Setup Stripe Configuration
-26. Task 6.2 - Create Checkout Flow
-27. Task 6.3 - Create Stripe Webhook Handler
-28. Task 6.4 - Implement Premium Feature Gating
-29. Task 7.1 - Create Account Page
-30. Task 7.2 - Create Account Deletion Flow
-31. Task 8.1 - Create Landing Page Components
-32. Task 8.2 - Update Landing Page Route
-33. Task 8.3 - Polish & Animations
-34. Task 9.1 - Setup Google Analytics 4
-35. Task 9.2 - Implement Custom Events
-36. Task 9.3 - Implement Ecommerce Tracking for Stripe
-37. Task 9.4 - Dashboard & Authenticated Area Tracking
-38. Task 9.5 - Consent & Privacy Compliance
-39. Task 10.1 - Error Handling & Edge Cases
-40. Task 10.2 - Complete E2E Test Suite
-41. Task 10.3 - Final Checks
+13. Task 3.1 - Create Public Page Route
+14. Task 3.2 - Create Public Profile Components
+15. Task 3.3 - Implement Click Tracking
+16. Task 3.4 - Implement View Tracking
+17. Task 3.5 - Performance Optimization
+18. Task 3.6 - Replace Dashboard Preview with Live Iframe
+19. Task 4.1 - Define Theme Configuration
+20. Task 4.2 - Create Theme Selector Component
+21. Task 4.3 - Create Theme Service
+22. Task 4.4 - Integrate Theme in Dashboard
+23. Task 5.1 - Create Analytics Service
+24. Task 5.2 - Create Stats Components
+25. Task 5.3 - Integrate Stats in Dashboard
+26. Task 6.1 - Setup Stripe Configuration
+27. Task 6.2 - Create Checkout Flow
+28. Task 6.3 - Create Stripe Webhook Handler
+29. Task 6.4 - Implement Premium Feature Gating
+30. Task 7.1 - Create Account Page
+31. Task 7.2 - Create Account Deletion Flow
+32. Task 8.1 - Create Landing Page Components
+33. Task 8.2 - Update Landing Page Route
+34. Task 8.3 - Polish & Animations
+35. Task 9.1 - Setup Google Analytics 4
+36. Task 9.2 - Implement Custom Events
+37. Task 9.3 - Implement Ecommerce Tracking for Stripe
+38. Task 9.4 - Dashboard & Authenticated Area Tracking
+39. Task 9.5 - Consent & Privacy Compliance
+40. Task 10.1 - Error Handling & Edge Cases
+41. Task 10.2 - Complete E2E Test Suite
+42. Task 10.3 - Final Checks
 
 ---
 
@@ -611,15 +625,16 @@ Sequential list of all tasks in recommended order:
 | 2     | 2.2   | ⬜ Not Started | Dashboard layout                    |
 | 2     | 2.3   | ⬜ Not Started | Link editor component               |
 | 2     | 2.4   | ⬜ Not Started | Links list component                |
-| 3     | 3.1   | ⬜ Not Started | Theme configuration                 |
-| 3     | 3.2   | ⬜ Not Started | Theme selector                      |
-| 3     | 3.3   | ⬜ Not Started | Theme service                       |
-| 3     | 3.4   | ⬜ Not Started | Theme integration                   |
-| 4     | 4.1   | ⬜ Not Started | Public page route                   |
-| 4     | 4.2   | ⬜ Not Started | Public profile components           |
-| 4     | 4.3   | ⬜ Not Started | Click tracking                      |
-| 4     | 4.4   | ⬜ Not Started | View tracking                       |
-| 4     | 4.5   | ⬜ Not Started | Performance optimization            |
+| 3     | 3.1   | ⬜ Not Started | Public page route                   |
+| 3     | 3.2   | ⬜ Not Started | Public profile components           |
+| 3     | 3.3   | ⬜ Not Started | Click tracking                      |
+| 3     | 3.4   | ⬜ Not Started | View tracking                       |
+| 3     | 3.5   | ⬜ Not Started | Performance optimization            |
+| 3     | 3.6   | ⬜ Not Started | Live iframe preview in dashboard    |
+| 4     | 4.1   | ⬜ Not Started | Theme configuration                 |
+| 4     | 4.2   | ⬜ Not Started | Theme selector                      |
+| 4     | 4.3   | ⬜ Not Started | Theme service                       |
+| 4     | 4.4   | ⬜ Not Started | Theme integration                   |
 | 5     | 5.1   | ⬜ Not Started | Analytics service                   |
 | 5     | 5.2   | ⬜ Not Started | Stats components                    |
 | 5     | 5.3   | ⬜ Not Started | Stats integration                   |
