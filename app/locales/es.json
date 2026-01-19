@@ -112,5 +112,16 @@
   "theme_brutalist": "Brutalista",
   "theme_light_minimal": "Minimalista Claro",
   "theme_dark_mode": "Modo Oscuro",
-  "theme_colorful": "Colorido"
+  "theme_colorful": "Colorido",
+
+  "customization_title": "Personalización",
+  "customization_theme_title": "Tema",
+  "customization_colors_title": "Colores Personalizados",
+  "customization_primary_color": "Color Principal",
+  "customization_bg_color": "Color de Fondo",
+  "customization_reset_colors": "Restablecer colores del tema",
+  "customization_save": "Guardar Cambios",
+  "customization_premium_required": "Se requiere Premium para personalizar",
+  "theme_error_invalid": "Tema seleccionado inválido",
+  "theme_error_premium_colors": "Los colores personalizados requieren Premium"
 }

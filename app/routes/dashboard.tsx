@@ -5,7 +5,16 @@ import { getCurrentUser } from '~/lib/auth.server'
 import { getUserBiolink } from '~/services/username.server'
 import { getLinksByBiolinkId, createLink, deleteLink, reorderLinks } from '~/services/links.server'
 import { getMaxLinks } from '~/lib/constants'
-import { PremiumBanner, StatsCard, LinksList, LivePreview } from '~/components/dashboard'
+import {
+  PremiumBanner,
+  StatsCard,
+  LinksList,
+  LivePreview,
+  CustomizationSection,
+} from '~/components/dashboard'
+import { updateBiolinkTheme, updateBiolinkColors } from '~/services/theme.server'
+import { THEMES } from '~/lib/themes'
+import type { BiolinkTheme } from '~/db/schema/biolinks'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
@@ -92,6 +101,33 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirect('/dashboard')
   }
 
+  if (intent === 'updateTheme') {
+    const biolinkId = formData.get('biolinkId') as string
+    const theme = formData.get('theme') as string
+    const primaryColor = formData.get('primaryColor') as string | null
+    const bgColor = formData.get('bgColor') as string | null
+
+    if (!theme || !(theme in THEMES)) {
+      return data({ error: 'INVALID_THEME' })
+    }
+
+    const themeResult = await updateBiolinkTheme(biolinkId, theme as BiolinkTheme)
+    if (!themeResult.success) {
+      return data({ error: themeResult.error })
+    }
+
+    const colorsResult = await updateBiolinkColors(biolinkId, {
+      primaryColor: primaryColor || null,
+      bgColor: bgColor || null,
+    })
+
+    if (!colorsResult.success) {
+      return data({ error: colorsResult.error })
+    }
+
+    return redirect('/dashboard')
+  }
+
   return data({ error: 'UNKNOWN_INTENT' })
 }
 
@@ -114,6 +150,13 @@ export default function DashboardPage() {
             biolinkId={biolink.id}
             maxLinks={maxLinks}
             error={actionData?.error}
+          />
+          <CustomizationSection
+            currentTheme={biolink.theme}
+            customPrimaryColor={biolink.customPrimaryColor}
+            customBgColor={biolink.customBgColor}
+            biolinkId={biolink.id}
+            isPremium={user.isPremium}
           />
         </div>
 

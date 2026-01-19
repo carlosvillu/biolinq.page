@@ -303,20 +303,20 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 4.2: Create Theme Selector Component
 
-- [ ] Create `app/components/dashboard/ThemeSelector.tsx`
-- [ ] Show 4 theme preview cards (2x2 grid)
-- [ ] Highlight currently selected theme
-- [ ] For premium users: show color pickers for primary and background
-- [ ] For free users: lock custom colors with "Premium" badge
-- [ ] Add i18n keys for theme names
+- [x] Create `app/components/dashboard/ThemeSelector.tsx`
+- [x] Show 4 theme preview cards (2x2 grid)
+- [x] Highlight currently selected theme
+- [x] For premium users: show color pickers for primary and background
+- [x] For free users: lock custom colors with "Premium" badge
+- [x] Add i18n keys for theme names
 
 #### Task 4.4: Integrate Theme in Dashboard
 
-- [ ] Add theme selector section to dashboard
-- [ ] Implement action to update theme
-- [ ] Live iframe preview reflects selected theme after refresh
-- [ ] E2E test: User can change theme and see preview update (after refresh)
-- [ ] E2E test: Free user cannot save custom colors
+- [x] Add theme selector section to dashboard
+- [x] Implement action to update theme
+- [x] Live iframe preview reflects selected theme after refresh
+- [x] E2E test: User can change theme and see preview update (after refresh)
+- [x] E2E test: Free user cannot save custom colors
 
 ---
 
@@ -636,9 +636,9 @@ Sequential list of all tasks in recommended order:
 | 3     | 3.5   | ⬜ Not Started | Performance optimization                |
 | 3     | 3.6   | ✅ Complete    | Live iframe preview in dashboard        |
 | 4     | 4.1   | ✅ Complete    | Theme configuration                     |
-| 4     | 4.2   | ⬜ Not Started | Theme selector                          |
+| 4     | 4.2   | ✅ Complete    | Theme selector                          |
 | 4     | 4.3   | ✅ Complete    | Theme service                           |
-| 4     | 4.4   | ⬜ Not Started | Theme integration                       |
+| 4     | 4.4   | ✅ Complete    | Theme integration                       |
 | 5     | 5.1   | ⬜ Not Started | Analytics service                       |
 | 5     | 5.2   | ⬜ Not Started | Stats components                        |
 | 5     | 5.3   | ⬜ Not Started | Stats integration                       |

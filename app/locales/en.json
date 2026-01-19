@@ -108,5 +108,16 @@
   "theme_brutalist": "Brutalist",
   "theme_light_minimal": "Light Minimal",
   "theme_dark_mode": "Dark Mode",
-  "theme_colorful": "Colorful"
+  "theme_colorful": "Colorful",
+
+  "customization_title": "Customization",
+  "customization_theme_title": "Theme",
+  "customization_colors_title": "Custom Colors",
+  "customization_primary_color": "Primary Color",
+  "customization_bg_color": "Background Color",
+  "customization_reset_colors": "Reset to theme defaults",
+  "customization_save": "Save Changes",
+  "customization_premium_required": "Premium required to customize",
+  "theme_error_invalid": "Invalid theme selected",
+  "theme_error_premium_colors": "Custom colors require Premium"
 }
