@@ -239,20 +239,20 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 3.3: Implement Click Tracking
 
-- [ ] Create `/go/:linkId` route (redirects to target URL after tracking)
-- [ ] Implement loader that increments click count and performs 302 redirect to target URL
-- [ ] Update `links.total_clicks` counter
-- [ ] Update `daily_link_clicks` for premium analytics
-- [ ] Redirect with 302 status code
+- [x] Create `/go/:linkId` route (redirects to target URL after tracking)
+- [x] Implement loader that increments click count and performs 302 redirect to target URL
+- [x] Update `links.total_clicks` counter
+- [x] Update `daily_link_clicks` for premium analytics
+- [x] Redirect with 302 status code
 
 #### Task 3.4: Implement View Tracking
 
-- [ ] Create middleware or loader logic to track unique views
-- [ ] Use session cookie to prevent counting page refreshes
-- [ ] Increment `biolinks.total_views` counter
-- [ ] Update `daily_stats` for premium analytics
-- [ ] E2E test: Public page renders correctly with user data
-- [ ] E2E test: Link click redirects and increments counter
+- [x] Create middleware or loader logic to track unique views
+- [x] Use session cookie to prevent counting page refreshes
+- [x] Increment `biolinks.total_views` counter
+- [x] Update `daily_stats` for premium analytics
+- [x] E2E test: Public page renders correctly with user data
+- [x] E2E test: Link click redirects and increments counter
 
 #### Task 3.5: Performance Optimization
 
@@ -612,49 +612,49 @@ Sequential list of all tasks in recommended order:
 
 ## Progress Tracker
 
-| Phase | Task  | Status         | Notes                               |
-| ----- | ----- | -------------- | ----------------------------------- |
-| 0     | 0.0.1 | ✅ Complete    | Migrate UI to Neo-Brutal design     |
-| 0     | 0.1   | ✅ Complete    | Configure Google OAuth auto sign-up |
-| 0     | 0.2   | ✅ Complete    | Create DB schema                    |
-| 0     | 0.3   | ⬜ Not Started | Configure env vars                  |
-| 1     | 1.1   | ⬜ Not Started | Username modal                      |
-| 1     | 1.2   | ⬜ Not Started | Username service                    |
-| 1     | 1.3   | ⬜ Not Started | Username route                      |
-| 1     | 1.4   | ⬜ Not Started | Auth flow redirect                  |
-| 2     | 2.1   | ⬜ Not Started | Links service                       |
-| 2     | 2.2   | ⬜ Not Started | Dashboard layout                    |
-| 2     | 2.3   | ⬜ Not Started | Link editor component               |
-| 2     | 2.4   | ⬜ Not Started | Links list component                |
-| 3     | 3.1   | ✅ Complete    | Public page route                   |
+| Phase | Task  | Status         | Notes                                   |
+| ----- | ----- | -------------- | --------------------------------------- |
+| 0     | 0.0.1 | ✅ Complete    | Migrate UI to Neo-Brutal design         |
+| 0     | 0.1   | ✅ Complete    | Configure Google OAuth auto sign-up     |
+| 0     | 0.2   | ✅ Complete    | Create DB schema                        |
+| 0     | 0.3   | ⬜ Not Started | Configure env vars                      |
+| 1     | 1.1   | ⬜ Not Started | Username modal                          |
+| 1     | 1.2   | ⬜ Not Started | Username service                        |
+| 1     | 1.3   | ⬜ Not Started | Username route                          |
+| 1     | 1.4   | ⬜ Not Started | Auth flow redirect                      |
+| 2     | 2.1   | ⬜ Not Started | Links service                           |
+| 2     | 2.2   | ⬜ Not Started | Dashboard layout                        |
+| 2     | 2.3   | ⬜ Not Started | Link editor component                   |
+| 2     | 2.4   | ⬜ Not Started | Links list component                    |
+| 3     | 3.1   | ✅ Complete    | Public page route                       |
 | 3     | 3.2   | ✅ Complete    | Public profile components (done in 3.1) |
-| 3     | 3.3   | ⬜ Not Started | Click tracking                      |
-| 3     | 3.4   | ⬜ Not Started | View tracking                       |
-| 3     | 3.5   | ⬜ Not Started | Performance optimization            |
-| 3     | 3.6   | ⬜ Not Started | Live iframe preview in dashboard    |
-| 4     | 4.1   | ⬜ Not Started | Theme configuration                 |
-| 4     | 4.2   | ⬜ Not Started | Theme selector                      |
-| 4     | 4.3   | ⬜ Not Started | Theme service                       |
-| 4     | 4.4   | ⬜ Not Started | Theme integration                   |
-| 5     | 5.1   | ⬜ Not Started | Analytics service                   |
-| 5     | 5.2   | ⬜ Not Started | Stats components                    |
-| 5     | 5.3   | ⬜ Not Started | Stats integration                   |
-| 6     | 6.1   | ⬜ Not Started | Stripe configuration                |
-| 6     | 6.2   | ⬜ Not Started | Checkout flow                       |
-| 6     | 6.3   | ⬜ Not Started | Webhook handler                     |
-| 6     | 6.4   | ⬜ Not Started | Premium feature gating              |
-| 7     | 7.1   | ⬜ Not Started | Account page                        |
-| 7     | 7.2   | ⬜ Not Started | Account deletion                    |
-| 8     | 8.1   | ⬜ Not Started | Landing components                  |
-| 8     | 8.2   | ⬜ Not Started | Landing route                       |
-| 8     | 8.3   | ⬜ Not Started | Polish & animations                 |
-| 9     | 9.1   | ⬜ Not Started | Setup Google Analytics 4            |
-| 9     | 9.2   | ⬜ Not Started | Custom events                       |
-| 9     | 9.3   | ⬜ Not Started | Ecommerce tracking (Stripe)         |
-| 9     | 9.4   | ⬜ Not Started | Dashboard tracking                  |
-| 9     | 9.5   | ⬜ Not Started | Consent & privacy                   |
-| 10    | 10.1  | ⬜ Not Started | Error handling                      |
-| 10    | 10.2  | ⬜ Not Started | E2E test suite                      |
-| 10    | 10.3  | ⬜ Not Started | Final checks                        |
+| 3     | 3.3   | ⬜ Not Started | Click tracking                          |
+| 3     | 3.4   | ✅ Complete    | View tracking                           |
+| 3     | 3.5   | ⬜ Not Started | Performance optimization                |
+| 3     | 3.6   | ⬜ Not Started | Live iframe preview in dashboard        |
+| 4     | 4.1   | ⬜ Not Started | Theme configuration                     |
+| 4     | 4.2   | ⬜ Not Started | Theme selector                          |
+| 4     | 4.3   | ⬜ Not Started | Theme service                           |
+| 4     | 4.4   | ⬜ Not Started | Theme integration                       |
+| 5     | 5.1   | ⬜ Not Started | Analytics service                       |
+| 5     | 5.2   | ⬜ Not Started | Stats components                        |
+| 5     | 5.3   | ⬜ Not Started | Stats integration                       |
+| 6     | 6.1   | ⬜ Not Started | Stripe configuration                    |
+| 6     | 6.2   | ⬜ Not Started | Checkout flow                           |
+| 6     | 6.3   | ⬜ Not Started | Webhook handler                         |
+| 6     | 6.4   | ⬜ Not Started | Premium feature gating                  |
+| 7     | 7.1   | ⬜ Not Started | Account page                            |
+| 7     | 7.2   | ⬜ Not Started | Account deletion                        |
+| 8     | 8.1   | ⬜ Not Started | Landing components                      |
+| 8     | 8.2   | ⬜ Not Started | Landing route                           |
+| 8     | 8.3   | ⬜ Not Started | Polish & animations                     |
+| 9     | 9.1   | ⬜ Not Started | Setup Google Analytics 4                |
+| 9     | 9.2   | ⬜ Not Started | Custom events                           |
+| 9     | 9.3   | ⬜ Not Started | Ecommerce tracking (Stripe)             |
+| 9     | 9.4   | ⬜ Not Started | Dashboard tracking                      |
+| 9     | 9.5   | ⬜ Not Started | Consent & privacy                       |
+| 10    | 10.1  | ⬜ Not Started | Error handling                          |
+| 10    | 10.2  | ⬜ Not Started | E2E test suite                          |
+| 10    | 10.3  | ⬜ Not Started | Final checks                            |
 
 **Status Legend:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked

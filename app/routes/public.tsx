@@ -1,14 +1,16 @@
-import { type LoaderFunctionArgs, type MetaFunction } from 'react-router'
+import { type LoaderFunctionArgs, type MetaFunction, data } from 'react-router'
 import { useLoaderData, isRouteErrorResponse, useRouteError } from 'react-router'
 import { getBiolinkWithUserByUsername } from '~/services/username.server'
 import { getPublicLinksByBiolinkId } from '~/services/links.server'
+import { trackView } from '~/services/views.server'
+import { parseViewCookie, shouldTrackView, updateViewCookie } from '~/lib/view-cookie.server'
 import { PublicProfile } from '~/components/public/PublicProfile'
 import { PublicNotFound } from '~/components/public/PublicNotFound'
 import { PublicError } from '~/components/public/PublicError'
 
 export const handle = { hideLayout: true }
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ params, request }: LoaderFunctionArgs) {
   const username = params.username
 
   if (!username) {
@@ -21,13 +23,31 @@ export async function loader({ params }: LoaderFunctionArgs) {
     throw new Response('Not Found', { status: 404 })
   }
 
+  const cookieHeader = request.headers.get('Cookie')
+  const entries = parseViewCookie(cookieHeader)
+  const shouldTrack = shouldTrackView(entries, result.biolink.id)
+
+  const headers = new Headers()
+  if (shouldTrack) {
+    try {
+      await trackView(result.biolink.id)
+      const setCookieHeader = updateViewCookie(entries, result.biolink.id)
+      headers.set('Set-Cookie', setCookieHeader)
+    } catch {
+      // Tracking failure should not block page render
+    }
+  }
+
   const links = await getPublicLinksByBiolinkId(result.biolink.id)
 
-  return {
-    biolink: result.biolink,
-    user: result.user,
-    links,
-  }
+  return data(
+    {
+      biolink: result.biolink,
+      user: result.user,
+      links,
+    },
+    { headers }
+  )
 }
 
 export const meta: MetaFunction<typeof loader> = ({ data, error }) => {

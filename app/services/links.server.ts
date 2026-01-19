@@ -2,6 +2,7 @@ import { eq, and, gt, sql } from 'drizzle-orm'
 import { db } from '~/db'
 import { links, type Link } from '~/db/schema/links'
 import { dailyLinkClicks } from '~/db/schema/dailyLinkClicks'
+import { dailyStats } from '~/db/schema/dailyStats'
 import { biolinks } from '~/db/schema/biolinks'
 import { getMaxLinks } from '~/lib/constants'
 import { createLinkSchema, type CreateLinkInput } from '~/lib/link-validation'
@@ -208,7 +209,7 @@ export async function trackClickAndGetUrl(
 ): Promise<TrackClickResult> {
   return db.transaction(async (tx) => {
     const linkResult = await tx
-      .select({ id: links.id, url: links.url })
+      .select({ id: links.id, url: links.url, biolinkId: links.biolinkId })
       .from(links)
       .where(eq(links.id, linkId))
       .limit(1)
@@ -218,6 +219,7 @@ export async function trackClickAndGetUrl(
     }
 
     const link = linkResult[0]
+    const today = sql`DATE_TRUNC('day', NOW())`
 
     await tx
       .update(links)
@@ -226,8 +228,6 @@ export async function trackClickAndGetUrl(
         updatedAt: new Date(),
       })
       .where(eq(links.id, linkId))
-
-    const today = sql`DATE_TRUNC('day', NOW())`
 
     await tx
       .insert(dailyLinkClicks)
@@ -239,6 +239,19 @@ export async function trackClickAndGetUrl(
       .onConflictDoUpdate({
         target: [dailyLinkClicks.linkId, dailyLinkClicks.date],
         set: { clicks: sql`${dailyLinkClicks.clicks} + 1` },
+      })
+
+    await tx
+      .insert(dailyStats)
+      .values({
+        biolinkId: link.biolinkId,
+        date: today,
+        views: 0,
+        clicks: 1,
+      })
+      .onConflictDoUpdate({
+        target: [dailyStats.biolinkId, dailyStats.date],
+        set: { clicks: sql`${dailyStats.clicks} + 1` },
       })
 
     return { success: true, url: link.url }

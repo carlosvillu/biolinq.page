@@ -59,6 +59,7 @@
     "@tailwindcss/vite": "^4.1.13",
     "@testcontainers/postgresql": "^11.9.0",
     "@types/accept-language-parser": "^1.5.8",
+    "@types/cookie": "^0.6.0",
     "@types/node": "^22",
     "@types/pg": "^8.15.6",
     "@types/react": "^19.2.7",
