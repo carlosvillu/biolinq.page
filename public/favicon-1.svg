@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Brutalist style: Bold chain link icon with brand colors -->
+  <rect width="32" height="32" rx="4" fill="#ffc480"/>
+  <rect x="1" y="1" width="30" height="30" rx="3" stroke="#111827" stroke-width="2" fill="none"/>
+  <path d="M12 10h-2a4 4 0 0 0 0 8h2m8-8h2a4 4 0 0 1 0 8h-2m-8-4h8" stroke="#FE4A60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

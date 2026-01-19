@@ -30,7 +30,7 @@ import { getThemeCookie, getThemeInitScript } from '~/lib/theme'
 import { Footer } from '~/components/landing'
 
 export const links: Route.LinksFunction = () => [
-  { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+  { rel: 'icon', type: 'image/svg+xml', href: '/favicon-1.svg' },
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
     rel: 'preconnect',
