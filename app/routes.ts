@@ -8,6 +8,7 @@ export default [
   route('api/username/claim', 'routes/api.username.claim.tsx'),
   route('api/__test__/username', 'routes/api.__test__.username.tsx'),
   route('api/__test__/links', 'routes/api.__test__.links.tsx'),
+  route('api/__test__/theme', 'routes/api.__test__.theme.tsx'),
   route('auth/login', 'routes/auth.login.tsx'),
   route('dashboard', 'routes/dashboard.tsx'),
   route('go/:linkId', 'routes/go.$linkId.tsx'),

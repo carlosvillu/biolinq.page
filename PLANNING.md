@@ -295,9 +295,11 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 4.3: Create Theme Service
 
-- [ ] Create `app/services/theme.server.ts`
-- [ ] Implement `updateBiolinkTheme(biolinkId, theme, customColors?)` function
-- [ ] Validate custom colors only for premium users
+- [x] Create `app/services/theme.server.ts`
+- [x] Implement `updateBiolinkTheme(biolinkId, theme)` function
+- [x] Implement `updateBiolinkColors(biolinkId, customColors)` function
+- [x] Validate custom colors only for premium users
+- [x] E2E tests for theme service
 
 #### Task 4.2: Create Theme Selector Component
 
@@ -635,7 +637,7 @@ Sequential list of all tasks in recommended order:
 | 3     | 3.6   | ✅ Complete    | Live iframe preview in dashboard        |
 | 4     | 4.1   | ✅ Complete    | Theme configuration                     |
 | 4     | 4.2   | ⬜ Not Started | Theme selector                          |
-| 4     | 4.3   | ⬜ Not Started | Theme service                           |
+| 4     | 4.3   | ✅ Complete    | Theme service                           |
 | 4     | 4.4   | ⬜ Not Started | Theme integration                       |
 | 5     | 5.1   | ⬜ Not Started | Analytics service                       |
 | 5     | 5.2   | ⬜ Not Started | Stats components                        |
