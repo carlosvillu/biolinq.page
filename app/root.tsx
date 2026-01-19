@@ -30,7 +30,17 @@ import { getThemeCookie, getThemeInitScript } from '~/lib/theme'
 import { Footer } from '~/components/landing'
 
 export const links: Route.LinksFunction = () => [
-  { rel: 'icon', type: 'image/svg+xml', href: '/favicon-1.svg' },
+  // Basic Favicons
+  { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/web/favicon-16x16.png' },
+  { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/web/favicon-32x32.png' },
+  { rel: 'icon', type: 'image/png', sizes: '48x48', href: '/web/favicon-48x48.png' },
+  // iOS - Add to Home Screen
+  { rel: 'apple-touch-icon', sizes: '180x180', href: '/ios/apple-touch-icon.png' },
+  // Android & PWA
+  { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/android/icon-192.png' },
+  { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/android/icon-512.png' },
+  { rel: 'manifest', href: '/manifest.json' },
+  // Fonts
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   {
     rel: 'preconnect',
@@ -85,6 +95,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#ffc480" />
+        <meta name="msapplication-TileImage" content="/windows/mstile-150x150.png" />
+        <meta name="msapplication-config" content="/browserconfig.xml" />
         <Meta />
         <Links />
         {/* Theme init script must run synchronously before body renders to prevent FOUC */}
