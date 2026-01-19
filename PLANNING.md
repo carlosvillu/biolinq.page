@@ -223,23 +223,24 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 3.1: Create Public Page Route
 
-- [ ] Create `/:username` route (dynamic route for public profiles)
-- [ ] Implement loader to fetch biolink by username (404 if not found)
-- [ ] Fetch user data (name, avatar) and links
-- [ ] Return data for SSR rendering
+- [x] Create `/:username` route (dynamic route for public profiles)
+- [x] Implement loader to fetch biolink by username (404 if not found)
+- [x] Fetch user data (name, avatar) and links
+- [x] Return data for SSR rendering
 
 #### Task 3.2: Create Public Profile Components
 
-- [ ] Create `app/components/public/ProfileHeader.tsx` (avatar, name)
-- [ ] Create `app/components/public/LinkCard.tsx` (single link with emoji, title)
-- [ ] Create `app/components/public/Watermark.tsx` (for free users)
-- [ ] Apply selected theme styles dynamically
-- [ ] Implement click tracking redirect through `/go/:linkId`
+- [x] Create `app/components/public/ProfileHeader.tsx` (avatar, name) - Integrated in `PublicProfile.tsx`
+- [x] Create `app/components/public/LinkCard.tsx` (single link with emoji, title) - Created as `PublicLinkCard.tsx`
+- [x] Create `app/components/public/Watermark.tsx` (for free users)
+- [x] E2E tests for all public profile components (in `public-page.spec.ts`)
+
+> **Note:** Theme styles (Phase 4) and click tracking (`/go/:linkId`, Task 3.3) were incorrectly listed here. Components completed during Task 3.1 implementation.
 
 #### Task 3.3: Implement Click Tracking
 
-- [ ] Create `/go/:linkId` route
-- [ ] Implement loader that increments click count and redirects to target URL
+- [ ] Create `/go/:linkId` route (redirects to target URL after tracking)
+- [ ] Implement loader that increments click count and performs 302 redirect to target URL
 - [ ] Update `links.total_clicks` counter
 - [ ] Update `daily_link_clicks` for premium analytics
 - [ ] Redirect with 302 status code
@@ -625,8 +626,8 @@ Sequential list of all tasks in recommended order:
 | 2     | 2.2   | ⬜ Not Started | Dashboard layout                    |
 | 2     | 2.3   | ⬜ Not Started | Link editor component               |
 | 2     | 2.4   | ⬜ Not Started | Links list component                |
-| 3     | 3.1   | ⬜ Not Started | Public page route                   |
-| 3     | 3.2   | ⬜ Not Started | Public profile components           |
+| 3     | 3.1   | ✅ Complete    | Public page route                   |
+| 3     | 3.2   | ✅ Complete    | Public profile components (done in 3.1) |
 | 3     | 3.3   | ⬜ Not Started | Click tracking                      |
 | 3     | 3.4   | ⬜ Not Started | View tracking                       |
 | 3     | 3.5   | ⬜ Not Started | Performance optimization            |

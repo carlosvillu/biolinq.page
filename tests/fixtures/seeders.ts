@@ -115,6 +115,28 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
       updated_at TIMESTAMP NOT NULL DEFAULT now()
     )`
   )
+
+  // Create daily_link_clicks table
+  await executeSQL(
+    ctx,
+    `CREATE TABLE IF NOT EXISTS daily_link_clicks (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      link_id UUID NOT NULL REFERENCES links(id) ON DELETE CASCADE,
+      date TIMESTAMP NOT NULL,
+      clicks INTEGER NOT NULL DEFAULT 0,
+      created_at TIMESTAMP NOT NULL DEFAULT now()
+    )`
+  )
+
+  await executeSQL(
+    ctx,
+    `CREATE UNIQUE INDEX IF NOT EXISTS unique_link_date ON daily_link_clicks(link_id, date)`
+  )
+
+  await executeSQL(
+    ctx,
+    `CREATE INDEX IF NOT EXISTS idx_daily_link_clicks_link_date ON daily_link_clicks(link_id, date)`
+  )
 }
 
 /**

@@ -10,5 +10,6 @@ export default [
   route('api/__test__/links', 'routes/api.__test__.links.tsx'),
   route('auth/login', 'routes/auth.login.tsx'),
   route('dashboard', 'routes/dashboard.tsx'),
+  route('go/:linkId', 'routes/go.$linkId.tsx'),
   route(':username', 'routes/public.tsx'),
 ] satisfies RouteConfig

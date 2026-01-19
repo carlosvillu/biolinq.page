@@ -1,6 +1,7 @@
 import { eq, and, gt, sql } from 'drizzle-orm'
 import { db } from '~/db'
 import { links, type Link } from '~/db/schema/links'
+import { dailyLinkClicks } from '~/db/schema/dailyLinkClicks'
 import { biolinks } from '~/db/schema/biolinks'
 import { getMaxLinks } from '~/lib/constants'
 import { createLinkSchema, type CreateLinkInput } from '~/lib/link-validation'
@@ -196,4 +197,50 @@ export async function getPublicLinksByBiolinkId(biolinkId: string): Promise<Link
     .orderBy(links.position)
 
   return result
+}
+
+export type TrackClickResult =
+  | { success: true; url: string }
+  | { success: false; error: 'LINK_NOT_FOUND' }
+
+export async function trackClickAndGetUrl(
+  linkId: string
+): Promise<TrackClickResult> {
+  return db.transaction(async (tx) => {
+    const linkResult = await tx
+      .select({ id: links.id, url: links.url })
+      .from(links)
+      .where(eq(links.id, linkId))
+      .limit(1)
+
+    if (linkResult.length === 0) {
+      return { success: false, error: 'LINK_NOT_FOUND' }
+    }
+
+    const link = linkResult[0]
+
+    await tx
+      .update(links)
+      .set({
+        totalClicks: sql`${links.totalClicks} + 1`,
+        updatedAt: new Date(),
+      })
+      .where(eq(links.id, linkId))
+
+    const today = sql`DATE_TRUNC('day', NOW())`
+
+    await tx
+      .insert(dailyLinkClicks)
+      .values({
+        linkId,
+        date: today,
+        clicks: 1,
+      })
+      .onConflictDoUpdate({
+        target: [dailyLinkClicks.linkId, dailyLinkClicks.date],
+        set: { clicks: sql`${dailyLinkClicks.clicks} + 1` },
+      })
+
+    return { success: true, url: link.url }
+  })
 }

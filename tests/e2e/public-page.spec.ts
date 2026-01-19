@@ -12,7 +12,7 @@ test.describe('Public Page', () => {
       userId,
       username: 'testuser',
     })
-    await seedLink(dbContext, {
+    const linkId = await seedLink(dbContext, {
       biolinkId,
       title: 'My Website',
       url: 'https://example.com',
@@ -35,7 +35,7 @@ test.describe('Public Page', () => {
     await expect(page.getByRole('link', { name: /My Blog/i })).toBeVisible()
 
     const websiteLink = page.getByRole('link', { name: /My Website/i })
-    await expect(websiteLink).toHaveAttribute('href', 'https://example.com')
+    await expect(websiteLink).toHaveAttribute('href', `/go/${linkId}`)
     await expect(websiteLink).toHaveAttribute('target', '_blank')
   })
 

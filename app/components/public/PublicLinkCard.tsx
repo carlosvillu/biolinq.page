@@ -7,7 +7,7 @@ type PublicLinkCardProps = {
 export function PublicLinkCard({ link }: PublicLinkCardProps) {
   return (
     <a
-      href={link.url}
+      href={`/go/${link.id}`}
       target="_blank"
       rel="noopener noreferrer"
       className="group relative block w-full"
