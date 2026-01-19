@@ -40,7 +40,7 @@ export default [
     },
   },
   {
-    files: ['app/root.tsx', 'app/components/ui/**/*.{ts,tsx}'],
+    files: ['app/root.tsx', 'app/components/ui/**/*.{ts,tsx}', 'app/routes/**/*.tsx'],
     rules: {
       'react/no-multi-comp': 'off',
       'react/prop-types': 'off',

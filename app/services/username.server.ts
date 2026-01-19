@@ -1,6 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { db } from '~/db'
 import { biolinks, type Biolink } from '~/db/schema/biolinks'
+import { users } from '~/db/schema/users'
 import { isReservedUsername } from '~/lib/constants'
 
 export type UsernameError =
@@ -107,4 +108,37 @@ export async function getUserBiolink(userId: string): Promise<Biolink | null> {
     .limit(1)
 
   return result[0] ?? null
+}
+
+export type BiolinkWithUser = {
+  biolink: Biolink
+  user: {
+    name: string | null
+    image: string | null
+    isPremium: boolean
+  }
+}
+
+export async function getBiolinkWithUserByUsername(
+  username: string
+): Promise<BiolinkWithUser | null> {
+  const result = await db
+    .select({
+      biolink: biolinks,
+      user: {
+        name: users.name,
+        image: users.image,
+        isPremium: users.isPremium,
+      },
+    })
+    .from(biolinks)
+    .innerJoin(users, eq(biolinks.userId, users.id))
+    .where(eq(biolinks.username, username.toLowerCase()))
+    .limit(1)
+
+  if (result.length === 0) {
+    return null
+  }
+
+  return result[0]
 }

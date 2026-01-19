@@ -123,16 +123,17 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
 export async function seedUser(
   ctx: DbContext,
   key: keyof typeof FIXTURES.users,
-  overrides?: Partial<typeof FIXTURES.users.alice>
+  overrides?: Partial<typeof FIXTURES.users.alice & { isPremium?: boolean; image?: string }>
 ): Promise<string> {
   const data = { ...FIXTURES.users[key], ...overrides }
   const emailLowercase = data.email.toLowerCase()
+  const nameValue = data.name === '' ? null : data.name
   const result = await executeSQL(
     ctx,
-    `INSERT INTO users (email, name)
-     VALUES ($1, $2)
+    `INSERT INTO users (email, name, is_premium, image)
+     VALUES ($1, $2, $3, $4)
      RETURNING id`,
-    [emailLowercase, data.name]
+    [emailLowercase, nameValue, data.isPremium ?? false, data.image ?? null]
   )
   return result.rows[0].id
 }

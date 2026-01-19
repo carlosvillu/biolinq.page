@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   data,
+  useMatches,
 } from 'react-router'
 import { I18nextProvider } from 'react-i18next'
 import { type i18n } from 'i18next'
@@ -140,6 +141,11 @@ export default function App({ loaderData }: Route.ComponentProps) {
   const themePreference = loaderData?.themePreference ?? null
   const i18nInstance = getI18nInstanceForRender(locale)
 
+  const matches = useMatches()
+  const hideLayout = matches.some(
+    (match) => (match.handle as { hideLayout?: boolean } | undefined)?.hideLayout
+  )
+
   // Update html lang attribute when locale changes
   useEffect(() => {
     document.documentElement.lang = locale
@@ -157,13 +163,17 @@ export default function App({ loaderData }: Route.ComponentProps) {
     return (
       <NeoBrutalToastProvider>
         <ThemeProvider initialPreference={themePreference}>
-          <div className="min-h-screen flex flex-col bg-neo-canvas">
-            <Header session={loaderData?.session ?? null} user={loaderData?.user ?? null} />
-            <main className="flex-1">
-              <Outlet />
-            </main>
-            <Footer />
-          </div>
+          {hideLayout ? (
+            <Outlet />
+          ) : (
+            <div className="min-h-screen flex flex-col bg-neo-canvas">
+              <Header session={loaderData?.session ?? null} user={loaderData?.user ?? null} />
+              <main className="flex-1">
+                <Outlet />
+              </main>
+              <Footer />
+            </div>
+          )}
         </ThemeProvider>
       </NeoBrutalToastProvider>
     )
@@ -173,13 +183,17 @@ export default function App({ loaderData }: Route.ComponentProps) {
     <NeoBrutalToastProvider>
       <ThemeProvider initialPreference={themePreference}>
         <I18nextProvider i18n={i18nInstance}>
-          <div className="min-h-screen flex flex-col bg-neo-canvas">
-            <Header session={loaderData.session} user={loaderData.user} />
-            <main className="flex-1">
-              <Outlet />
-            </main>
-            <Footer />
-          </div>
+          {hideLayout ? (
+            <Outlet />
+          ) : (
+            <div className="min-h-screen flex flex-col bg-neo-canvas">
+              <Header session={loaderData.session} user={loaderData.user} />
+              <main className="flex-1">
+                <Outlet />
+              </main>
+              <Footer />
+            </div>
+          )}
         </I18nextProvider>
       </ThemeProvider>
     </NeoBrutalToastProvider>

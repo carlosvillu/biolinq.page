@@ -99,5 +99,10 @@
   "dashboard_save_order": "Guardar orden",
   "dashboard_drag_link": "Arrastrar para reordenar",
   "saving": "Guardando...",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+
+  "public_not_found_title": "Perfil no encontrado",
+  "public_not_found_description": "Este usuario no existe todavía. ¿Quieres reclamarlo?",
+  "public_not_found_cta": "Crea tu BioLink",
+  "public_no_links": "Aún no hay enlaces"
 }

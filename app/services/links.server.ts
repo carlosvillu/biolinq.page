@@ -187,3 +187,13 @@ export async function reorderLinks(
     return { success: true }
   })
 }
+
+export async function getPublicLinksByBiolinkId(biolinkId: string): Promise<Link[]> {
+  const result = await db
+    .select()
+    .from(links)
+    .where(eq(links.biolinkId, biolinkId))
+    .orderBy(links.position)
+
+  return result
+}
