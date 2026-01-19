@@ -1067,30 +1067,63 @@ className="outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
 
 ## Implementation Best Practices
 
-### 1. Use Neo-Brutal Tokens Consistently
+### 1. Use `neo-` Prefixed Color Classes (CRITICAL)
+
+> **⚠️ IMPORTANT:** All Neo-Brutal brand colors use the `neo-` prefix in Tailwind classes.
+> Using `bg-dark` or `border-dark` will NOT work — these classes don't exist.
+
+```tsx
+// ✅ CORRECT - Use neo- prefix
+<div className="bg-neo-dark" />
+<div className="border-neo-dark" />
+<div className="text-neo-dark" />
+<div className="bg-neo-primary" />
+<div className="bg-neo-accent" />
+<div className="bg-neo-canvas" />
+<div className="bg-neo-panel" />
+<div className="bg-neo-input" />
+
+// ❌ WRONG - These classes don't exist in the project
+<div className="bg-dark" />
+<div className="border-dark" />
+<div className="text-dark" />
+```
+
+**Available Neo-Brutal color classes (defined in `app/app.css`):**
+
+| Color         | Background       | Border             | Text             |
+| ------------- | ---------------- | ------------------ | ---------------- |
+| Dark (ink)    | `bg-neo-dark`    | `border-neo-dark`  | `text-neo-dark`  |
+| Primary       | `bg-neo-primary` | `border-neo-primary` | `text-neo-primary` |
+| Accent        | `bg-neo-accent`  | `border-neo-accent`  | `text-neo-accent`  |
+| Canvas        | `bg-neo-canvas`  | —                  | —                |
+| Panel         | `bg-neo-panel`   | —                  | —                |
+| Input         | `bg-neo-input`   | —                  | —                |
+
+### 2. Use Neo-Brutal Tokens Consistently
 
 ```tsx
 // Good
-<div className="bg-primary border-[3px] border-dark" />
+<div className="bg-neo-primary border-[3px] border-neo-dark" />
 
 // Bad - Raw hex values
 <div className="bg-[#ffc480] border-[3px] border-[#111827]" />
 ```
 
-### 2. Always Include Shadow Layers for Interactive Elements
+### 3. Always Include Shadow Layers for Interactive Elements
 
 ```tsx
 // Good - Complete button structure
 <div className="relative group">
-  <div className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1" />
+  <div className="absolute inset-0 bg-neo-dark rounded translate-x-1 translate-y-1" />
   <button className="relative z-10 ...">Click</button>
 </div>
 
 // Bad - Missing shadow layer
-<button className="bg-primary border-[3px] border-dark">Click</button>
+<button className="bg-neo-primary border-[3px] border-neo-dark">Click</button>
 ```
 
-### 3. Mobile-First Responsive Design
+### 4. Mobile-First Responsive Design
 
 ```tsx
 // Good
@@ -1100,7 +1133,7 @@ className="outline-none focus-visible:ring-ring/50 focus-visible:ring-[3px]"
 <h1 className="text-7xl md:text-5xl sm:text-4xl" />
 ```
 
-### 4. Consistent Animation Patterns
+### 5. Consistent Animation Patterns
 
 ```tsx
 // Good - Predictable hover behavior
@@ -1110,7 +1143,7 @@ className = 'transition-transform duration-200 hover:-translate-y-px hover:-tran
 className = 'transition duration-500 hover:-translate-y-2'
 ```
 
-### 5. Semantic Color Usage
+### 6. Semantic Color Usage
 
 ```tsx
 // Good - Marketing/Landing pages

@@ -3,19 +3,9 @@ import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router'
 import { useLoaderData, useActionData } from 'react-router'
 import { getCurrentUser } from '~/lib/auth.server'
 import { getUserBiolink } from '~/services/username.server'
-import {
-  getLinksByBiolinkId,
-  createLink,
-  deleteLink,
-  reorderLinks,
-} from '~/services/links.server'
+import { getLinksByBiolinkId, createLink, deleteLink, reorderLinks } from '~/services/links.server'
 import { getMaxLinks } from '~/lib/constants'
-import {
-  PremiumBanner,
-  StatsCard,
-  LinksList,
-  PhonePreview,
-} from '~/components/dashboard'
+import { PremiumBanner, StatsCard, LinksList, LivePreview } from '~/components/dashboard'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
@@ -30,10 +20,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect('/')
   }
 
-  const linksResult = await getLinksByBiolinkId(
-    authSession.user.id,
-    biolink.id
-  )
+  const linksResult = await getLinksByBiolinkId(authSession.user.id, biolink.id)
   const links = linksResult.success ? linksResult.links : []
 
   return {
@@ -110,9 +97,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
 export default function DashboardPage() {
   const { user, biolink, links } = useLoaderData<typeof loader>()
-  const actionData = useActionData<typeof action>() as
-    | { error: string }
-    | undefined
+  const actionData = useActionData<typeof action>() as { error: string } | undefined
 
   const maxLinks = getMaxLinks(user.isPremium)
 
@@ -133,11 +118,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Right Column (hidden on mobile) */}
-        <PhonePreview
-          userName={user.name}
-          userImage={user.image}
-          links={links}
-        />
+        <LivePreview username={biolink.username} />
       </main>
     </div>
   )

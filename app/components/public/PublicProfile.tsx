@@ -12,9 +12,10 @@ type PublicProfileProps = {
   }
   biolink: Pick<Biolink, 'username'>
   links: Link[]
+  isPreview?: boolean
 }
 
-export function PublicProfile({ user, biolink, links }: PublicProfileProps) {
+export function PublicProfile({ user, biolink, links, isPreview = false }: PublicProfileProps) {
   const { t } = useTranslation()
   const displayName = user.name ?? biolink.username
 
@@ -42,7 +43,7 @@ export function PublicProfile({ user, biolink, links }: PublicProfileProps) {
 
         <div className="space-y-4">
           {links.map((link) => (
-            <PublicLinkCard key={link.id} link={link} />
+            <PublicLinkCard key={link.id} link={link} isPreview={isPreview} />
           ))}
 
           {links.length === 0 && (

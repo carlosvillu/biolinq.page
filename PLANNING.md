@@ -264,16 +264,17 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 3.6: Replace Dashboard Preview with Live Iframe
 
-- [ ] Remove or deprecate the static `Preview` component from dashboard
-- [ ] Create `app/components/dashboard/LivePreview.tsx` component
-- [ ] Use the existing iPhone frame component to wrap the iframe
-- [ ] Point iframe `src` to `/:username` (user's public page)
-- [ ] Add "Refresh Preview" button (manual refresh only)
-- [ ] Handle iframe loading state (spinner while loading)
-- [ ] Ensure iframe is sandboxed appropriately for security
-- [ ] Add i18n key for "Refresh Preview" button
-- [ ] E2E test: Dashboard shows live iframe preview of user's public page
-- [ ] E2E test: Refresh button reloads the iframe content
+- [x] Remove or deprecate the static `Preview` component from dashboard
+- [x] Create `app/components/dashboard/LivePreview.tsx` component
+- [x] Use the existing iPhone frame component to wrap the iframe
+- [x] Point iframe `src` to `/:username` (user's public page)
+- [x] Add "Refresh Preview" button (manual refresh only)
+- [x] Handle iframe loading state (spinner while loading)
+- [x] Ensure iframe is sandboxed appropriately for security
+- [x] Add i18n key for "Refresh Preview" button
+- [x] E2E test: Dashboard shows live iframe preview of user's public page
+- [x] E2E test: Refresh button reloads the iframe content
+- [x] Skip view/click tracking when rendering inside preview iframe
 
 ---
 
@@ -631,7 +632,7 @@ Sequential list of all tasks in recommended order:
 | 3     | 3.3   | ⬜ Not Started | Click tracking                          |
 | 3     | 3.4   | ✅ Complete    | View tracking                           |
 | 3     | 3.5   | ⬜ Not Started | Performance optimization                |
-| 3     | 3.6   | ⬜ Not Started | Live iframe preview in dashboard        |
+| 3     | 3.6   | ✅ Complete    | Live iframe preview in dashboard        |
 | 4     | 4.1   | ⬜ Not Started | Theme configuration                     |
 | 4     | 4.2   | ⬜ Not Started | Theme selector                          |
 | 4     | 4.3   | ⬜ Not Started | Theme service                           |

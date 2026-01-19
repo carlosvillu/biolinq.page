@@ -23,9 +23,12 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     throw new Response('Not Found', { status: 404 })
   }
 
+  const url = new URL(request.url)
+  const isPreview = url.searchParams.get('preview') === '1'
+
   const cookieHeader = request.headers.get('Cookie')
   const entries = parseViewCookie(cookieHeader)
-  const shouldTrack = shouldTrackView(entries, result.biolink.id)
+  const shouldTrack = !isPreview && shouldTrackView(entries, result.biolink.id)
 
   const headers = new Headers()
   if (shouldTrack) {
@@ -45,6 +48,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       biolink: result.biolink,
       user: result.user,
       links,
+      isPreview,
     },
     { headers }
   )
@@ -82,7 +86,14 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 export default function PublicPage() {
   const data = useLoaderData<typeof loader>()
 
-  return <PublicProfile user={data.user} biolink={data.biolink} links={data.links} />
+  return (
+    <PublicProfile
+      user={data.user}
+      biolink={data.biolink}
+      links={data.links}
+      isPreview={data.isPreview}
+    />
+  )
 }
 
 export function ErrorBoundary() {
