@@ -7,3 +7,8 @@ export function formatNumber(num: number): string {
   }
   return num.toLocaleString()
 }
+
+export function formatDayShort(dateString: string): string {
+  const date = new Date(dateString)
+  return date.toLocaleDateString('en-US', { weekday: 'short' })
+}

@@ -359,11 +359,11 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 5.2: Create Stats Components
 
-- [ ] Create `app/components/dashboard/StatsCard.tsx` (basic stats display)
-- [ ] Create `app/components/dashboard/PremiumStatsCard.tsx` (locked for free users)
-- [ ] Create `app/components/dashboard/ClicksChart.tsx` (30-day line chart)
-- [ ] Create `app/components/dashboard/LinkClicksBreakdown.tsx` (per-link bars)
-- [ ] Use a lightweight chart library (e.g., recharts or chart.js)
+- [x] Create `app/components/dashboard/StatsOverview.tsx` (basic stats display)
+- [x] Create `app/components/dashboard/DailyChart.tsx` (CSS-only 7-day chart)
+- [x] Create `app/components/dashboard/LinkPerformance.tsx` (per-link bars with Base UI Meter)
+- [x] Create `app/components/dashboard/PremiumLock.tsx` (reusable premium overlay)
+- [x] E2E tests for stats components
 
 #### Task 5.3: Integrate Stats in Dashboard
 
@@ -667,7 +667,7 @@ Sequential list of all tasks in recommended order:
 | 4     | 4.3   | ✅ Complete    | Theme service                           |
 | 4     | 4.4   | ✅ Complete    | Theme integration                       |
 | 5     | 5.1   | ✅ Complete    | Analytics service                       |
-| 5     | 5.2   | ⬜ Not Started | Stats components                        |
+| 5     | 5.2   | ✅ Complete    | Stats components                        |
 | 5     | 5.3   | ⬜ Not Started | Stats integration                       |
 | 6     | 6.1   | ⬜ Not Started | Stripe configuration                    |
 | 6     | 6.2   | ⬜ Not Started | Checkout flow                           |

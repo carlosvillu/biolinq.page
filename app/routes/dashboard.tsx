@@ -7,7 +7,9 @@ import { getLinksByBiolinkId, createLink, deleteLink, reorderLinks } from '~/ser
 import { getMaxLinks } from '~/lib/constants'
 import {
   PremiumBanner,
-  StatsCard,
+  StatsOverview,
+  DailyChart,
+  LinkPerformance,
   LinksList,
   LivePreview,
   CustomizationSection,
@@ -15,6 +17,8 @@ import {
 import { updateBiolinkTheme, updateBiolinkColors } from '~/services/theme.server'
 import { THEMES } from '~/lib/themes'
 import type { BiolinkTheme } from '~/db/schema/biolinks'
+import { getBasicStats, getPremiumStats, getLast7DaysData } from '~/services/analytics.server'
+import { fillMissingDays, getLast7Days } from '~/lib/stats'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
@@ -32,11 +36,42 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const linksResult = await getLinksByBiolinkId(authSession.user.id, biolink.id)
   const links = linksResult.success ? linksResult.links : []
 
+  const basicStatsResult = await getBasicStats(biolink.id, authSession.user.id)
+  const totalViews = basicStatsResult.success ? basicStatsResult.data.totalViews : 0
+
+  let totalClicks: number | null = null
+  let linksBreakdown: {
+    linkId: string
+    title: string
+    emoji: string | null
+    totalClicks: number
+  }[] = []
+  let dailyData: { date: string; views: number; clicks: number }[] = []
+
+  if (authSession.user.isPremium) {
+    const premiumStatsResult = await getPremiumStats(biolink.id, authSession.user.id)
+    if (premiumStatsResult.success) {
+      totalClicks = premiumStatsResult.data.totalClicks
+      linksBreakdown = premiumStatsResult.data.linksBreakdown
+    }
+
+    const dailyDataResult = await getLast7DaysData(biolink.id, authSession.user.id)
+    if (dailyDataResult.success) {
+      dailyData = dailyDataResult.data
+    }
+  }
+
   return {
     user: authSession.user,
     session: authSession.session,
     biolink,
     links,
+    stats: {
+      totalViews,
+      totalClicks,
+      linksBreakdown,
+      dailyData: fillMissingDays(dailyData, getLast7Days()),
+    },
   }
 }
 
@@ -132,7 +167,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function DashboardPage() {
-  const { user, biolink, links } = useLoaderData<typeof loader>()
+  const { user, biolink, links, stats } = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>() as { error: string } | undefined
 
   const maxLinks = getMaxLinks(user.isPremium)
@@ -144,7 +179,16 @@ export default function DashboardPage() {
       <main className="max-w-6xl mx-auto px-4 py-8 grid lg:grid-cols-[1.5fr_1fr] gap-8">
         {/* Left Column */}
         <div className="space-y-8">
-          <StatsCard totalViews={biolink.totalViews} isPremium={user.isPremium} />
+          {/* Stats Section */}
+          <div className="space-y-4">
+            <StatsOverview
+              totalViews={stats.totalViews}
+              totalClicks={stats.totalClicks}
+              isPremium={user.isPremium}
+            />
+            <DailyChart data={stats.dailyData} isPremium={user.isPremium} />
+            <LinkPerformance links={stats.linksBreakdown} isPremium={user.isPremium} />
+          </div>
           <LinksList
             links={links}
             biolinkId={biolink.id}

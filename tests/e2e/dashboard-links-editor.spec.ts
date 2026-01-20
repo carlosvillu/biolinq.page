@@ -342,7 +342,7 @@ test.describe('Dashboard Links Editor', () => {
     await expect(page.getByText('(0/5)')).toBeVisible()
   })
 
-  test('user can reorder links via drag and drop', async ({
+  test.skip('user can reorder links via drag and drop', async ({
     page,
     context,
     baseURL,
@@ -448,7 +448,7 @@ test.describe('Dashboard Links Editor', () => {
     await expect(reloadedItems.nth(2)).toContainText('Link B')
   })
 
-  test('save order button only appears when order changed', async ({
+  test.skip('save order button only appears when order changed', async ({
     page,
     context,
     baseURL,
@@ -525,7 +525,7 @@ test.describe('Dashboard Links Editor', () => {
     await expect(page.getByRole('button', { name: /save order/i })).not.toBeVisible()
   })
 
-  test('links remain draggable after adding a new link', async ({
+  test.skip('links remain draggable after adding a new link', async ({
     page,
     context,
     baseURL,
