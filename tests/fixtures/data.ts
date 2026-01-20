@@ -9,6 +9,14 @@ export const FIXTURES = {
       email: 'bob@example.com',
       name: 'Bob User',
     },
+    statsUser: {
+      email: 'statsuser@example.com',
+      name: 'Stats User',
+    },
+    premiumUser: {
+      email: 'premium@example.com',
+      name: 'Premium User',
+    },
   },
   sessions: {
     aliceSession: {

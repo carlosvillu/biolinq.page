@@ -276,6 +276,31 @@ Antes de empezar, necesitas tener configurado:
 - [x] E2E test: Refresh button reloads the iframe content
 - [x] Skip view/click tracking when rendering inside preview iframe
 
+#### Task 3.7: Add User GA4 Configuration (Premium Only)
+
+- [ ] Add `ga4_measurement_id` column to `biolinks` table (varchar(20), nullable)
+- [ ] Generate and run migration for new column
+- [ ] Create `app/services/ga4.server.ts`:
+  - [ ] `updateGA4MeasurementId(biolinkId, userId, ga4Id)` function
+  - [ ] Validate GA4 ID format (G-XXXXXXXXXX)
+  - [ ] Check user is premium before saving (throw error if not)
+- [ ] Create `app/components/dashboard/GA4Settings.tsx`:
+  - [ ] Input field for GA4 Measurement ID
+  - [ ] Format validation (G-XXXXXXXXXX pattern)
+  - [ ] Save button with loading state
+  - [ ] Help text explaining what this does
+  - [ ] For free users: show locked state with "Premium" badge (same as customization section)
+- [ ] Add GA4 settings section to dashboard (below theme selector)
+- [ ] Create dashboard action to handle GA4 ID update (verify premium status)
+- [ ] Update public page (`/:username`) to load dual GA4:
+  - [ ] Site GA4 (from env `GA_MEASUREMENT_ID`) - always present
+  - [ ] User GA4 (from `biolinks.ga4_measurement_id`) - only if configured AND user is premium
+- [ ] Add i18n keys for GA4 settings UI (including premium lock message)
+- [ ] E2E test: Premium user can save valid GA4 ID
+- [ ] E2E test: Invalid GA4 ID format shows validation error
+- [ ] E2E test: Free user sees locked GA4 section with premium badge
+- [ ] E2E test: Public page includes user GA4 script only for premium users
+
 ---
 
 ### Phase 4: Theme System
@@ -327,10 +352,10 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 5.1: Create Analytics Service
 
-- [ ] Create `app/services/analytics.server.ts`
-- [ ] Implement `getBasicStats(biolinkId)` - total views only
-- [ ] Implement `getPremiumStats(biolinkId)` - views, clicks, per-link clicks, 30-day history
-- [ ] Implement `getLast30DaysData(biolinkId)` for chart data
+- [x] Create `app/services/analytics.server.ts`
+- [x] Implement `getBasicStats(biolinkId)` - total views only
+- [x] Implement `getPremiumStats(biolinkId)` - views, clicks, per-link clicks, 30-day history
+- [x] Implement `getLast30DaysData(biolinkId)` for chart data
 
 #### Task 5.2: Create Stats Components
 
@@ -564,30 +589,31 @@ Sequential list of all tasks in recommended order:
 16. Task 3.4 - Implement View Tracking
 17. Task 3.5 - Performance Optimization
 18. Task 3.6 - Replace Dashboard Preview with Live Iframe
-19. Task 4.1 - Define Theme Configuration
-20. Task 4.2 - Create Theme Selector Component
-21. Task 4.3 - Create Theme Service
-22. Task 4.4 - Integrate Theme in Dashboard
-23. Task 5.1 - Create Analytics Service
-24. Task 5.2 - Create Stats Components
-25. Task 5.3 - Integrate Stats in Dashboard
-26. Task 6.1 - Setup Stripe Configuration
-27. Task 6.2 - Create Checkout Flow
-28. Task 6.3 - Create Stripe Webhook Handler
-29. Task 6.4 - Implement Premium Feature Gating
-30. Task 7.1 - Create Account Page
-31. Task 7.2 - Create Account Deletion Flow
-32. Task 8.1 - Create Landing Page Components
-33. Task 8.2 - Update Landing Page Route
-34. Task 8.3 - Polish & Animations
-35. Task 9.1 - Setup Google Analytics 4
-36. Task 9.2 - Implement Custom Events
-37. Task 9.3 - Implement Ecommerce Tracking for Stripe
-38. Task 9.4 - Dashboard & Authenticated Area Tracking
-39. Task 9.5 - Consent & Privacy Compliance
-40. Task 10.1 - Error Handling & Edge Cases
-41. Task 10.2 - Complete E2E Test Suite
-42. Task 10.3 - Final Checks
+19. Task 3.7 - Add User GA4 Configuration
+20. Task 4.1 - Define Theme Configuration
+21. Task 4.2 - Create Theme Selector Component
+22. Task 4.3 - Create Theme Service
+23. Task 4.4 - Integrate Theme in Dashboard
+24. Task 5.1 - Create Analytics Service
+25. Task 5.2 - Create Stats Components
+26. Task 5.3 - Integrate Stats in Dashboard
+27. Task 6.1 - Setup Stripe Configuration
+28. Task 6.2 - Create Checkout Flow
+29. Task 6.3 - Create Stripe Webhook Handler
+30. Task 6.4 - Implement Premium Feature Gating
+31. Task 7.1 - Create Account Page
+32. Task 7.2 - Create Account Deletion Flow
+33. Task 8.1 - Create Landing Page Components
+34. Task 8.2 - Update Landing Page Route
+35. Task 8.3 - Polish & Animations
+36. Task 9.1 - Setup Google Analytics 4
+37. Task 9.2 - Implement Custom Events
+38. Task 9.3 - Implement Ecommerce Tracking for Stripe
+39. Task 9.4 - Dashboard & Authenticated Area Tracking
+40. Task 9.5 - Consent & Privacy Compliance
+41. Task 10.1 - Error Handling & Edge Cases
+42. Task 10.2 - Complete E2E Test Suite
+43. Task 10.3 - Final Checks
 
 ---
 
@@ -635,11 +661,12 @@ Sequential list of all tasks in recommended order:
 | 3     | 3.4   | ✅ Complete    | View tracking                           |
 | 3     | 3.5   | ⬜ Not Started | Performance optimization                |
 | 3     | 3.6   | ✅ Complete    | Live iframe preview in dashboard        |
+| 3     | 3.7   | ⬜ Not Started | User GA4 configuration (Premium)        |
 | 4     | 4.1   | ✅ Complete    | Theme configuration                     |
 | 4     | 4.2   | ✅ Complete    | Theme selector                          |
 | 4     | 4.3   | ✅ Complete    | Theme service                           |
 | 4     | 4.4   | ✅ Complete    | Theme integration                       |
-| 5     | 5.1   | ⬜ Not Started | Analytics service                       |
+| 5     | 5.1   | ✅ Complete    | Analytics service                       |
 | 5     | 5.2   | ⬜ Not Started | Stats components                        |
 | 5     | 5.3   | ⬜ Not Started | Stats integration                       |
 | 6     | 6.1   | ⬜ Not Started | Stripe configuration                    |

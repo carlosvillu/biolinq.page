@@ -234,12 +234,13 @@ export async function seedBiolink(
     theme?: 'brutalist' | 'light_minimal' | 'dark_mode' | 'colorful'
     customPrimaryColor?: string | null
     customBgColor?: string | null
+    totalViews?: number
   }
 ): Promise<string> {
   const result = await executeSQL(
     ctx,
-    `INSERT INTO biolinks (user_id, username, theme, custom_primary_color, custom_bg_color)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO biolinks (user_id, username, theme, custom_primary_color, custom_bg_color, total_views)
+     VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id`,
     [
       data.userId,
@@ -247,6 +248,7 @@ export async function seedBiolink(
       data.theme ?? 'brutalist',
       data.customPrimaryColor ?? null,
       data.customBgColor ?? null,
+      data.totalViews ?? 0,
     ]
   )
   return result.rows[0].id
@@ -263,14 +265,41 @@ export async function seedLink(
     title: string
     url: string
     position: number
+    totalClicks?: number
   }
 ): Promise<string> {
   const result = await executeSQL(
     ctx,
-    `INSERT INTO links (biolink_id, emoji, title, url, position)
-     VALUES ($1, $2, $3, $4, $5)
+    `INSERT INTO links (biolink_id, emoji, title, url, position, total_clicks)
+     VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id`,
-    [data.biolinkId, data.emoji ?? null, data.title, data.url, data.position]
+    [
+      data.biolinkId,
+      data.emoji ?? null,
+      data.title,
+      data.url,
+      data.position,
+      data.totalClicks ?? 0,
+    ]
+  )
+  return result.rows[0].id
+}
+
+export async function seedDailyStat(
+  ctx: DbContext,
+  data: {
+    biolinkId: string
+    date: Date
+    views: number
+    clicks: number
+  }
+): Promise<string> {
+  const result = await executeSQL(
+    ctx,
+    `INSERT INTO daily_stats (biolink_id, date, views, clicks)
+     VALUES ($1, $2, $3, $4)
+     RETURNING id`,
+    [data.biolinkId, data.date, data.views, data.clicks]
   )
   return result.rows[0].id
 }
