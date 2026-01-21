@@ -367,12 +367,12 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 5.3: Integrate Stats in Dashboard
 
-- [ ] Add stats section to dashboard above links editor
-- [ ] For free users: show total views + locked premium section with CTA
-- [ ] For premium users: show full analytics
-- [ ] Add i18n keys for analytics texts
-- [ ] E2E test: Free user sees total views and premium upsell
-- [ ] E2E test: Premium user sees full analytics
+- [x] Add stats section to dashboard above links editor
+- [x] For free users: show total views + locked premium section with CTA
+- [x] For premium users: show full analytics
+- [x] Add i18n keys for analytics texts
+- [x] E2E test: Free user sees total views and premium upsell
+- [x] E2E test: Premium user sees full analytics
 
 ---
 

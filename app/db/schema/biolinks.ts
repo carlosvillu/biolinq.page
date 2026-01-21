@@ -6,6 +6,7 @@ import {
   integer,
   pgEnum,
   index,
+  boolean,
 } from 'drizzle-orm/pg-core'
 import { users } from './users'
 
@@ -29,6 +30,10 @@ export const biolinks = pgTable(
     customPrimaryColor: varchar('custom_primary_color', { length: 7 }),
     customBgColor: varchar('custom_bg_color', { length: 7 }),
     totalViews: integer('total_views').notNull().default(0),
+    customDomain: varchar('custom_domain', { length: 255 }).unique(),
+    domainVerificationToken: varchar('domain_verification_token', { length: 64 }),
+    domainOwnershipVerified: boolean('domain_ownership_verified').default(false),
+    cnameVerified: boolean('cname_verified').default(false),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
   },

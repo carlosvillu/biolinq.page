@@ -90,6 +90,10 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
       custom_primary_color VARCHAR(7),
       custom_bg_color VARCHAR(7),
       total_views INTEGER NOT NULL DEFAULT 0,
+      custom_domain VARCHAR(255) UNIQUE,
+      domain_verification_token VARCHAR(64),
+      domain_ownership_verified BOOLEAN DEFAULT FALSE,
+      cname_verified BOOLEAN DEFAULT FALSE,
       created_at TIMESTAMP NOT NULL DEFAULT now(),
       updated_at TIMESTAMP NOT NULL DEFAULT now()
     )`
@@ -235,12 +239,16 @@ export async function seedBiolink(
     customPrimaryColor?: string | null
     customBgColor?: string | null
     totalViews?: number
+    customDomain?: string | null
+    domainVerificationToken?: string | null
+    domainOwnershipVerified?: boolean
+    cnameVerified?: boolean
   }
 ): Promise<string> {
   const result = await executeSQL(
     ctx,
-    `INSERT INTO biolinks (user_id, username, theme, custom_primary_color, custom_bg_color, total_views)
-     VALUES ($1, $2, $3, $4, $5, $6)
+    `INSERT INTO biolinks (user_id, username, theme, custom_primary_color, custom_bg_color, total_views, custom_domain, domain_verification_token, domain_ownership_verified, cname_verified)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
      RETURNING id`,
     [
       data.userId,
@@ -249,6 +257,10 @@ export async function seedBiolink(
       data.customPrimaryColor ?? null,
       data.customBgColor ?? null,
       data.totalViews ?? 0,
+      data.customDomain ?? null,
+      data.domainVerificationToken ?? null,
+      data.domainOwnershipVerified ?? false,
+      data.cnameVerified ?? false,
     ]
   )
   return result.rows[0].id
