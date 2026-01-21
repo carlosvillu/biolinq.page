@@ -30,7 +30,7 @@ export function ProblemSection() {
         </h2>
         <p className="text-gray-700 text-center mb-12 max-w-xl mx-auto">{t('problem_subtitle')}</p>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 items-start">
           {problems.map((problem) => (
             <NeoBrutalCard key={problem.titleKey}>
               <div className="text-center">

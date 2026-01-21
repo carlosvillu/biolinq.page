@@ -42,7 +42,7 @@ export function SolutionSection() {
           <p className="text-gray-700 max-w-xl mx-auto">{t('solution_subtitle')}</p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 items-start">
           {solutions.map((solution) => (
             <NeoBrutalCard key={solution.titleKey}>
               <div className="flex flex-col h-full">
