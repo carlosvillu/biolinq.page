@@ -1,5 +1,20 @@
 # FEATURE_6.1_CustomDomains.md
 
+## 0. Architecture Summary
+
+**Key Decisions:**
+1. **Two-phase DNS verification**: TXT record challenge → Netlify API call → CNAME verification
+2. **Home route handles custom domains**: `app/routes/home.tsx` checks `request.host` and conditionally renders profile or landing
+3. **Reuse existing components**: `PublicProfile` component serves both `/:username` and custom domain profiles
+
+**Why this approach?**
+- **Security**: TXT challenge prevents domain squatting
+- **Resource efficiency**: Only verified domains consume Netlify aliases
+- **Simplicity**: No middleware needed, home route is the natural entry point for custom domains
+- **Code reuse**: Same `PublicProfile` component for all public views
+
+---
+
 ## 1. Natural Language Description
 
 ### Current State
@@ -19,11 +34,14 @@
 ### User Flow
 1. User enters custom domain in dashboard (e.g., `links.mydomain.com`)
 2. System validates format and checks uniqueness
-3. System calls Netlify API to add domain alias
-4. User configures CNAME record: `links.mydomain.com → biolinq.netlify.app`
-5. Netlify provisions SSL automatically
-6. System verifies DNS configuration
-7. Once verified, visitors to `links.mydomain.com` see the user's profile
+3. System generates a unique verification token and displays a TXT record challenge
+4. User adds TXT record to DNS: `_biolinq-verify.links.mydomain.com → {verification_token}`
+5. User clicks "Verify Domain Ownership"
+6. System checks TXT record exists and matches token
+7. Once verified, system calls Netlify API to add domain alias
+8. User configures CNAME record: `links.mydomain.com → biolinq.netlify.app`
+9. Netlify provisions SSL automatically
+10. Once CNAME is detected, visitors to `links.mydomain.com` see the user's profile
 
 ---
 
@@ -34,14 +52,19 @@
 The key technical challenge is detecting when a request comes from a custom domain vs. the main domain:
 
 ```
-Request to biolinq.page/alice     → resolve by params.username = 'alice'
-Request to links.usersite.com     → resolve by request.host = 'links.usersite.com'
+Request to biolinq.page/          → home route → render landing page
+Request to biolinq.page/alice     → public route → resolve by params.username = 'alice'
+Request to links.usersite.com/    → home route → resolve by request.host, render profile
 ```
 
-**Solution:** Modify the public route loader to:
+**Solution:** Modify the home route loader (`/`) to:
 1. Check if `request.host` matches a custom domain in the database
-2. If yes, load that biolink (ignore URL path)
-3. If no, fall back to current `params.username` resolution
+2. If yes, load that biolink and render the public profile view
+3. If no, render the normal landing page
+
+This approach is simpler than creating middleware and keeps responsibilities clear:
+- Home route: Landing page OR custom domain profiles
+- Public route: Username-based profiles on main domain
 
 ### Netlify API Integration
 
@@ -64,24 +87,40 @@ PATCH /api/v1/sites/{site_id} → set domain_aliases to NEW complete list
 
 ### DNS Verification Strategy
 
-**Simple approach (recommended for MVP):**
-- After user adds domain, check if CNAME resolves to Netlify
-- Netlify handles SSL provisioning automatically
-- Mark domain as "verified" once Netlify confirms it
+**Two-phase verification approach:**
 
-**Verification flow:**
-1. User saves domain → stored with `verified = false`
-2. Background check: DNS lookup for CNAME
-3. If CNAME points to Netlify → mark `verified = true`
-4. Only verified domains are resolved in public route
+**Phase 1: Domain Ownership (TXT Record Challenge)**
+- When user adds domain, generate unique verification token
+- Store token in DB with domain: `domainVerificationToken`
+- User must add TXT record: `_biolinq-verify.{domain} → {token}`
+- System verifies TXT record exists and matches before calling Netlify
+- Prevents domain squatting and Netlify alias exhaustion
+
+**Phase 2: CNAME Configuration (Traffic Routing)**
+- After ownership verified, system calls Netlify API to add alias
+- User configures CNAME: `{domain} → biolinq.netlify.app`
+- System checks CNAME resolves correctly
+- Mark domain as `cnameVerified = true` once DNS propagates
+- Only domains with both ownership + CNAME verified can serve traffic
+
+**Why two phases?**
+1. **Prevents abuse:** Can't claim domains you don't own
+2. **Saves Netlify resources:** Only add aliases for verified domains
+3. **Better UX:** Clear separation between "prove ownership" and "configure routing"
+
+**Verification states:**
+- `domainOwnershipVerified = false, cnameVerified = false` → Pending TXT record
+- `domainOwnershipVerified = true, cnameVerified = false` → Pending CNAME record
+- `domainOwnershipVerified = true, cnameVerified = true` → Live and serving traffic
 
 ### Architecture Decisions
 
 1. **New service:** `app/services/custom-domain.server.ts` - business logic
 2. **New service:** `app/services/netlify.server.ts` - Netlify API wrapper
-3. **Schema change:** Add `customDomain` and `customDomainVerified` to `biolinks`
-4. **Route modification:** Update `public.tsx` loader to check host
+3. **Schema change:** Add custom domain fields to `biolinks` table
+4. **Route modification:** Update `home.tsx` loader to check host and conditionally render profile
 5. **Dashboard component:** New `CustomDomainSection` component
+6. **Component reuse:** Use existing `PublicProfile` component to render custom domain profiles
 
 ### Environment Variables Required
 
@@ -107,6 +146,13 @@ PATCH /api/v1/sites/{site_id} → set domain_aliases to NEW complete list
 
 ## 3. Files to Change/Create
 
+**Summary:**
+1. **New files**: `app/services/netlify.server.ts`, `app/services/custom-domain.server.ts`, `app/components/dashboard/CustomDomainSection.tsx`, migration SQL
+2. **Modified files**: `app/db/schema/biolinks.ts`, `app/routes/home.tsx`, `app/routes/dashboard.tsx`, i18n files
+3. **Reused components**: `PublicProfile` component (no changes needed)
+
+---
+
 ### 3.1 Database Migration
 
 #### `drizzle/migrations/XXXX_add_custom_domain.sql`
@@ -116,9 +162,15 @@ PATCH /api/v1/sites/{site_id} → set domain_aliases to NEW complete list
 ```sql
 ALTER TABLE biolinks
 ADD COLUMN custom_domain VARCHAR(255) UNIQUE,
-ADD COLUMN custom_domain_verified BOOLEAN DEFAULT FALSE;
+ADD COLUMN domain_verification_token VARCHAR(64),
+ADD COLUMN domain_ownership_verified BOOLEAN DEFAULT FALSE,
+ADD COLUMN cname_verified BOOLEAN DEFAULT FALSE;
 
 CREATE INDEX idx_biolinks_custom_domain ON biolinks(custom_domain) WHERE custom_domain IS NOT NULL;
+
+-- Index for efficient lookup by verified domains
+CREATE INDEX idx_biolinks_verified_domains ON biolinks(custom_domain)
+WHERE domain_ownership_verified = TRUE AND cname_verified = TRUE;
 ```
 
 ---
@@ -132,7 +184,9 @@ CREATE INDEX idx_biolinks_custom_domain ON biolinks(custom_domain) WHERE custom_
 ```pseudocode
 ADD TO biolinks TABLE DEFINITION:
   customDomain: varchar('custom_domain', { length: 255 }).unique()
-  customDomainVerified: boolean('custom_domain_verified').default(false)
+  domainVerificationToken: varchar('domain_verification_token', { length: 64 })
+  domainOwnershipVerified: boolean('domain_ownership_verified').default(false)
+  cnameVerified: boolean('cname_verified').default(false)
 ```
 
 ---
@@ -261,6 +315,7 @@ IMPORTS
   eq from drizzle-orm
   addDomainAlias, removeDomainAlias from ./netlify.server
   dns from node:dns/promises (for verification)
+  crypto from node:crypto (for token generation)
 
 TYPES
   CustomDomainError =
@@ -270,16 +325,23 @@ TYPES
     | 'BIOLINK_NOT_FOUND'
     | 'NETLIFY_ERROR'
     | 'DOMAIN_NOT_SET'
+    | 'OWNERSHIP_NOT_VERIFIED'
+    | 'TXT_RECORD_NOT_FOUND'
+    | 'TXT_RECORD_MISMATCH'
 
   SetDomainResult =
-    | { success: true; domain: string }
+    | { success: true; domain: string; verificationToken: string }
     | { success: false; error: CustomDomainError }
 
   RemoveDomainResult =
     | { success: true }
     | { success: false; error: CustomDomainError }
 
-  VerifyDomainResult =
+  VerifyOwnershipResult =
+    | { success: true; verified: boolean }
+    | { success: false; error: CustomDomainError }
+
+  VerifyCNAMEResult =
     | { success: true; verified: boolean }
     | { success: false; error: CustomDomainError }
 
@@ -302,6 +364,14 @@ FUNCTION isValidDomainFormat(domain: string): boolean
     IF domain === blocked OR domain.endsWith('.' + blocked)
       RETURN false
   RETURN true
+END
+
+// ============================================
+// FUNCTION: Generate verification token
+// ============================================
+FUNCTION generateVerificationToken(): string
+  // Generate a random 32-byte token
+  RETURN crypto.randomBytes(32).toString('hex')
 END
 
 // ============================================
@@ -337,24 +407,20 @@ FUNCTION setCustomDomain(
   IF existingResult IS NOT empty
     RETURN { success: false, error: 'DOMAIN_ALREADY_TAKEN' }
 
-  // If changing domain, remove old one from Netlify first
-  oldDomain = biolinkResult.customDomain
-  IF oldDomain AND oldDomain !== normalizedDomain
-    await removeDomainAlias(oldDomain) // Best effort, don't fail if this errors
+  // Generate verification token
+  verificationToken = generateVerificationToken()
 
-  // Add new domain to Netlify
-  netlifyResult = await addDomainAlias(normalizedDomain)
-  IF NOT netlifyResult.success
-    RETURN { success: false, error: 'NETLIFY_ERROR' }
-
-  // Save to database (unverified initially)
+  // Save to database (ownership unverified initially)
+  // DO NOT call Netlify yet - that happens after ownership verification
   UPDATE biolinks
   SET customDomain = normalizedDomain,
-      customDomainVerified = false,
+      domainVerificationToken = verificationToken,
+      domainOwnershipVerified = false,
+      cnameVerified = false,
       updatedAt = new Date()
   WHERE id = biolinkId
 
-  RETURN { success: true, domain: normalizedDomain }
+  RETURN { success: true, domain: normalizedDomain, verificationToken }
 END
 
 // ============================================
@@ -366,7 +432,8 @@ FUNCTION removeCustomDomain(
 ): Promise<RemoveDomainResult>
 
   // Get current domain
-  biolinkResult = SELECT id, customDomain FROM biolinks
+  biolinkResult = SELECT id, customDomain, domainOwnershipVerified
+                  FROM biolinks
                   WHERE id = biolinkId AND userId = userId
   IF biolinkResult IS empty
     RETURN { success: false, error: 'BIOLINK_NOT_FOUND' }
@@ -374,15 +441,19 @@ FUNCTION removeCustomDomain(
   IF biolinkResult.customDomain IS null
     RETURN { success: false, error: 'DOMAIN_NOT_SET' }
 
-  // Remove from Netlify
-  netlifyResult = await removeDomainAlias(biolinkResult.customDomain)
-  IF NOT netlifyResult.success
-    RETURN { success: false, error: 'NETLIFY_ERROR' }
+  // Only remove from Netlify if ownership was verified
+  // (otherwise it was never added to Netlify)
+  IF biolinkResult.domainOwnershipVerified
+    netlifyResult = await removeDomainAlias(biolinkResult.customDomain)
+    IF NOT netlifyResult.success
+      RETURN { success: false, error: 'NETLIFY_ERROR' }
 
   // Clear from database
   UPDATE biolinks
   SET customDomain = null,
-      customDomainVerified = false,
+      domainVerificationToken = null,
+      domainOwnershipVerified = false,
+      cnameVerified = false,
       updatedAt = new Date()
   WHERE id = biolinkId
 
@@ -390,21 +461,78 @@ FUNCTION removeCustomDomain(
 END
 
 // ============================================
-// FUNCTION: Verify domain DNS configuration
+// FUNCTION: Verify domain ownership (TXT record challenge)
 // ============================================
-FUNCTION verifyCustomDomain(
+FUNCTION verifyDomainOwnership(
   userId: string,
   biolinkId: string
-): Promise<VerifyDomainResult>
+): Promise<VerifyOwnershipResult>
 
-  // Get domain
-  biolinkResult = SELECT id, customDomain FROM biolinks
+  // Get domain and token
+  biolinkResult = SELECT id, customDomain, domainVerificationToken
+                  FROM biolinks
                   WHERE id = biolinkId AND userId = userId
   IF biolinkResult IS empty
     RETURN { success: false, error: 'BIOLINK_NOT_FOUND' }
 
   IF biolinkResult.customDomain IS null
     RETURN { success: false, error: 'DOMAIN_NOT_SET' }
+
+  domain = biolinkResult.customDomain
+  expectedToken = biolinkResult.domainVerificationToken
+
+  TRY
+    // Look up TXT record at _biolinq-verify.{domain}
+    verificationHost = `_biolinq-verify.${domain}`
+    txtRecords = await dns.resolveTxt(verificationHost)
+
+    // TXT records come as array of arrays, flatten them
+    allRecords = txtRecords.flat()
+
+    // Check if any TXT record matches our token
+    tokenFound = allRecords.includes(expectedToken)
+
+    IF NOT tokenFound
+      RETURN { success: true, verified: false }
+
+    // Token verified! Now add domain to Netlify
+    netlifyResult = await addDomainAlias(domain)
+    IF NOT netlifyResult.success
+      RETURN { success: false, error: 'NETLIFY_ERROR' }
+
+    // Mark ownership as verified
+    UPDATE biolinks
+    SET domainOwnershipVerified = true,
+        updatedAt = new Date()
+    WHERE id = biolinkId
+
+    RETURN { success: true, verified: true }
+
+  CATCH (error)
+    // DNS lookup failed (TXT record not found)
+    RETURN { success: true, verified: false }
+END
+
+// ============================================
+// FUNCTION: Verify CNAME configuration
+// ============================================
+FUNCTION verifyCNAME(
+  userId: string,
+  biolinkId: string
+): Promise<VerifyCNAMEResult>
+
+  // Get domain
+  biolinkResult = SELECT id, customDomain, domainOwnershipVerified
+                  FROM biolinks
+                  WHERE id = biolinkId AND userId = userId
+  IF biolinkResult IS empty
+    RETURN { success: false, error: 'BIOLINK_NOT_FOUND' }
+
+  IF biolinkResult.customDomain IS null
+    RETURN { success: false, error: 'DOMAIN_NOT_SET' }
+
+  IF NOT biolinkResult.domainOwnershipVerified
+    RETURN { success: false, error: 'OWNERSHIP_NOT_VERIFIED' }
 
   TRY
     // Check CNAME record
@@ -416,12 +544,12 @@ FUNCTION verifyCustomDomain(
     )
 
     IF pointsToNetlify
-      UPDATE biolinks SET customDomainVerified = true WHERE id = biolinkId
+      UPDATE biolinks SET cnameVerified = true WHERE id = biolinkId
       RETURN { success: true, verified: true }
     ELSE
       RETURN { success: true, verified: false }
   CATCH (error)
-    // DNS lookup failed (domain not configured or doesn't exist)
+    // DNS lookup failed (CNAME not configured)
     RETURN { success: true, verified: false }
 END
 
@@ -435,7 +563,8 @@ FUNCTION getBiolinkByCustomDomain(domain: string): Promise<ResolveDomainResult>
            FROM biolinks
            JOIN users ON biolinks.userId = users.id
            WHERE biolinks.customDomain = normalizedDomain
-             AND biolinks.customDomainVerified = true
+             AND biolinks.domainOwnershipVerified = true
+             AND biolinks.cnameVerified = true
            LIMIT 1
 
   IF result IS empty
@@ -448,20 +577,22 @@ FUNCTION getBiolinkByCustomDomain(domain: string): Promise<ResolveDomainResult>
   }
 END
 
-EXPORT setCustomDomain, removeCustomDomain, verifyCustomDomain, getBiolinkByCustomDomain
+EXPORT setCustomDomain, removeCustomDomain, verifyDomainOwnership, verifyCNAME, getBiolinkByCustomDomain
 ```
 
 ---
 
-### 3.5 Public Route Modification
+### 3.5 Home Route Modification
 
-#### `app/routes/public.tsx`
-**Objective:** Modify loader to resolve by custom domain when applicable.
+#### `app/routes/home.tsx`
+**Objective:** Modify loader to detect custom domains and render public profile instead of landing page.
 
 **Pseudocode:**
 ```pseudocode
 // Add to existing imports
 IMPORT getBiolinkByCustomDomain from ~/services/custom-domain.server
+IMPORT { getPublicLinksByBiolinkId } from ~/services/biolink.server
+IMPORT { PublicProfile } from ~/components/public
 
 // Add helper function
 FUNCTION isCustomDomain(host: string): boolean
@@ -471,7 +602,7 @@ FUNCTION isCustomDomain(host: string): boolean
 END
 
 // Modify loader
-FUNCTION loader({ params, request })
+FUNCTION loader({ request })
   url = new URL(request.url)
   host = url.host // e.g., 'links.usersite.com' or 'biolinq.page'
 
@@ -482,36 +613,50 @@ FUNCTION loader({ params, request })
       // Custom domain found and verified - serve this profile
       links = await getPublicLinksByBiolinkId(customDomainResult.biolink.id)
 
-      // Track view (same logic as before)
-      ...tracking code...
+      // Track view (optional - same logic as public route)
+      // ... tracking code if needed ...
 
       RETURN data({
+        renderType: 'profile',
         biolink: customDomainResult.biolink,
         user: customDomainResult.user,
         links,
-        isPreview: false,
         isCustomDomain: true
       })
-    // If custom domain not found/verified, fall through to 404
+    // If custom domain not found/verified, return 404
     THROW new Response('Not Found', { status: 404 })
 
-  // STEP 2: Fall back to username resolution (existing logic)
-  username = params.username
-  IF NOT username
-    THROW new Response('Not Found', { status: 404 })
-
-  result = await getBiolinkWithUserByUsername(username)
-  IF NOT result
-    THROW new Response('Not Found', { status: 404 })
-
-  // ... rest of existing loader code ...
-
+  // STEP 2: Render normal landing page
   RETURN data({
-    ...existing data...,
-    isCustomDomain: false
+    renderType: 'landing'
   })
 END
+
+// Modify component
+FUNCTION Home()
+  loaderData = useLoaderData<typeof loader>()
+
+  // Conditionally render based on loader data
+  IF loaderData.renderType === 'profile'
+    RETURN <PublicProfile
+      biolink={loaderData.biolink}
+      user={loaderData.user}
+      links={loaderData.links}
+      isCustomDomain={loaderData.isCustomDomain}
+    />
+
+  // Default: render landing page
+  RETURN (
+    <>
+      <Header />
+      <BioLinqHero />
+      <Footer />
+    </>
+  )
+END
 ```
+
+**Note:** This approach reuses the existing `PublicProfile` component, keeping code DRY.
 
 ---
 
@@ -523,7 +668,12 @@ END
 **Pseudocode:**
 ```pseudocode
 // Add to imports
-IMPORT { setCustomDomain, removeCustomDomain, verifyCustomDomain } from ~/services/custom-domain.server
+IMPORT {
+  setCustomDomain,
+  removeCustomDomain,
+  verifyDomainOwnership,
+  verifyCNAME
+} from ~/services/custom-domain.server
 
 // Add to loader return
 RETURN {
@@ -531,7 +681,9 @@ RETURN {
   biolink: {
     ...biolink,
     customDomain: biolink.customDomain,
-    customDomainVerified: biolink.customDomainVerified
+    domainVerificationToken: biolink.domainVerificationToken,
+    domainOwnershipVerified: biolink.domainOwnershipVerified,
+    cnameVerified: biolink.cnameVerified
   }
 }
 
@@ -545,7 +697,8 @@ IF intent === 'setCustomDomain'
   IF NOT result.success
     RETURN data({ error: result.error })
 
-  RETURN redirect('/dashboard')
+  // Return token so UI can display it
+  RETURN data({ success: true, verificationToken: result.verificationToken })
 
 IF intent === 'removeCustomDomain'
   biolinkId = formData.get('biolinkId') as string
@@ -557,16 +710,27 @@ IF intent === 'removeCustomDomain'
 
   RETURN redirect('/dashboard')
 
-IF intent === 'verifyCustomDomain'
+IF intent === 'verifyDomainOwnership'
   biolinkId = formData.get('biolinkId') as string
 
-  result = await verifyCustomDomain(authSession.user.id, biolinkId)
+  result = await verifyDomainOwnership(authSession.user.id, biolinkId)
 
   IF NOT result.success
     RETURN data({ error: result.error })
 
   // Return verification status without redirect (for inline feedback)
-  RETURN data({ verified: result.verified })
+  RETURN data({ ownershipVerified: result.verified })
+
+IF intent === 'verifyCNAME'
+  biolinkId = formData.get('biolinkId') as string
+
+  result = await verifyCNAME(authSession.user.id, biolinkId)
+
+  IF NOT result.success
+    RETURN data({ error: result.error })
+
+  // Return verification status without redirect (for inline feedback)
+  RETURN data({ cnameVerified: result.verified })
 ```
 
 ---
@@ -582,12 +746,15 @@ COMPONENT CustomDomainSection
   PROPS:
     biolinkId: string
     customDomain: string | null
-    customDomainVerified: boolean
+    domainVerificationToken: string | null
+    domainOwnershipVerified: boolean
+    cnameVerified: boolean
     isPremium: boolean
 
   STATE:
     domainInput: string (initialized to customDomain or '')
-    isVerifying: boolean = false
+    isVerifyingOwnership: boolean = false
+    isVerifyingCNAME: boolean = false
 
   HOOKS:
     { t } = useTranslation()
@@ -595,8 +762,10 @@ COMPONENT CustomDomainSection
 
   // Handle verification check
   EFFECT: when fetcher.data changes
-    IF fetcher.data?.verified !== undefined
-      setIsVerifying(false)
+    IF fetcher.data?.ownershipVerified !== undefined
+      setIsVerifyingOwnership(false)
+    IF fetcher.data?.cnameVerified !== undefined
+      setIsVerifyingCNAME(false)
 
   RENDER:
     IF NOT isPremium
@@ -624,38 +793,74 @@ COMPONENT CustomDomainSection
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <span className="font-mono">{customDomain}</span>
-              IF customDomainVerified
-                <Badge variant="success">{t('custom_domain_verified')}</Badge>
+
+              // Phase 1: Ownership verification
+              IF NOT domainOwnershipVerified
+                <Badge variant="warning">{t('custom_domain_ownership_pending')}</Badge>
+              ELSE IF NOT cnameVerified
+                <Badge variant="warning">{t('custom_domain_cname_pending')}</Badge>
               ELSE
-                <Badge variant="warning">{t('custom_domain_pending')}</Badge>
+                <Badge variant="success">{t('custom_domain_verified')}</Badge>
             </div>
 
-            IF NOT customDomainVerified
-              // Show DNS instructions
+            // PHASE 1: TXT Record Challenge
+            IF NOT domainOwnershipVerified
               <Alert>
-                <AlertTitle>{t('custom_domain_dns_title')}</AlertTitle>
+                <AlertTitle>{t('custom_domain_ownership_title')}</AlertTitle>
                 <AlertDescription>
-                  <p>{t('custom_domain_dns_instruction')}</p>
+                  <p>{t('custom_domain_ownership_instruction')}</p>
                   <code className="block mt-2 p-2 bg-muted rounded">
-                    CNAME {customDomain} → biolinq.netlify.app
+                    TXT _biolinq-verify.{customDomain} → {domainVerificationToken}
                   </code>
                 </AlertDescription>
               </Alert>
 
-              // Verify button
               <fetcher.Form method="post">
-                <input type="hidden" name="intent" value="verifyCustomDomain" />
+                <input type="hidden" name="intent" value="verifyDomainOwnership" />
                 <input type="hidden" name="biolinkId" value={biolinkId} />
                 <Button
                   type="submit"
                   variant="outline"
                   disabled={fetcher.state !== 'idle'}
                 >
-                  {fetcher.state !== 'idle' ? t('custom_domain_verifying') : t('custom_domain_verify')}
+                  {fetcher.state !== 'idle' ? t('custom_domain_verifying') : t('custom_domain_verify_ownership')}
                 </Button>
               </fetcher.Form>
 
-            // Remove button
+            // PHASE 2: CNAME Configuration (only show after ownership verified)
+            ELSE IF domainOwnershipVerified AND NOT cnameVerified
+              <Alert variant="success">
+                <AlertTitle>{t('custom_domain_ownership_verified_title')}</AlertTitle>
+                <AlertDescription>
+                  <p>{t('custom_domain_cname_instruction')}</p>
+                  <code className="block mt-2 p-2 bg-muted rounded">
+                    CNAME {customDomain} → biolinq.netlify.app
+                  </code>
+                </AlertDescription>
+              </Alert>
+
+              <fetcher.Form method="post">
+                <input type="hidden" name="intent" value="verifyCNAME" />
+                <input type="hidden" name="biolinkId" value={biolinkId} />
+                <Button
+                  type="submit"
+                  variant="outline"
+                  disabled={fetcher.state !== 'idle'}
+                >
+                  {fetcher.state !== 'idle' ? t('custom_domain_verifying') : t('custom_domain_verify_cname')}
+                </Button>
+              </fetcher.Form>
+
+            // PHASE 3: Fully verified
+            ELSE IF domainOwnershipVerified AND cnameVerified
+              <Alert variant="success">
+                <AlertTitle>{t('custom_domain_live_title')}</AlertTitle>
+                <AlertDescription>
+                  {t('custom_domain_live_message')}
+                </AlertDescription>
+              </Alert>
+
+            // Remove button (available at any stage)
             <fetcher.Form method="post">
               <input type="hidden" name="intent" value="removeCustomDomain" />
               <input type="hidden" name="biolinkId" value={biolinkId} />
@@ -721,7 +926,9 @@ IMPORT { CustomDomainSection } from '~/components/dashboard'
 <CustomDomainSection
   biolinkId={biolink.id}
   customDomain={biolink.customDomain}
-  customDomainVerified={biolink.customDomainVerified}
+  domainVerificationToken={biolink.domainVerificationToken}
+  domainOwnershipVerified={biolink.domainOwnershipVerified}
+  cnameVerified={biolink.cnameVerified}
   isPremium={user.isPremium}
 />
 ```
@@ -740,11 +947,17 @@ IMPORT { CustomDomainSection } from '~/components/dashboard'
 | `custom_domain_label` | Your domain | Tu dominio |
 | `custom_domain_hint` | Enter a subdomain like links.yourdomain.com | Introduce un subdominio como links.tudominio.com |
 | `custom_domain_save` | Add Domain | Agregar Dominio |
-| `custom_domain_verified` | Verified | Verificado |
-| `custom_domain_pending` | Pending verification | Pendiente de verificacion |
-| `custom_domain_dns_title` | DNS Configuration Required | Configuracion DNS Requerida |
-| `custom_domain_dns_instruction` | Add this CNAME record in your DNS provider: | Agrega este registro CNAME en tu proveedor DNS: |
-| `custom_domain_verify` | Check DNS | Verificar DNS |
+| `custom_domain_verified` | Live | En producción |
+| `custom_domain_ownership_pending` | Pending ownership verification | Pendiente de verificar propiedad |
+| `custom_domain_cname_pending` | Pending CNAME configuration | Pendiente de configurar CNAME |
+| `custom_domain_ownership_title` | Step 1: Verify Domain Ownership | Paso 1: Verificar Propiedad del Dominio |
+| `custom_domain_ownership_instruction` | Add this TXT record to your DNS provider to prove ownership: | Agrega este registro TXT a tu proveedor DNS para probar propiedad: |
+| `custom_domain_verify_ownership` | Verify Ownership | Verificar Propiedad |
+| `custom_domain_ownership_verified_title` | Step 2: Configure CNAME | Paso 2: Configurar CNAME |
+| `custom_domain_cname_instruction` | Add this CNAME record to route traffic to your BioLinq page: | Agrega este registro CNAME para dirigir el trafico a tu pagina BioLinq: |
+| `custom_domain_verify_cname` | Check CNAME | Verificar CNAME |
+| `custom_domain_live_title` | Domain is Live! | ¡Dominio en Producción! |
+| `custom_domain_live_message` | Your custom domain is fully configured and serving traffic | Tu dominio personalizado esta completamente configurado y sirviendo trafico |
 | `custom_domain_verifying` | Checking... | Verificando... |
 | `custom_domain_remove` | Remove Domain | Eliminar Dominio |
 | `custom_domain_error_PREMIUM_REQUIRED` | Custom domains require Premium | Los dominios personalizados requieren Premium |
@@ -752,6 +965,9 @@ IMPORT { CustomDomainSection } from '~/components/dashboard'
 | `custom_domain_error_DOMAIN_ALREADY_TAKEN` | This domain is already in use | Este dominio ya esta en uso |
 | `custom_domain_error_NETLIFY_ERROR` | Could not configure domain. Please try again. | No se pudo configurar el dominio. Intenta de nuevo. |
 | `custom_domain_error_DOMAIN_NOT_SET` | No custom domain is configured | No hay dominio personalizado configurado |
+| `custom_domain_error_OWNERSHIP_NOT_VERIFIED` | You must verify domain ownership first | Debes verificar la propiedad del dominio primero |
+| `custom_domain_error_TXT_RECORD_NOT_FOUND` | TXT record not found | Registro TXT no encontrado |
+| `custom_domain_error_TXT_RECORD_MISMATCH` | TXT record does not match | El registro TXT no coincide |
 
 ---
 
@@ -766,8 +982,9 @@ IMPORT { CustomDomainSection } from '~/components/dashboard'
   4. Click "Add Domain"
 - **Expected:**
   - Domain is saved
-  - DNS instructions appear
-  - "Pending verification" badge shows
+  - TXT record instructions appear with verification token
+  - "Pending ownership verification" badge shows
+  - Netlify API is NOT called yet
 
 ### Test: Free user cannot access custom domain feature
 - **Preconditions:** Free user logged in, has biolink
@@ -797,18 +1014,53 @@ IMPORT { CustomDomainSection } from '~/components/dashboard'
   3. Click "Add Domain"
 - **Expected:** Error message "This domain is already in use"
 
+### Test: Domain ownership verification flow
+- **Preconditions:** Premium user logged in, domain added but ownership not verified
+- **Steps:**
+  1. Mock DNS TXT record: `_biolinq-verify.test.example.com` → `{correct_token}`
+  2. Click "Verify Ownership"
+- **Expected:**
+  - DNS lookup performed
+  - Token matches
+  - Netlify API called to add domain alias
+  - `domainOwnershipVerified = true` in DB
+  - UI shows "Step 2: Configure CNAME"
+
+### Test: Domain ownership fails with wrong TXT record
+- **Preconditions:** Premium user logged in, domain added
+- **Steps:**
+  1. Mock DNS TXT record with WRONG token
+  2. Click "Verify Ownership"
+- **Expected:**
+  - DNS lookup performed
+  - Verification fails
+  - `domainOwnershipVerified = false` in DB
+  - UI still shows TXT instructions
+
+### Test: CNAME verification flow
+- **Preconditions:** Premium user logged in, ownership verified but CNAME not verified
+- **Steps:**
+  1. Mock DNS CNAME record: `test.example.com` → `biolinq.netlify.app`
+  2. Click "Check CNAME"
+- **Expected:**
+  - DNS lookup performed
+  - CNAME verified
+  - `cnameVerified = true` in DB
+  - UI shows "Domain is Live!"
+
 ### Test: User can remove custom domain
-- **Preconditions:** Premium user logged in, has custom domain set
+- **Preconditions:** Premium user logged in, has custom domain set (ownership verified)
 - **Steps:**
   1. Navigate to `/dashboard`
   2. Click "Remove Domain"
 - **Expected:**
-  - Domain is removed
+  - Domain removed from Netlify (API called)
+  - All domain fields cleared in DB
   - Input form appears again
 
-### Test: Verified custom domain resolves to user profile
+### Test: Fully verified custom domain resolves to user profile
 - **Preconditions:**
-  - Premium user has `links.testuser.com` verified
+  - Premium user has `links.testuser.com` with both ownership + CNAME verified
   - DNS properly configured (mock in test)
 - **Steps:**
   1. Make request to app with `Host: links.testuser.com`
@@ -816,9 +1068,16 @@ IMPORT { CustomDomainSection } from '~/components/dashboard'
   - User's public profile renders
   - Correct biolink data displayed
 
+### Test: Domain with only ownership verified returns 404
+- **Preconditions:**
+  - Premium user has `links.testuser.com` with ownership verified but CNAME not verified
+- **Steps:**
+  1. Make request to app with `Host: links.testuser.com`
+- **Expected:** 404 Not Found (both flags required)
+
 ### Test: Unverified custom domain returns 404
 - **Preconditions:**
-  - Premium user has `links.testuser.com` set but NOT verified
+  - Premium user has `links.testuser.com` set but ownership NOT verified
 - **Steps:**
   1. Make request to app with `Host: links.testuser.com`
 - **Expected:** 404 Not Found
@@ -856,6 +1115,21 @@ Generate at: https://app.netlify.com/user/applications#personal-access-tokens
 ---
 
 ## 7. Implementation Notes
+
+### Why Two-Phase Verification?
+
+The original plan had a simpler flow: add domain → call Netlify → verify CNAME. However, this approach has serious problems:
+
+**Problems with single-phase verification:**
+1. **Domain squatting:** Anyone could claim any domain (e.g., `google.com`) without proving ownership
+2. **Netlify resource exhaustion:** Netlify limits domain aliases per site; unverified claims waste slots
+3. **Security risk:** Malicious users could disrupt legitimate domain owners
+
+**Benefits of two-phase verification:**
+1. **Proof of ownership required first:** TXT record challenge ensures only domain owners can claim a domain
+2. **Netlify aliases only for verified domains:** Only call Netlify API after ownership is proven
+3. **Clear user journey:** Users understand they need to prove ownership first, then configure routing
+4. **Industry standard:** This is how major platforms (Vercel, Cloudflare Pages, GitHub Pages) handle custom domains
 
 ### Answering the Original Question
 
