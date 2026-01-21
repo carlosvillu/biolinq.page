@@ -13,12 +13,19 @@ import {
   LinksList,
   LivePreview,
   CustomizationSection,
+  CustomDomainSection,
 } from '~/components/dashboard'
 import { updateBiolinkTheme, updateBiolinkColors } from '~/services/theme.server'
 import { THEMES } from '~/lib/themes'
 import type { BiolinkTheme } from '~/db/schema/biolinks'
 import { getBasicStats, getPremiumStats, getLast7DaysData } from '~/services/analytics.server'
 import { fillMissingDays, getLast7Days } from '~/lib/stats'
+import {
+  setCustomDomain,
+  removeCustomDomain,
+  verifyDomainOwnership,
+  verifyCNAME,
+} from '~/services/custom-domain.server'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
@@ -163,6 +170,55 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirect('/dashboard')
   }
 
+  if (intent === 'setCustomDomain') {
+    const domain = formData.get('domain') as string
+    const biolinkId = formData.get('biolinkId') as string
+
+    const result = await setCustomDomain(authSession.user.id, biolinkId, domain)
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    return data({ success: true, verificationToken: result.verificationToken })
+  }
+
+  if (intent === 'removeCustomDomain') {
+    const biolinkId = formData.get('biolinkId') as string
+
+    const result = await removeCustomDomain(authSession.user.id, biolinkId)
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    return redirect('/dashboard')
+  }
+
+  if (intent === 'verifyDomainOwnership') {
+    const biolinkId = formData.get('biolinkId') as string
+
+    const result = await verifyDomainOwnership(authSession.user.id, biolinkId)
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    return data({ ownershipVerified: result.verified })
+  }
+
+  if (intent === 'verifyCNAME') {
+    const biolinkId = formData.get('biolinkId') as string
+
+    const result = await verifyCNAME(authSession.user.id, biolinkId)
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    return data({ cnameVerified: result.verified })
+  }
+
   return data({ error: 'UNKNOWN_INTENT' })
 }
 
@@ -200,6 +256,14 @@ export default function DashboardPage() {
             customPrimaryColor={biolink.customPrimaryColor}
             customBgColor={biolink.customBgColor}
             biolinkId={biolink.id}
+            isPremium={user.isPremium}
+          />
+          <CustomDomainSection
+            biolinkId={biolink.id}
+            customDomain={biolink.customDomain}
+            domainVerificationToken={biolink.domainVerificationToken}
+            domainOwnershipVerified={biolink.domainOwnershipVerified ?? false}
+            cnameVerified={biolink.cnameVerified ?? false}
             isPremium={user.isPremium}
           />
         </div>

@@ -39,7 +39,7 @@
 5. User clicks "Verify Domain Ownership"
 6. System checks TXT record exists and matches token
 7. Once verified, system calls Netlify API to add domain alias
-8. User configures CNAME record: `links.mydomain.com → biolinq.netlify.app`
+8. User configures CNAME record: `links.mydomain.com → biolinq.page`
 9. Netlify provisions SSL automatically
 10. Once CNAME is detected, visitors to `links.mydomain.com` see the user's profile
 
@@ -98,7 +98,7 @@ PATCH /api/v1/sites/{site_id} → set domain_aliases to NEW complete list
 
 **Phase 2: CNAME Configuration (Traffic Routing)**
 - After ownership verified, system calls Netlify API to add alias
-- User configures CNAME: `{domain} → biolinq.netlify.app`
+- User configures CNAME: `{domain} → biolinq.page`
 - System checks CNAME resolves correctly
 - Mark domain as `cnameVerified = true` once DNS propagates
 - Only domains with both ownership + CNAME verified can serve traffic
@@ -539,11 +539,11 @@ FUNCTION verifyCNAME(
     cnameRecords = await dns.resolveCname(biolinkResult.customDomain)
 
     // Check if any CNAME points to Netlify
-    pointsToNetlify = cnameRecords.some(record =>
-      record.includes('netlify') OR record.endsWith('.netlify.app')
+    pointsToBiolinq = cnameRecords.some(record =>
+      record.replace(/\.$/, '').toLowerCase() === 'biolinq.page'
     )
 
-    IF pointsToNetlify
+    IF pointsToBiolinq
       UPDATE biolinks SET cnameVerified = true WHERE id = biolinkId
       RETURN { success: true, verified: true }
     ELSE
@@ -834,7 +834,7 @@ COMPONENT CustomDomainSection
                 <AlertDescription>
                   <p>{t('custom_domain_cname_instruction')}</p>
                   <code className="block mt-2 p-2 bg-muted rounded">
-                    CNAME {customDomain} → biolinq.netlify.app
+                    CNAME {customDomain} → biolinq.page
                   </code>
                 </AlertDescription>
               </Alert>
@@ -1040,7 +1040,7 @@ IMPORT { CustomDomainSection } from '~/components/dashboard'
 ### Test: CNAME verification flow
 - **Preconditions:** Premium user logged in, ownership verified but CNAME not verified
 - **Steps:**
-  1. Mock DNS CNAME record: `test.example.com` → `biolinq.netlify.app`
+  1. Mock DNS CNAME record: `test.example.com` → `biolinq.page`
   2. Click "Check CNAME"
 - **Expected:**
   - DNS lookup performed
@@ -1167,6 +1167,7 @@ export async function addDomainAlias(domain: string) {
     },
     body: JSON.stringify({ domain_aliases: [...currentAliases, domain] })
   })
+  // Note: User configures CNAME to point to biolinq.page (not netlify subdomain)
   // ...
 }
 ```

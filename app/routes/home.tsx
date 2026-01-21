@@ -1,8 +1,13 @@
 import type { LoaderFunctionArgs } from 'react-router'
-import { redirect, useLoaderData } from 'react-router'
+import { redirect, useLoaderData, data } from 'react-router'
 import { BioLinqHero, PricingSection } from '~/components/landing'
 import { getCurrentUser } from '~/lib/auth.server'
 import { registerUsername, getUserBiolink } from '~/services/username.server'
+import { getBiolinkByCustomDomain } from '~/services/custom-domain.server'
+import { getPublicLinksByBiolinkId } from '~/services/links.server'
+import { PublicProfile } from '~/components/public/PublicProfile'
+import { trackView } from '~/services/views.server'
+import { parseViewCookie, shouldTrackView, updateViewCookie } from '~/lib/view-cookie.server'
 
 export function meta() {
   return [
@@ -14,7 +19,50 @@ export function meta() {
   ]
 }
 
+const MAIN_DOMAINS = ['biolinq.page', 'www.biolinq.page', 'localhost', '127.0.0.1']
+
+function isCustomDomain(host: string): boolean {
+  return !MAIN_DOMAINS.some((d) => host === d || host.startsWith(d + ':'))
+}
+
 export async function loader({ request }: LoaderFunctionArgs) {
+  const url = new URL(request.url)
+  const host = url.host
+
+  if (isCustomDomain(host)) {
+    const customDomainResult = await getBiolinkByCustomDomain(host)
+    if (customDomainResult.success) {
+      const links = await getPublicLinksByBiolinkId(customDomainResult.biolink.id)
+
+      const cookieHeader = request.headers.get('Cookie')
+      const entries = parseViewCookie(cookieHeader)
+      const shouldTrack = shouldTrackView(entries, customDomainResult.biolink.id)
+
+      const headers = new Headers()
+      if (shouldTrack) {
+        try {
+          await trackView(customDomainResult.biolink.id)
+          const setCookieHeader = updateViewCookie(entries, customDomainResult.biolink.id)
+          headers.set('Set-Cookie', setCookieHeader)
+        } catch {
+          // Tracking failure should not block page render
+        }
+      }
+
+      return data(
+        {
+          renderType: 'profile' as const,
+          biolink: customDomainResult.biolink,
+          user: customDomainResult.user,
+          links,
+          isCustomDomain: true,
+        },
+        { headers }
+      )
+    }
+    throw new Response('Not Found', { status: 404 })
+  }
+
   const authSession = await getCurrentUser(request)
 
   if (authSession?.user) {
@@ -23,7 +71,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
       return redirect('/dashboard')
     }
 
-    const url = new URL(request.url)
     const usernameToClaim = url.searchParams.get('username')
     const shouldClaim = url.searchParams.get('claim') === 'true'
 
@@ -37,19 +84,34 @@ export async function loader({ request }: LoaderFunctionArgs) {
         return redirect('/dashboard')
       }
 
-      return { user: authSession.user, claimError: result.error }
+      return {
+        renderType: 'landing' as const,
+        user: authSession.user,
+        claimError: result.error,
+      }
     }
   }
 
-  return { user: authSession?.user ?? null, claimError: null }
+  return { renderType: 'landing' as const, user: authSession?.user ?? null, claimError: null }
 }
 
 export default function Home() {
-  const data = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
+
+  if (loaderData.renderType === 'profile') {
+    return (
+      <PublicProfile
+        user={loaderData.user}
+        biolink={loaderData.biolink}
+        links={loaderData.links}
+        isPreview={false}
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-neo-canvas flex flex-col">
-      <BioLinqHero initialError={data.claimError} />
+      <BioLinqHero initialError={loaderData.claimError} />
       <PricingSection />
     </div>
   )

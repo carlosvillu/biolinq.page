@@ -15,6 +15,13 @@
       "when": 1768742209948,
       "tag": "0001_familiar_hiroim",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768990393133,
+      "tag": "0002_skinny_power_man",
+      "breakpoints": true
     }
   ]
 }
