@@ -57,6 +57,6 @@ export default [
   },
   prettier,
   {
-    ignores: ['node_modules/', 'build/', '.react-router/', 'playwright-report/'],
+    ignores: ['node_modules/', 'build/', '.react-router/', 'playwright-report/', '.agents/', 'remotion/'],
   },
 ]

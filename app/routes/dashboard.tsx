@@ -26,6 +26,7 @@ import {
   verifyDomainOwnership,
   verifyCNAME,
 } from '~/services/custom-domain.server'
+import { invalidateBiolinkCache } from '~/services/cache.server'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
@@ -108,6 +109,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: result.error })
     }
 
+    invalidateBiolinkCache(biolinkId)
     return redirect('/dashboard')
   }
 
@@ -120,6 +122,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: result.error })
     }
 
+    invalidateBiolinkCache(result.biolinkId)
     return redirect('/dashboard')
   }
 
@@ -140,6 +143,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: result.error })
     }
 
+    invalidateBiolinkCache(biolinkId)
     return redirect('/dashboard')
   }
 
@@ -167,6 +171,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: colorsResult.error })
     }
 
+    invalidateBiolinkCache(biolinkId)
     return redirect('/dashboard')
   }
 

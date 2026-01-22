@@ -23,7 +23,7 @@ export type CreateLinkResult =
   | { success: false; error: LinkError }
 
 export type DeleteLinkResult =
-  | { success: true }
+  | { success: true; biolinkId: string }
   | { success: false; error: LinkError }
 
 export type ReorderLinksResult =
@@ -144,7 +144,7 @@ export async function deleteLink(
         )
       )
 
-    return { success: true }
+    return { success: true, biolinkId: link.biolinkId }
   })
 }
 
