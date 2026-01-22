@@ -5,6 +5,7 @@ import type { Link } from '~/db/schema/links'
 import { usePageView } from '~/hooks/usePageView'
 import { getThemeCSSVariables, getThemeClasses, getThemeShadowStyle } from '~/lib/theme-styles'
 import { getThemeById, resolveThemeColors } from '~/lib/themes'
+import { LoadTimeIndicator } from './LoadTimeIndicator'
 import { PublicLinkCard } from './PublicLinkCard'
 import { Watermark } from './Watermark'
 
@@ -81,6 +82,8 @@ export function PublicProfile({ user, biolink, links, isPreview = false }: Publi
       </div>
 
       {!user.isPremium && <Watermark theme={theme} />}
+
+      <LoadTimeIndicator />
     </main>
   )
 }

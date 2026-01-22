@@ -111,6 +111,7 @@
   "public_not_found_description": "This username doesn't exist yet. Want to claim it?",
   "public_not_found_cta": "Create your BioLink",
   "public_no_links": "No links yet",
+  "public_load_time": "This page loaded in {{time}}ms",
 
   "theme_brutalist": "Brutalist",
   "theme_light_minimal": "Light Minimal",
