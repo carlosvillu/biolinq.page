@@ -1,6 +1,14 @@
 import type { LoaderFunctionArgs } from 'react-router'
 import { redirect, useLoaderData, data } from 'react-router'
-import { BioLinqHero, PricingSection } from '~/components/landing'
+import {
+  BioLinqHero,
+  ComparisonSection,
+  FinalCTASection,
+  PricingSection,
+  ProblemSection,
+  SocialProofSection,
+  SolutionSection,
+} from '~/components/landing'
 import { getCurrentUser } from '~/lib/auth.server'
 import { registerUsername, getUserBiolink } from '~/services/username.server'
 import { getBiolinkByCustomDomain } from '~/services/custom-domain.server'
@@ -112,7 +120,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-neo-canvas flex flex-col">
       <BioLinqHero initialError={loaderData.claimError} />
+      <ProblemSection />
+      <SolutionSection />
+      <ComparisonSection />
+      <SocialProofSection />
       <PricingSection />
+      <FinalCTASection />
     </div>
   )
 }
