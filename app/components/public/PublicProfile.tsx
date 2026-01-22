@@ -2,6 +2,7 @@ import type { CSSProperties } from 'react'
 import { useTranslation } from 'react-i18next'
 import type { Biolink } from '~/db/schema/biolinks'
 import type { Link } from '~/db/schema/links'
+import { usePageView } from '~/hooks/usePageView'
 import { getThemeCSSVariables, getThemeClasses, getThemeShadowStyle } from '~/lib/theme-styles'
 import { getThemeById, resolveThemeColors } from '~/lib/themes'
 import { PublicLinkCard } from './PublicLinkCard'
@@ -13,13 +14,14 @@ type PublicProfileProps = {
     image: string | null
     isPremium: boolean
   }
-  biolink: Pick<Biolink, 'username' | 'theme' | 'customPrimaryColor' | 'customBgColor'>
+  biolink: Pick<Biolink, 'id' | 'username' | 'theme' | 'customPrimaryColor' | 'customBgColor'>
   links: Link[]
   isPreview?: boolean
 }
 
 export function PublicProfile({ user, biolink, links, isPreview = false }: PublicProfileProps) {
   const { t } = useTranslation()
+  usePageView(biolink.id, isPreview)
   const displayName = user.name ?? biolink.username
 
   const theme = getThemeById(biolink.theme)

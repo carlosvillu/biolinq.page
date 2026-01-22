@@ -10,6 +10,7 @@ export default [
   route('api/__test__/links', 'routes/api.__test__.links.tsx'),
   route('api/__test__/theme', 'routes/api.__test__.theme.tsx'),
   route('api/__test__/analytics', 'routes/api.__test__.analytics.tsx'),
+  route('api/px', 'routes/api.px.tsx'),
   route('auth/login', 'routes/auth.login.tsx'),
   route('dashboard', 'routes/dashboard.tsx'),
   route('go/:linkId', 'routes/go.$linkId.tsx'),

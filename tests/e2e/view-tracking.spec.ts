@@ -7,7 +7,7 @@ test.describe('View Tracking', () => {
   })
 
   test('view increments totalViews', async ({
-    request,
+    page,
     appServer,
     dbContext,
   }) => {
@@ -19,7 +19,8 @@ test.describe('View Tracking', () => {
       username: 'viewtest',
     })
 
-    await request.get(`${baseUrl}/viewtest`)
+    await page.goto(`${baseUrl}/viewtest`)
+    await page.waitForTimeout(500)
 
     const result = await executeSQL(
       dbContext,
@@ -30,7 +31,7 @@ test.describe('View Tracking', () => {
   })
 
   test('view creates record in daily_stats', async ({
-    request,
+    page,
     appServer,
     dbContext,
   }) => {
@@ -42,7 +43,8 @@ test.describe('View Tracking', () => {
       username: 'dailyviewtest',
     })
 
-    await request.get(`${baseUrl}/dailyviewtest`)
+    await page.goto(`${baseUrl}/dailyviewtest`)
+    await page.waitForTimeout(500)
 
     const result = await executeSQL(
       dbContext,
@@ -54,7 +56,7 @@ test.describe('View Tracking', () => {
     expect(result.rows[0].clicks).toBe(0)
   })
 
-  test('cookie prevents duplicate view within 30 minutes', async ({
+  test('sessionStorage prevents duplicate view in same session', async ({
     page,
     appServer,
     dbContext,
@@ -68,8 +70,10 @@ test.describe('View Tracking', () => {
     })
 
     await page.goto(`${baseUrl}/cookietest`)
+    await page.waitForTimeout(500)
 
     await page.goto(`${baseUrl}/cookietest`)
+    await page.waitForTimeout(500)
 
     const result = await executeSQL(
       dbContext,
@@ -99,8 +103,10 @@ test.describe('View Tracking', () => {
     })
 
     await page.goto(`${baseUrl}/aliceprofile`)
+    await page.waitForTimeout(500)
 
     await page.goto(`${baseUrl}/bobprofile`)
+    await page.waitForTimeout(500)
 
     const aliceResult = await executeSQL(
       dbContext,
@@ -148,6 +154,7 @@ test.describe('View Tracking', () => {
   })
 
   test('view and click on same day accumulate correctly', async ({
+    page,
     request,
     appServer,
     dbContext,
@@ -166,7 +173,8 @@ test.describe('View Tracking', () => {
       position: 0,
     })
 
-    await request.get(`${baseUrl}/accumtest`)
+    await page.goto(`${baseUrl}/accumtest`)
+    await page.waitForTimeout(500)
 
     await request.get(`${baseUrl}/go/${linkId}`, { maxRedirects: 0 })
 

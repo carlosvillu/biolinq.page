@@ -1,14 +1,17 @@
+import type { Route } from './+types/public'
 import { type LoaderFunctionArgs, type MetaFunction, data } from 'react-router'
 import { useLoaderData, isRouteErrorResponse, useRouteError } from 'react-router'
 import { getBiolinkWithUserByUsername } from '~/services/username.server'
 import { getPublicLinksByBiolinkId } from '~/services/links.server'
-import { trackView } from '~/services/views.server'
-import { parseViewCookie, shouldTrackView, updateViewCookie } from '~/lib/view-cookie.server'
 import { PublicProfile } from '~/components/public/PublicProfile'
 import { PublicNotFound } from '~/components/public/PublicNotFound'
 import { PublicError } from '~/components/public/PublicError'
 
 export const handle = { hideLayout: true }
+
+export function headers({ loaderHeaders }: Route.HeadersArgs) {
+  return loaderHeaders
+}
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const username = params.username
@@ -26,22 +29,15 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
   const url = new URL(request.url)
   const isPreview = url.searchParams.get('preview') === '1'
 
-  const cookieHeader = request.headers.get('Cookie')
-  const entries = parseViewCookie(cookieHeader)
-  const shouldTrack = !isPreview && shouldTrackView(entries, result.biolink.id)
+  const links = await getPublicLinksByBiolinkId(result.biolink.id)
 
   const headers = new Headers()
-  if (shouldTrack) {
-    try {
-      await trackView(result.biolink.id)
-      const setCookieHeader = updateViewCookie(entries, result.biolink.id)
-      headers.set('Set-Cookie', setCookieHeader)
-    } catch {
-      // Tracking failure should not block page render
-    }
+  if (!isPreview) {
+    headers.set('Cache-Control', 'public, max-age=60, s-maxage=3600')
+    headers.set('Surrogate-Key', `biolink-${result.biolink.id}`)
+  } else {
+    headers.set('Cache-Control', 'no-store')
   }
-
-  const links = await getPublicLinksByBiolinkId(result.biolink.id)
 
   return data(
     {
