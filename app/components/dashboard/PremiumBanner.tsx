@@ -12,9 +12,11 @@ export function PremiumBanner() {
           <p className="font-bold text-sm sm:text-base">{t('premium_banner_message')}</p>
         </div>
 
-        <NeoBrutalButton variant="primary" size="sm" disabled className="whitespace-nowrap">
-          {t('premium_banner_cta')}
-        </NeoBrutalButton>
+        <form method="POST" action="/api/stripe/checkout">
+          <NeoBrutalButton type="submit" variant="primary" size="sm" className="whitespace-nowrap">
+            {t('premium_banner_cta')}
+          </NeoBrutalButton>
+        </form>
       </div>
     </div>
   )

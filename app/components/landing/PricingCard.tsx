@@ -11,7 +11,7 @@ export interface PricingCardProps {
   highlighted?: boolean
   badge?: string
   ctaText?: string
-  onCtaClick?: () => void
+  ctaHref?: string
 }
 
 export function PricingCard({
@@ -22,7 +22,7 @@ export function PricingCard({
   highlighted = false,
   badge,
   ctaText,
-  onCtaClick,
+  ctaHref,
 }: PricingCardProps) {
   return (
     <div
@@ -63,13 +63,12 @@ export function PricingCard({
       {ctaText && (
         <div className="relative group cursor-pointer mt-6">
           <div className="absolute inset-0 bg-neo-dark rounded translate-x-1 translate-y-1" />
-          <button
-            type="button"
-            onClick={onCtaClick}
-            className="relative z-10 w-full py-3 bg-neo-accent text-white border-[3px] border-neo-dark rounded font-bold group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-200"
+          <a
+            href={ctaHref}
+            className="relative z-10 w-full py-3 bg-neo-accent text-white border-[3px] border-neo-dark rounded font-bold group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-200 block text-center"
           >
             {ctaText}
-          </button>
+          </a>
         </div>
       )}
     </div>

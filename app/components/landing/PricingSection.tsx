@@ -48,7 +48,8 @@ export function PricingSection() {
             features={premiumFeatures}
             highlighted
             badge={t('pricing_premium_badge')}
-            ctaText={t('pricing_premium_cta')}
+            ctaText={t('hero_cta')}
+            ctaHref="/auth/login"
           />
         </div>
       </div>
