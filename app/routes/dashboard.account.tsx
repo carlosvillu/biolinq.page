@@ -57,13 +57,13 @@ export async function action({ request }: ActionFunctionArgs) {
     const result = await deleteAccount(authSession.user.id)
 
     if (!result.success) {
+      const errorMessages: Record<string, string> = {
+        NO_BIOLINK: 'No biolink found for this user',
+        NETLIFY_ERROR: 'Failed to remove custom domain. Please try again.',
+        DATABASE_ERROR: 'Failed to delete account',
+      }
       return data(
-        {
-          error:
-            result.error === 'NO_BIOLINK'
-              ? 'No biolink found for this user'
-              : 'Failed to delete account',
-        },
+        { error: errorMessages[result.error] ?? 'Failed to delete account' },
         { status: 400 }
       )
     }
@@ -87,9 +87,7 @@ export default function AccountPage() {
 
       <main className="max-w-3xl mx-auto px-4 py-8 md:py-12">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-neo-dark mb-2">
-            Account Settings
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-neo-dark mb-2">Account Settings</h1>
           <p className="text-gray-700">Manage your account information and settings</p>
         </div>
 
@@ -109,8 +107,7 @@ export default function AccountPage() {
         <div className="border-t-[3px] border-neo-dark pt-8">
           <h2 className="text-xl font-bold text-neo-dark mb-2">Danger Zone</h2>
           <p className="text-gray-700 mb-4">
-            Permanently delete your account and all associated data. This action cannot be
-            undone.
+            Permanently delete your account and all associated data. This action cannot be undone.
           </p>
           <DeleteAccountDialog username={biolink.username} />
         </div>

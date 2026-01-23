@@ -7,8 +7,9 @@ import { dailyLinkClicks } from '~/db/schema/dailyLinkClicks'
 import { sessions } from '~/db/schema/sessions'
 import { accounts } from '~/db/schema/accounts'
 import { users } from '~/db/schema/users'
+import { removeDomainAlias } from './netlify.server'
 
-export type DeleteAccountError = 'NO_BIOLINK' | 'DATABASE_ERROR'
+export type DeleteAccountError = 'NO_BIOLINK' | 'DATABASE_ERROR' | 'NETLIFY_ERROR'
 
 export type DeleteAccountResult =
   | { success: true }
@@ -19,22 +20,27 @@ export type DeleteAccountResult =
  * to avoid foreign key constraint violations.
  *
  * Deletion order:
- * 1. daily_link_clicks (depends on links)
- * 2. daily_stats (depends on biolinks)
- * 3. links (depends on biolinks)
- * 4. biolinks (depends on users)
- * 5. sessions (depends on users)
- * 6. accounts (depends on users)
- * 7. users (root entity)
+ * 1. Remove custom domain from Netlify (if exists and verified)
+ * 2. daily_link_clicks (depends on links)
+ * 3. daily_stats (depends on biolinks)
+ * 4. links (depends on biolinks)
+ * 5. biolinks (depends on users)
+ * 6. sessions (depends on users)
+ * 7. accounts (depends on users)
+ * 8. users (root entity)
  */
 export async function deleteAccount(
   userId: string
 ): Promise<DeleteAccountResult> {
   try {
     return await db.transaction(async (tx) => {
-      // 1. Fetch user's biolink
+      // 1. Fetch user's biolink (including custom domain info)
       const userBiolink = await tx
-        .select({ id: biolinks.id })
+        .select({
+          id: biolinks.id,
+          customDomain: biolinks.customDomain,
+          domainOwnershipVerified: biolinks.domainOwnershipVerified,
+        })
         .from(biolinks)
         .where(eq(biolinks.userId, userId))
         .limit(1)
@@ -44,8 +50,18 @@ export async function deleteAccount(
       }
 
       const biolinkId = userBiolink[0].id
+      const { customDomain, domainOwnershipVerified } = userBiolink[0]
 
-      // 2. Get all link IDs for this biolink
+      // 2. Remove custom domain from Netlify if it exists and was verified
+      if (customDomain && domainOwnershipVerified) {
+        const netlifyResult = await removeDomainAlias(customDomain)
+        if (!netlifyResult.success) {
+          console.error('Failed to remove domain from Netlify:', netlifyResult.error)
+          return { success: false, error: 'NETLIFY_ERROR' }
+        }
+      }
+
+      // 3. Get all link IDs for this biolink
       const biolinkLinks = await tx
         .select({ id: links.id })
         .from(links)
@@ -53,29 +69,29 @@ export async function deleteAccount(
 
       const linkIds = biolinkLinks.map((link) => link.id)
 
-      // 3. Delete daily_link_clicks for all links (if there are links)
+      // 4. Delete daily_link_clicks for all links (if there are links)
       if (linkIds.length > 0) {
         for (const linkId of linkIds) {
           await tx.delete(dailyLinkClicks).where(eq(dailyLinkClicks.linkId, linkId))
         }
       }
 
-      // 4. Delete daily_stats for this biolink
+      // 5. Delete daily_stats for this biolink
       await tx.delete(dailyStats).where(eq(dailyStats.biolinkId, biolinkId))
 
-      // 5. Delete links for this biolink
+      // 6. Delete links for this biolink
       await tx.delete(links).where(eq(links.biolinkId, biolinkId))
 
-      // 6. Delete biolink
+      // 7. Delete biolink
       await tx.delete(biolinks).where(eq(biolinks.id, biolinkId))
 
-      // 7. Delete sessions for this user
+      // 8. Delete sessions for this user
       await tx.delete(sessions).where(eq(sessions.userId, userId))
 
-      // 8. Delete accounts for this user
+      // 9. Delete accounts for this user
       await tx.delete(accounts).where(eq(accounts.userId, userId))
 
-      // 9. Delete user
+      // 10. Delete user
       await tx.delete(users).where(eq(users.id, userId))
 
       return { success: true }
