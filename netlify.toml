@@ -9,3 +9,24 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Block common scanner/bot probes before they reach the SSR function
+[[redirects]]
+  from = "/.git/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/.env*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "/404.html"
+  status = 404
+
+[[redirects]]
+  from = "/wp-login.php"
+  to = "/404.html"
+  status = 404

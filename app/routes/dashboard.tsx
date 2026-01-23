@@ -90,6 +90,12 @@ export async function action({ request }: ActionFunctionArgs) {
     return redirect('/auth/login')
   }
 
+  const biolink = await getUserBiolink(authSession.user.id)
+
+  if (!biolink) {
+    return redirect('/')
+  }
+
   const formData = await request.formData()
   const intent = formData.get('intent')
 
@@ -109,7 +115,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: result.error })
     }
 
-    invalidateBiolinkCache(biolinkId)
+    invalidateBiolinkCache(biolink.username)
     return redirect('/dashboard')
   }
 
@@ -122,7 +128,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: result.error })
     }
 
-    invalidateBiolinkCache(result.biolinkId)
+    invalidateBiolinkCache(biolink.username)
     return redirect('/dashboard')
   }
 
@@ -143,7 +149,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: result.error })
     }
 
-    invalidateBiolinkCache(biolinkId)
+    invalidateBiolinkCache(biolink.username)
     return redirect('/dashboard')
   }
 
@@ -171,7 +177,7 @@ export async function action({ request }: ActionFunctionArgs) {
       return data({ error: colorsResult.error })
     }
 
-    invalidateBiolinkCache(biolinkId)
+    invalidateBiolinkCache(biolink.username)
     return redirect('/dashboard')
   }
 

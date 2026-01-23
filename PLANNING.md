@@ -383,36 +383,36 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 6.1: Setup Stripe Configuration
 
-- [ ] Install Stripe SDK (`npm install stripe`)
-- [ ] Create `app/lib/stripe.server.ts` with Stripe client initialization
-- [ ] Configure Stripe product and price ID in environment
+- [x] Install Stripe SDK (`npm install stripe`)
+- [x] Create `app/lib/stripe.server.ts` with Stripe client initialization
+- [x] Configure Stripe product and price ID in environment
 
 #### Task 6.2: Create Checkout Flow
 
-- [ ] Create `/api/stripe/checkout` API route
-- [ ] Implement Stripe Checkout session creation with user metadata
-- [ ] Set success_url to `/dashboard?upgrade=success`
-- [ ] Set cancel_url to `/dashboard?upgrade=cancelled`
-- [ ] Create "Go Premium" button that triggers checkout
+- [x] Create `/api/stripe/checkout` API route
+- [x] Implement Stripe Checkout session creation with user metadata
+- [x] Set success_url to `/dashboard?upgrade=success`
+- [x] Set cancel_url to `/dashboard?upgrade=cancelled`
+- [x] Create "Go Premium" button that triggers checkout
 
 #### Task 6.3: Create Stripe Webhook Handler
 
-- [ ] Create `/api/stripe/webhook` API route
-- [ ] Verify webhook signature
-- [ ] Handle `checkout.session.completed` event
-- [ ] Update user `is_premium` to true
-- [ ] Store `stripe_customer_id` on user record
+- [x] Create `/api/stripe/webhook` API route
+- [x] Verify webhook signature
+- [x] Handle `checkout.session.completed` event
+- [x] Update user `is_premium` to true
+- [x] Store `stripe_customer_id` on user record
 
 #### Task 6.4: Implement Premium Feature Gating
 
-- [ ] Create `app/services/premium.server.ts` with `isPremium(userId)` check
-- [ ] Gate custom colors behind premium
-- [ ] Gate advanced analytics behind premium
-- [ ] Remove watermark for premium users on public page
-- [ ] Show success toast on dashboard after upgrade
-- [ ] Add i18n keys for premium-related texts
-- [ ] E2E test: Free user sees upgrade prompts
-- [ ] E2E test: Premium user sees unlocked features (mock Stripe in tests)
+- [x] Create `app/services/premium.server.ts` with `isPremium(userId)` check
+- [x] Gate custom colors behind premium
+- [x] Gate advanced analytics behind premium
+- [x] Remove watermark for premium users on public page
+- [x] Show success toast on dashboard after upgrade
+- [x] Add i18n keys for premium-related texts
+- [x] E2E test: Free user sees upgrade prompts
+- [x] E2E test: Premium user sees unlocked features (mock Stripe in tests)
 
 ---
 

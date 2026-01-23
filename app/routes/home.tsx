@@ -64,6 +64,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
           user: customDomainResult.user,
           links,
           isCustomDomain: true,
+          hideLayout: true,
         },
         { headers }
       )

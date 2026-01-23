@@ -143,7 +143,9 @@ export default function App({ loaderData }: Route.ComponentProps) {
 
   const matches = useMatches()
   const hideLayout = matches.some(
-    (match) => (match.handle as { hideLayout?: boolean } | undefined)?.hideLayout
+    (match) =>
+      (match.handle as { hideLayout?: boolean } | undefined)?.hideLayout ||
+      (match.data as { hideLayout?: boolean } | undefined)?.hideLayout
   )
 
   // Update html lang attribute when locale changes
