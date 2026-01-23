@@ -31,7 +31,7 @@ export function LoadTimeIndicator() {
   }
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10">
+    <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-10 sm:bottom-4">
       <span className="font-mono text-xs opacity-60" style={{ color: 'var(--theme-text-muted)' }}>
         {t('public_load_time', { time: loadTime })}
       </span>

@@ -147,3 +147,25 @@ await setAuthCookie(context, token)
 - Do NOT attempt to write E2E tests for `@dnd-kit` drag and drop interactions
 - If drag and drop is critical, consider alternative testing strategies (unit tests for reorder logic, integration tests for the API endpoint)
 - Accept that some UI interactions require manual testing
+
+---
+
+## UI / Architecture
+
+### Duplicate Headers in Route Modules
+
+**Date:** 2025-01-23
+
+**Problem:** Route modules (e.g., `dashboard.account.tsx`) rendered their own `<Header>` component, causing duplicate headers since `root.tsx` already provides a global Header in the layout.
+
+**Root Cause:**
+- `root.tsx` wraps all routes with a layout that includes `<Header>` (unless `hideLayout` is set)
+- Individual route modules incorrectly imported and rendered their own `<Header>`
+- This happened because the route was developed in isolation without checking the root layout
+
+**Solution:** Remove the duplicate `<Header>` from the route module. The root layout already provides it.
+
+**Prevention:**
+- Before adding `<Header>` to any route, check if `root.tsx` already provides it in the layout
+- Route modules should only render their specific content, not global layout elements
+- If a route needs a different header, use `hideLayout` handle and provide a custom layout
