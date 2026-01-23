@@ -53,6 +53,13 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
           </Link>
         </NeoBrutalMenuItem>
 
+        {/* Link to Account */}
+        <NeoBrutalMenuItem>
+          <Link to="/dashboard/account" className="w-full">
+            {t('account_page_link')}
+          </Link>
+        </NeoBrutalMenuItem>
+
         <NeoBrutalMenuSeparator />
 
         {/* Logout */}
