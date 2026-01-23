@@ -34,6 +34,8 @@ export async function action({ request }: ActionFunctionArgs) {
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
     payment_method_types: ['card'],
+    allow_promotion_codes: true,
+    customer_creation: 'always',
     line_items: [
       {
         price: STRIPE_PRICE_ID,
