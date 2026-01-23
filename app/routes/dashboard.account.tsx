@@ -6,7 +6,6 @@ import { getUserBiolink } from '~/services/username.server'
 import { deleteAccount } from '~/services/account.server'
 import { AccountInfoCard } from '~/components/dashboard/AccountInfoCard'
 import { DeleteAccountDialog } from '~/components/dashboard/DeleteAccountDialog'
-import { Header } from '~/components/Header'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
@@ -25,8 +24,6 @@ export async function loader({ request }: LoaderFunctionArgs) {
   }
 
   return {
-    session: authSession.session,
-    user: authSession.user,
     accountUser: {
       email: authSession.user.email,
       name: authSession.user.name,
@@ -78,13 +75,11 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function AccountPage() {
-  const { session, user, accountUser, biolink } = useLoaderData<typeof loader>()
+  const { accountUser, biolink } = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>()
 
   return (
     <div className="min-h-screen bg-neo-input/30">
-      <Header session={session} user={user} />
-
       <main className="max-w-3xl mx-auto px-4 py-8 md:py-12">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-neo-dark mb-2">Account Settings</h1>
