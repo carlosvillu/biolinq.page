@@ -38,7 +38,13 @@ export const test = base.extend<object, AppWorkerFixtures>({
       const requestedPort = 4000 + workerInfo.workerIndex
 
       const serverProcess = spawn('npx', ['react-router', 'dev', '--port', String(requestedPort)], {
-        env: { ...process.env, DB_TEST_URL: dbContext.connectionString },
+        env: {
+          ...process.env,
+          DB_TEST_URL: dbContext.connectionString,
+          STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_for_tests',
+          STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID || 'price_test_dummy_for_tests',
+          STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_test_secret_for_e2e',
+        },
         cwd: process.cwd(),
         stdio: 'pipe',
         shell: true,
