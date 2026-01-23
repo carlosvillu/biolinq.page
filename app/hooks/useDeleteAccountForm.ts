@@ -4,9 +4,7 @@ export function useDeleteAccountForm(expectedUsername: string) {
   const [inputValue, setInputValue] = useState('')
 
   const isValid = useMemo(() => {
-    return (
-      inputValue.trim().toLowerCase() === expectedUsername.trim().toLowerCase()
-    )
+    return inputValue.trim() === expectedUsername.trim()
   }, [inputValue, expectedUsername])
 
   const reset = () => {
