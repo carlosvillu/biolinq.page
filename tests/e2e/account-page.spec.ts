@@ -369,6 +369,10 @@ test.describe('Account Page', () => {
     await page.waitForURL('/')
     expect(page.url()).toBe(`${baseURL}/`)
 
+    // Verify header shows login button, NOT the user dropdown
+    await expect(page.getByRole('link', { name: 'Login' })).toBeVisible()
+    await expect(page.locator('button[aria-label="User menu"]')).not.toBeVisible()
+
     // Verify user is signed out (can't access dashboard)
     await page.goto('/dashboard')
     await page.waitForURL('**/auth/login**')

@@ -169,3 +169,26 @@ await setAuthCookie(context, token)
 - Before adding `<Header>` to any route, check if `root.tsx` already provides it in the layout
 - Route modules should only render their specific content, not global layout elements
 - If a route needs a different header, use `hideLayout` handle and provide a custom layout
+
+---
+
+## Auth / Session
+
+### Better Auth cookieCache causes stale session data
+
+**Date:** 2025-01-24
+
+**Problem:** Two bugs caused by Better Auth's `cookieCache` (TTL 5 min) serving stale data:
+1. Premium status not reflected after Stripe webhook updates `isPremium=true` in DB
+2. Header shows logged-in user dropdown after account deletion because the cached session persists through the redirect
+
+**Root Cause:** `session.cookieCache` in Better Auth caches session data in the cookie for the configured TTL. Any server-side mutation (webhook, account deletion cascade) is invisible to subsequent requests until the cache expires.
+
+**Solution:**
+1. Remove `session.cookieCache` configuration entirely from `app/lib/auth.ts` — every `auth.api.getSession()` call now reads from DB
+2. On account deletion, explicitly clear the session cookie via `Set-Cookie` header in the redirect response
+
+**Prevention:**
+- Do NOT use `session.cookieCache` unless you can guarantee no server-side mutations happen outside the user's own requests
+- When deleting sessions/accounts server-side, always explicitly clear auth cookies in the response
+- If cookie caching is ever re-introduced, ensure all mutation paths (webhooks, admin actions, cascade deletes) invalidate the cache

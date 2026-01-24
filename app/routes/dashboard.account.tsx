@@ -67,9 +67,12 @@ export async function action({ request }: ActionFunctionArgs) {
     }
 
     // Account deleted successfully
-    // Note: The session will be invalidated automatically by the database cascade delete
-    // Redirect to landing page
-    return redirect('/')
+    // Clear the session cookie explicitly to prevent stale cached session on redirect
+    return redirect('/', {
+      headers: {
+        'Set-Cookie': 'better-auth.session_token=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax',
+      },
+    })
   }
 
   return data({ error: 'Invalid intent' }, { status: 400 })

@@ -1,6 +1,6 @@
 import Stripe from 'stripe'
 import { test, expect } from '../fixtures/app.fixture'
-import { createAuthSession } from '../helpers/auth'
+import { createAuthSession, setAuthCookie } from '../helpers/auth'
 
 // Webhook secret usado en el fixture app.fixture.ts
 const WEBHOOK_SECRET = 'whsec_test_secret_for_e2e'
@@ -217,5 +217,65 @@ test.describe('Premium Service', () => {
     expect(statusAfterSecond.isPremium).toBe(true)
     // El stripeCustomerId NO debe haber cambiado porque ya era premium
     expect(statusAfterSecond.stripeCustomerId).toBe('cus_first123')
+  })
+})
+
+// Helper to create a biolink via API
+async function createBiolink(
+  baseURL: string,
+  userId: string,
+  username: string
+): Promise<void> {
+  const response = await fetch(`${baseURL}/api/__test__/username`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, username }),
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Failed to create biolink: ${response.status} - ${text}`)
+  }
+}
+
+test.describe('Premium Dashboard UI', () => {
+  test('dashboard shows premium UI after granting premium', async ({
+    page,
+    context,
+    baseURL,
+  }) => {
+    const timestamp = Date.now()
+    const email = `premium-dash-${timestamp}@example.com`
+    const password = 'TestPassword123!'
+    const username = `pdash${timestamp.toString().slice(-8)}`
+
+    // Create user session
+    const { token, userId } = await createAuthSession(baseURL!, {
+      email,
+      password,
+      name: 'Premium Dashboard Test',
+    })
+    await setAuthCookie(context, token)
+
+    // Create biolink for user
+    await createBiolink(baseURL!, userId, username)
+
+    // Grant premium via test API
+    const grantResponse = await fetch(`${baseURL}/api/__test__/premium`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, stripeCustomerId: 'cus_dash_test' }),
+    })
+    expect(grantResponse.ok).toBe(true)
+
+    // Navigate to dashboard
+    await page.goto('/dashboard')
+
+    // Verify that the premium banner is NOT visible (user is premium)
+    await expect(page.locator('form[action="/api/stripe/checkout"]')).not.toBeVisible()
+
+    // Verify that the account page shows PREMIUM badge
+    await page.goto('/dashboard/account')
+    await expect(page.getByText('PREMIUM', { exact: true })).toBeVisible()
   })
 })
