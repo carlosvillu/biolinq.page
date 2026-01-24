@@ -15,6 +15,7 @@ import {
   CustomizationSection,
   CustomDomainSection,
 } from '~/components/dashboard'
+import { useUpgradeTracking } from '~/hooks/useUpgradeTracking'
 import { updateBiolinkTheme, updateBiolinkColors } from '~/services/theme.server'
 import { THEMES } from '~/lib/themes'
 import type { BiolinkTheme } from '~/db/schema/biolinks'
@@ -236,6 +237,8 @@ export async function action({ request }: ActionFunctionArgs) {
 export default function DashboardPage() {
   const { user, biolink, links, stats } = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>() as { error: string } | undefined
+
+  useUpgradeTracking()
 
   const maxLinks = getMaxLinks(user.isPremium)
 

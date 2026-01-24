@@ -509,14 +509,14 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 9.3: Implement Ecommerce Tracking for Stripe
 
-- [ ] Track `begin_checkout` event when user clicks "Go Premium"
-- [ ] Track `purchase` event on successful Stripe checkout:
+- [x] Track `begin_checkout` event when user clicks "Go Premium"
+- [x] Track `purchase` event on successful Stripe checkout:
   - `transaction_id`: Stripe session ID
   - `value`: 5.00
   - `currency`: EUR
   - `items`: [{ item_name: "BioLinq Premium", price: 5.00 }]
-- [ ] Pass user ID to GA for cross-device tracking (hashed)
-- [ ] Update Stripe success redirect to trigger purchase event
+- [x] Pass user ID to GA for cross-device tracking (hashed)
+- [x] Update Stripe success redirect to trigger purchase event
 - [ ] Verify ecommerce events appear in GA4 Monetization reports
 
 #### Task 9.4: Dashboard & Authenticated Area Tracking
@@ -685,7 +685,7 @@ Sequential list of all tasks in recommended order:
 | 8     | 8.3   | ⬜ Not Started | Polish & animations                     |
 | 9     | 9.1   | ⬜ Not Started | Setup Google Analytics 4                |
 | 9     | 9.2   | ✅ Complete    | Custom events                           |
-| 9     | 9.3   | ⬜ Not Started | Ecommerce tracking (Stripe)             |
+| 9     | 9.3   | ✅ Complete    | Ecommerce tracking (Stripe)             |
 | 9     | 9.4   | ⬜ Not Started | Dashboard tracking                      |
 | 9     | 9.5   | ⬜ Not Started | Consent & privacy                       |
 | 10    | 10.1  | ⬜ Not Started | Error handling                          |

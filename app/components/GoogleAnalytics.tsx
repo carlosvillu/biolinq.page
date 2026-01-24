@@ -1,9 +1,10 @@
 interface GoogleAnalyticsProps {
   measurementId: string | undefined
   nodeEnv: string
+  hashedUserId: string | null
 }
 
-export function GoogleAnalytics({ measurementId, nodeEnv }: GoogleAnalyticsProps) {
+export function GoogleAnalytics({ measurementId, nodeEnv, hashedUserId }: GoogleAnalyticsProps) {
   if (!measurementId) {
     return null
   }
@@ -17,7 +18,7 @@ export function GoogleAnalytics({ measurementId, nodeEnv }: GoogleAnalyticsProps
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${measurementId}', { send_page_view: false });
+            gtag('config', '${measurementId}', { send_page_view: false${hashedUserId ? `, user_id: '${hashedUserId}'` : ''} });
             gtag('set', 'user_properties', { environment: '${nodeEnv}' });
           `,
         }}

@@ -11,11 +11,13 @@ BioLinq uses Google Analytics 4 (GA4) for tracking user interactions and site me
 ## Architecture
 
 ```
-app/lib/analytics-events.ts   → Core event functions (framework-agnostic)
-app/hooks/useAnalytics.ts     → React hook wrapper for components
-app/lib/gtag.client.ts        → GA4 initialization and pageview tracking
+app/lib/analytics-events.ts      → Core event functions (framework-agnostic)
+app/hooks/useAnalytics.ts        → React hook wrapper for components
+app/lib/gtag.client.ts           → GA4 initialization and pageview tracking
+app/lib/hash.server.ts           → SHA-256 hash for user_id (server-only)
 app/hooks/usePageviewTracking.ts → Automatic pageview tracking hook
-app/components/GoogleAnalytics.tsx → Script injection component
+app/hooks/useUpgradeTracking.ts  → Purchase event on Stripe redirect
+app/components/GoogleAnalytics.tsx → Script injection component (includes user_id)
 ```
 
 ## Files
@@ -51,6 +53,14 @@ Handles GA4 initialization and pageview tracking. Declares the global `Window.gt
 ### `app/hooks/usePageviewTracking.ts`
 
 Automatic pageview tracking on route changes. Also sets the `language` user property.
+
+### `app/hooks/useUpgradeTracking.ts`
+
+Detects `?upgrade=success&session_id=X` in URL after Stripe redirect, fires `purchase` event, and cleans the URL params. Used in `dashboard.tsx`.
+
+### `app/lib/hash.server.ts`
+
+Server-only utility to hash user IDs with SHA-256 (truncated to 16 chars) for GA4 `user_id` tracking without exposing real UUIDs.
 
 ## Available Events
 
@@ -89,6 +99,20 @@ Automatic pageview tracking on route changes. Also sets the `language` user prop
 | `trackPremiumCTAClicked(location)` | `premium_cta_clicked` | `{ location }` | On premium upgrade CTA click |
 
 Locations: `'dashboard_banner'`, `'landing_pricing'`
+
+### Ecommerce Events (GA4 Standard)
+
+| Function | Event Name | Parameters | When to Use |
+|----------|------------|------------|-------------|
+| `trackBeginCheckout()` | `begin_checkout` | `{ currency, value, items }` | When user clicks "Go Premium" |
+| `trackPurchase(transactionId)` | `purchase` | `{ transaction_id, currency, value, items }` | On successful Stripe redirect |
+
+These events follow GA4's standard ecommerce schema and appear in GA4's Monetization reports.
+
+**Ecommerce data:**
+- `currency`: `'EUR'`
+- `value`: `5.00`
+- `items`: `[{ item_name: 'BioLinq Premium', price: 5.00, quantity: 1 }]`
 
 ### Profile Events
 
@@ -155,6 +179,7 @@ trackMyNewEvent('value1', 42)
 3. **Keep parameters minimal:** Only include data needed for analysis
 4. **No PII:** Never include email, full name, or other personally identifiable information
 5. **Test in GA4 Real-Time:** Verify events appear in GA4 Real-Time reports during development
+6. **Ecommerce events:** Use GA4 standard event names (`begin_checkout`, `purchase`) for Monetization reports
 
 ## Environment Variables
 
@@ -182,7 +207,7 @@ Events are integrated in these files:
 - `app/components/dashboard/DeleteLinkDialog.tsx` - link deleted
 - `app/components/dashboard/ThemeSelector.tsx` - theme changed
 - `app/components/dashboard/CustomizationSection.tsx` - colors changed
-- `app/components/dashboard/PremiumBanner.tsx` - premium CTA (dashboard)
+- `app/components/dashboard/PremiumBanner.tsx` - premium CTA, begin_checkout (dashboard)
 - `app/components/dashboard/CustomDomainSection.tsx` - custom domain flow
 - `app/components/public/PublicLinkCard.tsx` - link clicked
 - `app/components/public/PublicProfile.tsx` - profile viewed (via usePageView)
@@ -190,3 +215,25 @@ Events are integrated in these files:
 - `app/components/landing/PricingSection.tsx` - premium CTA (landing)
 - `app/hooks/usePageviewTracking.ts` - language property
 - `app/hooks/usePageView.ts` - profile viewed
+- `app/hooks/useUpgradeTracking.ts` - purchase event on Stripe success redirect
+- `app/routes/dashboard.tsx` - calls useUpgradeTracking hook
+- `app/root.tsx` - passes hashedUserId to GoogleAnalytics
+- `app/components/GoogleAnalytics.tsx` - sets user_id in gtag config
+
+## User ID Tracking
+
+For cross-device tracking, authenticated users have a hashed `user_id` set in GA4:
+
+1. `app/lib/hash.server.ts` generates a SHA-256 hash (16 chars) of the user's UUID
+2. `app/root.tsx` loader computes `hashedUserId` for authenticated users
+3. `app/components/GoogleAnalytics.tsx` includes `user_id` in the gtag config
+
+This allows GA4 to correlate sessions across devices without exposing real user IDs.
+
+## Stripe Ecommerce Flow
+
+1. User clicks "Go Premium" → `trackPremiumCTAClicked()` + `trackBeginCheckout()` fire
+2. User completes Stripe checkout
+3. Stripe redirects to `/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`
+4. `useUpgradeTracking` hook detects params, fires `trackPurchase(sessionId)`, cleans URL
+5. Events appear in GA4 Monetization reports

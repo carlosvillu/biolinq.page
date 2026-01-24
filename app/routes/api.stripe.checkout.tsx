@@ -42,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
         quantity: 1,
       },
     ],
-    success_url: `${origin}/dashboard?upgrade=success`,
+    success_url: `${origin}/dashboard?upgrade=success&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${origin}/dashboard?upgrade=cancelled`,
     metadata: {
       userId: authSession.user.id,

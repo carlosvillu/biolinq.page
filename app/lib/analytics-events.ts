@@ -46,6 +46,24 @@ export function trackPremiumCTAClicked(location: string): void {
   gtagEvent('premium_cta_clicked', { location })
 }
 
+// Ecommerce events (GA4 standard)
+export function trackBeginCheckout(): void {
+  gtagEvent('begin_checkout', {
+    currency: 'EUR',
+    value: 5.0,
+    items: [{ item_name: 'BioLinq Premium', price: 5.0, quantity: 1 }],
+  })
+}
+
+export function trackPurchase(transactionId: string): void {
+  gtagEvent('purchase', {
+    transaction_id: transactionId,
+    value: 5.0,
+    currency: 'EUR',
+    items: [{ item_name: 'BioLinq Premium', price: 5.0, quantity: 1 }],
+  })
+}
+
 // Profile events
 export function trackProfileViewed(username: string): void {
   gtagEvent('profile_viewed', { username })

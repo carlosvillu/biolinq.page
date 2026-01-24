@@ -214,3 +214,30 @@ await setAuthCookie(context, token)
 - When creating a new API route, always include `'Cache-Control': 'no-store'` in response headers
 - Use `no-store` (not `no-cache`) — `no-store` forbids storing the response entirely, while `no-cache` allows storing but forces revalidation
 - If a centralized `jsonResponse` utility is ever created, it must include this header by default
+
+---
+
+## Testing
+
+### GA4 dataLayer in E2E Tests Requires Array.from() Conversion
+
+**Date:** 2025-01-24
+
+**Problem:** E2E tests checking `window.dataLayer` for GA4 events fail because entries are `Arguments` objects, not plain arrays. Tests using `Array.isArray()` or direct array access don't work.
+
+**Root Cause:** The `gtag()` function pushes its `arguments` object directly to `dataLayer`. In the browser, these are `Arguments` objects (array-like but not arrays). When accessed via `page.evaluate()`, they need conversion.
+
+**Solution:** Convert dataLayer entries to arrays before inspection:
+
+```typescript
+const dataLayer = await page.evaluate(() =>
+  (window as Window & { dataLayer: unknown[] }).dataLayer.map((entry) =>
+    Array.from(entry as ArrayLike<unknown>)
+  )
+)
+```
+
+**Prevention:**
+- When testing GA4 events in E2E, always use `Array.from()` to convert dataLayer entries
+- TypeScript errors about `window.dataLayer` in `page.evaluate()` are expected (browser context vs Node context)
+- For events fired during form submission (which causes navigation), use `page.exposeFunction()` to capture events before the page navigates away
