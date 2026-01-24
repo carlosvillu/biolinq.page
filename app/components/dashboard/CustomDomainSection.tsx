@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFetcher } from 'react-router'
 import { NeoBrutalCard } from '../neo-brutal/NeoBrutalCard'
 import { NeoBrutalButton } from '../neo-brutal/NeoBrutalButton'
 import { cn } from '~/lib/utils'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 interface CustomDomainSectionProps {
   biolinkId: string
@@ -25,6 +26,9 @@ export function CustomDomainSection({
   const { t } = useTranslation()
   const fetcher = useFetcher()
   const [domainInput, setDomainInput] = useState(customDomain ?? '')
+  const { trackCustomDomainSet, trackCustomDomainVerified, trackCustomDomainRemoved } =
+    useAnalytics()
+  const prevFetcherDataRef = useRef<typeof fetcherData>(undefined)
 
   const isLocked = !isPremium
   const isSubmitting = fetcher.state !== 'idle'
@@ -41,6 +45,22 @@ export function CustomDomainSection({
   const currentOwnershipVerified = fetcherData?.ownershipVerified ?? domainOwnershipVerified
   const currentCnameVerified = fetcherData?.cnameVerified ?? cnameVerified
   const currentToken = fetcherData?.verificationToken ?? domainVerificationToken
+
+  useEffect(() => {
+    const prev = prevFetcherDataRef.current
+    if (fetcherData && fetcherData !== prev) {
+      if (fetcherData.verificationToken && !fetcherData.error) {
+        trackCustomDomainSet(domainInput)
+      }
+      if (fetcherData.ownershipVerified === true && prev?.ownershipVerified !== true) {
+        trackCustomDomainVerified('ownership')
+      }
+      if (fetcherData.cnameVerified === true && prev?.cnameVerified !== true) {
+        trackCustomDomainVerified('cname')
+      }
+    }
+    prevFetcherDataRef.current = fetcherData
+  }, [fetcherData, domainInput, trackCustomDomainSet, trackCustomDomainVerified])
 
   return (
     <NeoBrutalCard variant="white">
@@ -149,6 +169,7 @@ export function CustomDomainSection({
                   type="submit"
                   disabled={isSubmitting}
                   className="text-sm text-red-600 hover:text-red-800 underline"
+                  onClick={() => trackCustomDomainRemoved()}
                 >
                   {t('custom_domain_remove')}
                 </button>

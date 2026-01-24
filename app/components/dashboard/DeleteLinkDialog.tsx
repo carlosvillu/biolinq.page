@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { Form, useNavigation } from 'react-router'
 import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { NeoBrutalButton } from '~/components/neo-brutal/NeoBrutalButton'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 interface DeleteLinkDialogProps {
   open: boolean
@@ -10,17 +11,12 @@ interface DeleteLinkDialogProps {
   linkTitle: string
 }
 
-export function DeleteLinkDialog({
-  open,
-  onOpenChange,
-  linkId,
-  linkTitle,
-}: DeleteLinkDialogProps) {
+export function DeleteLinkDialog({ open, onOpenChange, linkId, linkTitle }: DeleteLinkDialogProps) {
   const { t } = useTranslation()
   const navigation = useNavigation()
+  const { trackLinkDeleted } = useAnalytics()
   const isDeleting =
-    navigation.state === 'submitting' &&
-    navigation.formData?.get('intent') === 'delete'
+    navigation.state === 'submitting' && navigation.formData?.get('intent') === 'delete'
 
   return (
     <AlertDialog.Root open={open} onOpenChange={onOpenChange}>
@@ -36,7 +32,7 @@ export function DeleteLinkDialog({
             {t('dashboard_delete_link_confirm', { title: linkTitle })}
           </AlertDialog.Description>
 
-          <Form method="post">
+          <Form method="post" onSubmit={() => trackLinkDeleted()}>
             <input type="hidden" name="intent" value="delete" />
             <input type="hidden" name="linkId" value={linkId} />
 
@@ -50,15 +46,8 @@ export function DeleteLinkDialog({
                 {t('cancel')}
               </NeoBrutalButton>
 
-              <NeoBrutalButton
-                type="submit"
-                variant="accent"
-                size="sm"
-                disabled={isDeleting}
-              >
-                {isDeleting ? (
-                  <span className="inline-block animate-spin mr-2">⏳</span>
-                ) : null}
+              <NeoBrutalButton type="submit" variant="accent" size="sm" disabled={isDeleting}>
+                {isDeleting ? <span className="inline-block animate-spin mr-2">⏳</span> : null}
                 {t('dashboard_delete_link_button')}
               </NeoBrutalButton>
             </div>

@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { PricingCard, type PricingFeature } from './PricingCard'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 export function PricingSection() {
   const { t } = useTranslation()
+  const { trackPremiumCTAClicked } = useAnalytics()
 
   const freeFeatures: PricingFeature[] = [
     { text: t('pricing_feature_links'), included: true },
@@ -50,6 +52,7 @@ export function PricingSection() {
             badge={t('pricing_premium_badge')}
             ctaText={t('hero_cta')}
             ctaHref="/auth/login"
+            onCtaClick={() => trackPremiumCTAClicked('landing_pricing')}
           />
         </div>
       </div>

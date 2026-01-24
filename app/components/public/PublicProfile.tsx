@@ -22,7 +22,7 @@ type PublicProfileProps = {
 
 export function PublicProfile({ user, biolink, links, isPreview = false }: PublicProfileProps) {
   const { t } = useTranslation()
-  usePageView(biolink.id, isPreview)
+  usePageView(biolink.id, biolink.username, isPreview)
   const displayName = user.name ?? biolink.username
 
   const theme = getThemeById(biolink.theme)
@@ -69,8 +69,14 @@ export function PublicProfile({ user, biolink, links, isPreview = false }: Publi
         </div>
 
         <div className="space-y-4">
-          {links.map((link) => (
-            <PublicLinkCard key={link.id} link={link} theme={theme} isPreview={isPreview} />
+          {links.map((link, index) => (
+            <PublicLinkCard
+              key={link.id}
+              link={link}
+              theme={theme}
+              isPreview={isPreview}
+              position={index}
+            />
           ))}
 
           {links.length === 0 && (

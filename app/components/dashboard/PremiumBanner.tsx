@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next'
 import { NeoBrutalButton } from '../neo-brutal/NeoBrutalButton'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 export function PremiumBanner() {
   const { t } = useTranslation()
+  const { trackPremiumCTAClicked } = useAnalytics()
 
   return (
     <div className="sticky top-16 z-30 w-full bg-neo-accent border-b-[3px] border-neo-dark">
@@ -12,7 +14,11 @@ export function PremiumBanner() {
           <p className="font-bold text-sm sm:text-base">{t('premium_banner_message')}</p>
         </div>
 
-        <form method="POST" action="/api/stripe/checkout">
+        <form
+          method="POST"
+          action="/api/stripe/checkout"
+          onSubmit={() => trackPremiumCTAClicked('dashboard_banner')}
+        >
           <NeoBrutalButton type="submit" variant="primary" size="sm" className="whitespace-nowrap">
             {t('premium_banner_cta')}
           </NeoBrutalButton>

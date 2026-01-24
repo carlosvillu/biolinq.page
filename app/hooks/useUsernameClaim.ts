@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { signIn, authClient } from '~/lib/auth.client'
 import { createUsernameSchema } from '~/lib/username-validation'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 const useSession = typeof window !== 'undefined' ? authClient.useSession : () => ({ data: null })
 
@@ -35,6 +36,7 @@ export function useUsernameClaim() {
   const navigate = useNavigate()
 
   const schema = useMemo(() => createUsernameSchema(t), [t])
+  const { trackUsernameCreated, trackSignup } = useAnalytics()
 
   const handleUsernameChange = useCallback((value: string) => {
     setUsername(value.toLowerCase())
@@ -90,6 +92,7 @@ export function useUsernameClaim() {
         const claimResult = (await claimResponse.json()) as ClaimResponse
 
         if (claimResult.success) {
+          trackUsernameCreated(normalizedUsername)
           setState('redirecting')
           navigate('/dashboard')
           return
@@ -101,6 +104,7 @@ export function useUsernameClaim() {
       }
 
       setState('redirecting')
+      trackSignup()
       await signIn.social({
         provider: 'google',
         callbackURL: `/?username=${encodeURIComponent(normalizedUsername)}&claim=true`,
@@ -109,7 +113,7 @@ export function useUsernameClaim() {
       setError({ type: 'server', message: t('username_error_server') })
       setState('idle')
     }
-  }, [navigate, schema, session, t, username])
+  }, [navigate, schema, session, t, username, trackSignup, trackUsernameCreated])
 
   return {
     username,

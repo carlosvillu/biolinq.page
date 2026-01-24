@@ -4,6 +4,7 @@ import { Form, useNavigation } from 'react-router'
 import { Dialog } from '@base-ui/react/dialog'
 import { NeoBrutalButton } from '~/components/neo-brutal/NeoBrutalButton'
 import { NeoBrutalInput } from '~/components/neo-brutal/NeoBrutalInput'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 interface AddLinkDialogProps {
   open: boolean
@@ -11,16 +12,12 @@ interface AddLinkDialogProps {
   biolinkId: string
 }
 
-export function AddLinkDialog({
-  open,
-  onOpenChange,
-  biolinkId,
-}: AddLinkDialogProps) {
+export function AddLinkDialog({ open, onOpenChange, biolinkId }: AddLinkDialogProps) {
   const { t } = useTranslation()
   const navigation = useNavigation()
+  const { trackLinkAdded } = useAnalytics()
   const isSubmitting =
-    navigation.state === 'submitting' &&
-    navigation.formData?.get('intent') === 'create'
+    navigation.state === 'submitting' && navigation.formData?.get('intent') === 'create'
 
   const wasSubmittingRef = useRef(false)
 
@@ -35,9 +32,10 @@ export function AddLinkDialog({
   useEffect(() => {
     if (wasSubmittingRef.current && navigation.state === 'idle') {
       wasSubmittingRef.current = false
+      trackLinkAdded()
       onOpenChange(false)
     }
-  }, [navigation.state, onOpenChange])
+  }, [navigation.state, onOpenChange, trackLinkAdded])
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -66,9 +64,7 @@ export function AddLinkDialog({
                 maxLength={2}
                 className="w-16 text-center text-2xl p-2 bg-neo-input border-[3px] border-neo-dark rounded focus:outline-none focus:ring-2 focus:ring-neo-primary"
               />
-              <p className="text-xs text-gray-500 mt-1">
-                {t('dashboard_emoji_hint')}
-              </p>
+              <p className="text-xs text-gray-500 mt-1">{t('dashboard_emoji_hint')}</p>
             </div>
 
             {/* Title field */}
@@ -111,9 +107,7 @@ export function AddLinkDialog({
               </NeoBrutalButton>
 
               <NeoBrutalButton type="submit" size="sm" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <span className="inline-block animate-spin mr-2">⏳</span>
-                ) : null}
+                {isSubmitting ? <span className="inline-block animate-spin mr-2">⏳</span> : null}
                 {t('dashboard_save_link')}
               </NeoBrutalButton>
             </div>

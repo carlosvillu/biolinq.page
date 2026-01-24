@@ -9,6 +9,7 @@ import {
 } from '~/components/neo-brutal'
 import { changeLanguage } from '~/lib/i18n.client'
 import { DEFAULT_LOCALE, isValidLocale, type Locale } from '~/lib/i18n'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 const LANGUAGE_OPTIONS: { locale: Locale; label: string }[] = [
   { locale: 'en', label: 'English' },
@@ -17,10 +18,12 @@ const LANGUAGE_OPTIONS: { locale: Locale; label: string }[] = [
 
 export function LanguageSelector() {
   const { i18n } = useTranslation()
+  const { trackLanguageChanged } = useAnalytics()
   const currentLocale = isValidLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE
 
   const handleSelect = (locale: string) => {
     changeLanguage(locale as Locale)
+    trackLanguageChanged(locale)
   }
 
   return (

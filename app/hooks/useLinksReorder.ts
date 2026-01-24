@@ -3,6 +3,7 @@ import { useSubmit, useNavigation, useActionData } from 'react-router'
 import { arrayMove } from '@dnd-kit/sortable'
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 import type { Link } from '~/db/schema/links'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 interface UseLinksReorderProps {
   links: Link[]
@@ -13,6 +14,7 @@ export function useLinksReorder({ links, biolinkId }: UseLinksReorderProps) {
   const submit = useSubmit()
   const navigation = useNavigation()
   const actionData = useActionData<{ error?: string }>()
+  const { trackLinksReordered } = useAnalytics()
 
   // Create stable key from links for change detection
   const linksKey = links.map((l) => l.id).join(',')
@@ -85,8 +87,9 @@ export function useLinksReorder({ links, biolinkId }: UseLinksReorderProps) {
     formData.set('biolinkId', biolinkId)
     formData.set('linkIds', JSON.stringify(orderedLinks.map((l) => l.id)))
 
+    trackLinksReordered()
     submit(formData, { method: 'post' })
-  }, [biolinkId, orderedLinks, submit])
+  }, [biolinkId, orderedLinks, submit, trackLinksReordered])
 
   return {
     orderedLinks,

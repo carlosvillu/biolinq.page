@@ -480,17 +480,17 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 9.1: Setup Google Analytics 4
 
-- [ ] Install `@analytics/google-analytics` or use gtag.js directly
-- [ ] Create `app/lib/analytics.client.ts` with GA4 initialization
-- [ ] Add `GA_MEASUREMENT_ID` to `.env.example` and environment variables
-- [ ] Create `app/components/GoogleAnalytics.tsx` component for script injection
-- [ ] Add GA script to root layout (`app/root.tsx`)
-- [ ] Ensure GA only loads in production (or with explicit env flag)
-- [ ] Verify pageview tracking works on all routes
+- [x] Install `@analytics/google-analytics` or use gtag.js directly
+- [x] Create `app/lib/analytics.client.ts` with GA4 initialization
+- [x] Add `GA_MEASUREMENT_ID` to `.env.example` and environment variables
+- [x] Create `app/components/GoogleAnalytics.tsx` component for script injection
+- [x] Add GA script to root layout (`app/root.tsx`)
+- [x] Ensure GA only loads in production (or with explicit env flag)
+- [x] Verify pageview tracking works on all routes
 
 #### Task 9.2: Implement Custom Events
 
-- [ ] Create `app/lib/analytics-events.ts` with typed event functions:
+- [x] Create `app/lib/analytics-events.ts` with typed event functions:
   - `trackSignup()` - when user completes Google OAuth
   - `trackUsernameCreated(username)` - when user claims username
   - `trackLinkAdded()` - when user adds a new link
@@ -500,10 +500,12 @@ Antes de empezar, necesitas tener configurado:
   - `trackProfileViewed(username)` - on public biolink page view
   - `trackLinksReordered()` - When user reorder links
   - `trackThemeColorsChanged()` - when user change theme colors
-  - every point in the process of create a custom link
-- [ ] Add event tracking calls in relevant components/actions
-- [ ] Create custom hook `useAnalytics()` for client-side event tracking
-- [ ] Add i18n consideration: track language preference
+  - `trackLinkDeleted()` - when user deletes a link
+  - `trackCustomDomainSet/Verified/Removed()` - custom domain flow
+  - `trackLanguageChanged()` - when user changes language
+- [x] Add event tracking calls in relevant components/actions
+- [x] Create custom hook `useAnalytics()` for client-side event tracking
+- [x] Add i18n consideration: track language preference via `setLanguageProperty()`
 
 #### Task 9.3: Implement Ecommerce Tracking for Stripe
 
@@ -682,7 +684,7 @@ Sequential list of all tasks in recommended order:
 | 8     | 8.2   | ⬜ Not Started | Landing route                           |
 | 8     | 8.3   | ⬜ Not Started | Polish & animations                     |
 | 9     | 9.1   | ⬜ Not Started | Setup Google Analytics 4                |
-| 9     | 9.2   | ⬜ Not Started | Custom events                           |
+| 9     | 9.2   | ✅ Complete    | Custom events                           |
 | 9     | 9.3   | ⬜ Not Started | Ecommerce tracking (Stripe)             |
 | 9     | 9.4   | ⬜ Not Started | Dashboard tracking                      |
 | 9     | 9.5   | ⬜ Not Started | Consent & privacy                       |

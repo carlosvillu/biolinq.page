@@ -25,6 +25,7 @@ Before creating any planning document:
 - Do NOT start writing the planning file until you have gathered ALL the information required
 - Questions may cover: scope, edge cases, UI/UX expectations, business rules, integration details, etc.
 - **If the task involves creating tests:** MUST read `docs/TESTING.md` before planning to understand project conventions, existing fixtures, and patterns
+- **If the task involves user interactions that should be tracked:** MUST read `docs/ANALYTICS.md` to understand existing events and how to add new ones
 
 ## Planning File Structure
 

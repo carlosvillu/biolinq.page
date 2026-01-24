@@ -7,6 +7,7 @@ import { ColorPickers } from './ColorPickers'
 import { useThemeCustomization } from '~/hooks/useThemeCustomization'
 import { getThemeById, type ThemeId } from '~/lib/themes'
 import { cn } from '~/lib/utils'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 interface CustomizationSectionProps {
   currentTheme: ThemeId
@@ -25,6 +26,7 @@ export function CustomizationSection({
 }: CustomizationSectionProps) {
   const { t } = useTranslation()
   const fetcher = useFetcher()
+  const { trackThemeColorsChanged } = useAnalytics()
 
   const {
     selectedTheme,
@@ -95,6 +97,11 @@ export function CustomizationSection({
             type="submit"
             disabled={!hasChanges || isLocked || isSubmitting}
             className="w-full"
+            onClick={() => {
+              if (primaryColor || bgColor) {
+                trackThemeColorsChanged()
+              }
+            }}
           >
             {isSubmitting ? t('saving') : t('customization_save')}
           </NeoBrutalButton>

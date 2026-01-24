@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 
-export function usePageView(biolinkId: string, isPreview: boolean): void {
+import { trackProfileViewed } from '~/lib/analytics-events'
+
+export function usePageView(biolinkId: string, username: string, isPreview: boolean): void {
   useEffect(() => {
     if (isPreview) {
       return
@@ -26,5 +28,7 @@ export function usePageView(biolinkId: string, isPreview: boolean): void {
     }).catch(() => {
       // Silently ignore errors
     })
-  }, [biolinkId, isPreview])
+
+    trackProfileViewed(username)
+  }, [biolinkId, username, isPreview])
 }

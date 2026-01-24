@@ -12,6 +12,7 @@ export interface PricingCardProps {
   badge?: string
   ctaText?: string
   ctaHref?: string
+  onCtaClick?: () => void
 }
 
 export function PricingCard({
@@ -23,6 +24,7 @@ export function PricingCard({
   badge,
   ctaText,
   ctaHref,
+  onCtaClick,
 }: PricingCardProps) {
   return (
     <div
@@ -65,6 +67,7 @@ export function PricingCard({
           <div className="absolute inset-0 bg-neo-dark rounded translate-x-1 translate-y-1" />
           <a
             href={ctaHref}
+            onClick={onCtaClick}
             className="relative z-10 w-full py-3 bg-neo-accent text-white border-[3px] border-neo-dark rounded font-bold group-hover:-translate-y-px group-hover:-translate-x-px transition-transform duration-200 block text-center"
           >
             {ctaText}

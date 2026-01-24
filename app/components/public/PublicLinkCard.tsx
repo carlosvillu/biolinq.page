@@ -1,14 +1,17 @@
 import type { Link } from '~/db/schema/links'
 import { getThemeBorderStyle, getThemeClasses, getThemeShadowStyle } from '~/lib/theme-styles'
 import type { Theme } from '~/lib/themes'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 type PublicLinkCardProps = {
   link: Pick<Link, 'id' | 'title' | 'url' | 'emoji'>
   theme: Theme
   isPreview?: boolean
+  position: number
 }
 
-export function PublicLinkCard({ link, theme, isPreview = false }: PublicLinkCardProps) {
+export function PublicLinkCard({ link, theme, isPreview = false, position }: PublicLinkCardProps) {
+  const { trackLinkClicked } = useAnalytics()
   const classes = getThemeClasses(theme.style)
   const shadowStyle = getThemeShadowStyle(theme.style)
   const borderClass = getThemeBorderStyle(theme.style)
@@ -20,6 +23,7 @@ export function PublicLinkCard({ link, theme, isPreview = false }: PublicLinkCar
       target="_blank"
       rel="noopener noreferrer"
       className="group relative block w-full"
+      onClick={() => !isPreview && trackLinkClicked(link.id, position)}
     >
       {/* Shadow Layer - Only for hard shadow themes (brutalist) */}
       {useShadowLayer && (

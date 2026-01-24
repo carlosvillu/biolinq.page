@@ -28,6 +28,7 @@ Consult these docs when needed:
 - **`docs/TESTING.md`** - TestContainers, semantic fixtures, E2E helpers
 - **`docs/KNOWN_ISSUES.md`** - Lessons learned from bugfixes, edge cases, and limitations to avoid repeating mistakes
 - **`docs/I18N.md`** - Internationalization setup, adding literals, adding languages
+- **`docs/ANALYTICS.md`** - GA4 analytics setup, custom events, adding new tracking
 
 ### When to read each doc (MANDATORY)
 
@@ -47,6 +48,7 @@ Domain mapping:
 - **Deployment / env vars → `docs/DEPLOYMENT.md`**
 - **Testing / Playwright / TestContainers → `docs/TESTING.md`**
 - **I18N / translations / UI text → `docs/I18N.md`**
+- **Analytics / GA4 / tracking events → `docs/ANALYTICS.md`**
 
 UI/UX tasks MUST read both:
 

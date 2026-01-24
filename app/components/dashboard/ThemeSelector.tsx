@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { THEMES, type ThemeId } from '~/lib/themes'
 import { ThemePreviewCard } from './ThemePreviewCard'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 interface ThemeSelectorProps {
   selectedTheme: ThemeId
@@ -10,6 +11,7 @@ interface ThemeSelectorProps {
 
 export function ThemeSelector({ selectedTheme, onThemeChange, disabled }: ThemeSelectorProps) {
   const { t } = useTranslation()
+  const { trackThemeChanged } = useAnalytics()
 
   return (
     <div>
@@ -28,7 +30,12 @@ export function ThemeSelector({ selectedTheme, onThemeChange, disabled }: ThemeS
             theme={theme}
             isSelected={selectedTheme === theme.id}
             disabled={disabled}
-            onClick={() => !disabled && onThemeChange(theme.id)}
+            onClick={() => {
+              if (!disabled) {
+                trackThemeChanged(theme.id)
+                onThemeChange(theme.id)
+              }
+            }}
           />
         ))}
       </div>
