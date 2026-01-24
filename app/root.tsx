@@ -25,6 +25,8 @@ import {
 } from '~/lib/i18n'
 import { initI18nClientSync, getI18nInstance } from '~/lib/i18n.client'
 import { auth } from '~/lib/auth'
+import { GoogleAnalytics } from '~/components/GoogleAnalytics'
+import { usePageviewTracking } from '~/hooks/usePageviewTracking'
 import { NeoBrutalToastProvider } from '~/components/neo-brutal/NeoBrutalToast'
 import { ThemeProvider } from '~/components/ThemeContext'
 import { getThemeCookie, getThemeInitScript } from '~/lib/theme'
@@ -71,11 +73,16 @@ export async function loader({ request }: Route.LoaderArgs) {
   // Create i18n instance for SSR
   serverI18nInstance = await createI18nInstance(locale)
 
+  const gaMeasurementId = process.env.GA_MEASUREMENT_ID || undefined
+  const nodeEnv = process.env.NODE_ENV || 'development'
+
   const response = {
     locale,
     session: sessionData?.session ?? null,
     user: sessionData?.user ?? null,
     themePreference,
+    gaMeasurementId,
+    nodeEnv,
   }
 
   // Set cookie if it doesn't exist or differs from detected locale
@@ -140,6 +147,10 @@ export default function App({ loaderData }: Route.ComponentProps) {
   const locale = (loaderData?.locale ?? DEFAULT_LOCALE) as Locale
   const themePreference = loaderData?.themePreference ?? null
   const i18nInstance = getI18nInstanceForRender(locale)
+  const gaMeasurementId = loaderData?.gaMeasurementId
+  const nodeEnv = loaderData?.nodeEnv ?? 'development'
+
+  usePageviewTracking(gaMeasurementId)
 
   const matches = useMatches()
   const hideLayout = matches.some(
@@ -165,6 +176,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
     return (
       <NeoBrutalToastProvider>
         <ThemeProvider initialPreference={themePreference}>
+          <GoogleAnalytics measurementId={gaMeasurementId} nodeEnv={nodeEnv} />
           {hideLayout ? (
             <Outlet />
           ) : (
@@ -184,6 +196,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
   return (
     <NeoBrutalToastProvider>
       <ThemeProvider initialPreference={themePreference}>
+        <GoogleAnalytics measurementId={gaMeasurementId} nodeEnv={nodeEnv} />
         <I18nextProvider i18n={i18nInstance}>
           {hideLayout ? (
             <Outlet />

@@ -44,6 +44,7 @@ export const test = base.extend<object, AppWorkerFixtures>({
           STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY || 'sk_test_dummy_key_for_tests',
           STRIPE_PRICE_ID: process.env.STRIPE_PRICE_ID || 'price_test_dummy_for_tests',
           STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || 'whsec_test_secret_for_e2e',
+          GA_MEASUREMENT_ID: 'G-TESTMEASURE',
         },
         cwd: process.cwd(),
         stdio: 'pipe',

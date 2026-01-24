@@ -423,23 +423,23 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 7.1: Create Account Page
 
-- [ ] Create `/dashboard/account` route
-- [ ] Show user info (email, name, avatar) - all readonly from Google
-- [ ] Show premium status (badge or CTA)
-- [ ] Show biolink URL with copy button
-- [ ] Add "Delete Account" button
+- [x] Create `/dashboard/account` route
+- [x] Show user info (email, name, avatar) - all readonly from Google
+- [x] Show premium status (badge or CTA)
+- [x] Show biolink URL with copy button
+- [x] Add "Delete Account" button
 
 #### Task 7.2: Create Account Deletion Flow
 
-- [ ] Create `app/components/dashboard/DeleteAccountModal.tsx`
-- [ ] Require user to type their username to confirm
-- [ ] Create `app/services/account.server.ts` with `deleteAccount(userId)` function
-- [ ] Delete in order: daily_link_clicks, daily_stats, links, biolinks, sessions, accounts, user
-- [ ] Release username for future use
-- [ ] Sign out user and redirect to landing
-- [ ] Add i18n keys for account page texts
-- [ ] E2E test: User can view account info
-- [ ] E2E test: User can delete account with confirmation
+- [x] Create `app/components/dashboard/DeleteAccountModal.tsx`
+- [x] Require user to type their username to confirm
+- [x] Create `app/services/account.server.ts` with `deleteAccount(userId)` function
+- [x] Delete in order: daily_link_clicks, daily_stats, links, biolinks, sessions, accounts, user
+- [x] Release username for future use
+- [x] Sign out user and redirect to landing
+- [x] Add i18n keys for account page texts
+- [x] E2E test: User can view account info
+- [x] E2E test: User can delete account with confirmation
 
 ---
 
@@ -450,26 +450,26 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 8.1: Create Landing Page Components
 
-- [ ] Create `app/components/landing/BioLinqHero.tsx` with username input preview
-- [ ] Create `app/components/landing/ValueProps.tsx` (3 cards: speed, design, price)
-- [ ] Create `app/components/landing/BioLinqFooter.tsx`
-- [ ] Apply Neo-Brutal design system from STYLE_GUIDE.md
+- [x] Create `app/components/landing/BioLinqHero.tsx` with username input preview
+- [x] Create `app/components/landing/ValueProps.tsx` (3 cards: speed, design, price)
+- [x] Create `app/components/landing/BioLinqFooter.tsx`
+- [x] Apply Neo-Brutal design system from STYLE_GUIDE.md
 
 #### Task 8.2: Update Landing Page Route
 
-- [ ] Update `/` route (home.tsx) with new landing components
-- [ ] Add "Create my BioLink" CTA that redirects to Google OAuth
-- [ ] If user already logged in, redirect to dashboard
-- [ ] Add proper SEO meta tags
-- [ ] Add i18n keys for landing page texts
+- [x] Update `/` route (home.tsx) with new landing components
+- [x] Add "Create my BioLink" CTA that redirects to Google OAuth
+- [x] If user already logged in, redirect to dashboard
+- [x] Add proper SEO meta tags
+- [x] Add i18n keys for landing page texts
 
 #### Task 8.3: Polish & Animations
 
-- [ ] Add subtle hover animations on cards
-- [ ] Add decorative elements (sparkles, etc.) as in mockup
-- [ ] Ensure responsive design (mobile-first)
-- [ ] E2E test: Landing page renders correctly
-- [ ] E2E test: CTA triggers auth flow
+- [x] Add subtle hover animations on cards
+- [x] Add decorative elements (sparkles, etc.) as in mockup
+- [x] Ensure responsive design (mobile-first)
+- [x] E2E test: Landing page renders correctly
+- [x] E2E test: CTA triggers auth flow
 
 ---
 
@@ -498,6 +498,9 @@ Antes de empezar, necesitas tener configurado:
   - `trackThemeChanged(theme)` - when user changes theme
   - `trackPremiumCTAClicked(location)` - when user clicks upgrade button
   - `trackProfileViewed(username)` - on public biolink page view
+  - `trackLinksReordered()` - When user reorder links
+  - `trackThemeColorsChanged()` - when user change theme colors
+  - every point in the process of create a custom link
 - [ ] Add event tracking calls in relevant components/actions
 - [ ] Create custom hook `useAnalytics()` for client-side event tracking
 - [ ] Add i18n consideration: track language preference
