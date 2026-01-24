@@ -21,7 +21,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const status = await getPremiumStatus(userId)
   return new Response(JSON.stringify(status), {
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
   })
 }
 
@@ -43,6 +43,6 @@ export async function action({ request }: ActionFunctionArgs) {
 
   await grantPremium(result.data.userId, result.data.stripeCustomerId)
   return new Response(JSON.stringify({ success: true }), {
-    headers: { 'Content-Type': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' }
   })
 }

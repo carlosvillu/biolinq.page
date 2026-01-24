@@ -8,7 +8,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   // Solo aceptar POST
   if (request.method !== 'POST') {
     console.log('[WEBHOOK] Rejected: Method not POST')
-    return new Response('Method Not Allowed', { status: 405 })
+    return new Response('Method Not Allowed', { status: 405, headers: { 'Cache-Control': 'no-store' } })
   }
 
   // Obtener header de firma y raw body
@@ -20,7 +20,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   if (!signature) {
     console.log('[WEBHOOK] Rejected: Missing signature')
-    return new Response('Missing stripe-signature header', { status: 400 })
+    return new Response('Missing stripe-signature header', { status: 400, headers: { 'Cache-Control': 'no-store' } })
   }
 
   // Verificar firma del webhook
@@ -34,7 +34,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'Unknown error'
     console.error(`Webhook signature verification failed: ${errorMessage}`)
-    return new Response(`Webhook Error: ${errorMessage}`, { status: 400 })
+    return new Response(`Webhook Error: ${errorMessage}`, { status: 400, headers: { 'Cache-Control': 'no-store' } })
   }
 
   // Manejar solo checkout.session.completed
@@ -69,5 +69,5 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   // SIEMPRE responder 200 para confirmar recepción.
   // Si retornamos un error, Stripe reintentará el webhook indefinidamente.
-  return new Response(null, { status: 200 })
+  return new Response(null, { status: 200, headers: { 'Cache-Control': 'no-store' } })
 }

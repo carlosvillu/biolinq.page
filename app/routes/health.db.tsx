@@ -5,13 +5,13 @@ export async function loader() {
     await checkDbConnection()
     return new Response('ok', {
       status: 200,
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' },
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return new Response(`error: ${message}`, {
       status: 500,
-      headers: { 'Content-Type': 'text/plain' },
+      headers: { 'Content-Type': 'text/plain', 'Cache-Control': 'no-store' },
     })
   }
 }

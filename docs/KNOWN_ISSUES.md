@@ -192,3 +192,25 @@ await setAuthCookie(context, token)
 - Do NOT use `session.cookieCache` unless you can guarantee no server-side mutations happen outside the user's own requests
 - When deleting sessions/accounts server-side, always explicitly clear auth cookies in the response
 - If cookie caching is ever re-introduced, ensure all mutation paths (webhooks, admin actions, cascade deletes) invalidate the cache
+
+---
+
+## API / Caching
+
+### API endpoints must return Cache-Control: no-store
+
+**Date:** 2025-01-24
+
+**Problem:** API endpoints returned responses without `Cache-Control` headers, allowing browsers or intermediate proxies to cache dynamic API responses (e.g., username availability, analytics data, auth session info).
+
+**Root Cause:**
+- Each API route had its own `jsonResponse` helper that only set `Content-Type`
+- No centralized middleware to enforce cache headers on API routes
+- Easy to forget when creating new endpoints
+
+**Solution:** Add `'Cache-Control': 'no-store'` to every API endpoint response. For routes using a `jsonResponse` helper, add it there. For routes returning `new Response` directly, add it to the headers object. For routes delegating to external handlers (e.g., Better Auth), wrap the response to set the header.
+
+**Prevention:**
+- When creating a new API route, always include `'Cache-Control': 'no-store'` in response headers
+- Use `no-store` (not `no-cache`) — `no-store` forbids storing the response entirely, while `no-cache` allows storing but forces revalidation
+- If a centralized `jsonResponse` utility is ever created, it must include this header by default

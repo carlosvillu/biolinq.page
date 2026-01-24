@@ -12,6 +12,7 @@ function jsonResponse(data: unknown, init?: ResponseInit) {
     ...init,
     headers: {
       'Content-Type': 'application/json',
+      'Cache-Control': 'no-store',
       ...init?.headers,
     },
   })
