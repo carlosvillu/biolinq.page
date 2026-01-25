@@ -234,7 +234,7 @@
   "account_delete_button": "Eliminar Cuenta",
   "delete_account_title": "¿Eliminar cuenta?",
   "delete_account_description": "Esta acción no se puede deshacer. Todos tus datos, links y estadísticas se eliminarán permanentemente.",
-  "delete_account_confirmation_label": "Para confirmar, escribe tu nombre de usuario: <strong>{{username}}</strong>",
+  "delete_account_confirmation_label": "Para confirmar, escribe tu nombre de usuario:",
   "delete_account_placeholder": "Escribe tu nombre de usuario",
   "delete_account_confirm_button": "Eliminar Mi Cuenta",
 

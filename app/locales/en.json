@@ -230,7 +230,7 @@
   "account_delete_button": "Delete Account",
   "delete_account_title": "Delete Account?",
   "delete_account_description": "This action cannot be undone. All your data, links, and stats will be permanently deleted.",
-  "delete_account_confirmation_label": "To confirm, type your username: <strong>{{username}}</strong>",
+  "delete_account_confirmation_label": "To confirm, type your username:",
   "delete_account_placeholder": "Type your username",
   "delete_account_confirm_button": "Delete My Account",
 

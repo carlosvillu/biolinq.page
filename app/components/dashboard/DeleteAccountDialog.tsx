@@ -73,12 +73,10 @@ export function DeleteAccountDialog({ username }: DeleteAccountDialogProps) {
                   <label
                     htmlFor="username-confirm"
                     className="block text-sm font-bold text-gray-700 mb-2"
-                    dangerouslySetInnerHTML={{
-                      __html: t('delete_account_confirmation_label', {
-                        username,
-                      }),
-                    }}
-                  />
+                  >
+                    {t('delete_account_confirmation_label')}{' '}
+                    <strong>{username}</strong>
+                  </label>
                   <div className="relative">
                     <div className="absolute inset-0 bg-neo-dark rounded translate-x-1 translate-y-1" />
                     <input
