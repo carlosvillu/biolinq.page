@@ -16,6 +16,11 @@ import {
   trackCustomDomainRemoved,
   trackLanguageChanged,
   setLanguageProperty,
+  setUserTypeProperty,
+  setHasBiolinkProperty,
+  setLinkCountProperty,
+  trackDeleteAccountStarted,
+  trackAccountDeleted,
 } from '~/lib/analytics-events'
 
 export function useAnalytics() {
@@ -37,5 +42,10 @@ export function useAnalytics() {
     trackCustomDomainRemoved,
     trackLanguageChanged,
     setLanguageProperty,
+    setUserTypeProperty,
+    setHasBiolinkProperty,
+    setLinkCountProperty,
+    trackDeleteAccountStarted,
+    trackAccountDeleted,
   }
 }

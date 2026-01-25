@@ -16,6 +16,7 @@ import {
   CustomDomainSection,
 } from '~/components/dashboard'
 import { useUpgradeTracking } from '~/hooks/useUpgradeTracking'
+import { useUserPropertiesTracking } from '~/hooks/useUserPropertiesTracking'
 import { updateBiolinkTheme, updateBiolinkColors } from '~/services/theme.server'
 import { THEMES } from '~/lib/themes'
 import type { BiolinkTheme } from '~/db/schema/biolinks'
@@ -239,6 +240,11 @@ export default function DashboardPage() {
   const actionData = useActionData<typeof action>() as { error: string } | undefined
 
   useUpgradeTracking()
+  useUserPropertiesTracking({
+    isPremium: user.isPremium,
+    hasBiolink: true,
+    linkCount: links.length,
+  })
 
   const maxLinks = getMaxLinks(user.isPremium)
 

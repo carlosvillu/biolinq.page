@@ -517,7 +517,7 @@ Antes de empezar, necesitas tener configurado:
   - `items`: [{ item_name: "BioLinq Premium", price: 5.00 }]
 - [x] Pass user ID to GA for cross-device tracking (hashed)
 - [x] Update Stripe success redirect to trigger purchase event
-- [ ] Verify ecommerce events appear in GA4 Monetization reports
+- [x] Verify ecommerce events appear in GA4 Monetization reports
 
 #### Task 9.4: Dashboard & Authenticated Area Tracking
 

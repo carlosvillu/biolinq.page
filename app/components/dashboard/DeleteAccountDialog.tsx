@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Dialog } from '@base-ui/react/dialog'
 import { NeoBrutalButton } from '../neo-brutal/NeoBrutalButton'
 import { useDeleteAccountForm } from '~/hooks/useDeleteAccountForm'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 interface DeleteAccountDialogProps {
   username: string
@@ -12,14 +13,23 @@ interface DeleteAccountDialogProps {
 export function DeleteAccountDialog({ username }: DeleteAccountDialogProps) {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
-  const { inputValue, setInputValue, isValid, reset } =
-    useDeleteAccountForm(username)
+  const { inputValue, setInputValue, isValid, reset } = useDeleteAccountForm(username)
+  const { trackDeleteAccountStarted, trackAccountDeleted } = useAnalytics()
 
   const handleOpenChange = (open: boolean) => {
+    if (open) {
+      trackDeleteAccountStarted()
+    }
     setIsOpen(open)
     if (!open) {
       // Reset form when dialog closes
       reset()
+    }
+  }
+
+  const handleSubmit = () => {
+    if (isValid) {
+      trackAccountDeleted()
     }
   }
 
@@ -55,7 +65,7 @@ export function DeleteAccountDialog({ username }: DeleteAccountDialogProps) {
               </Dialog.Description>
 
               {/* Form */}
-              <Form method="post" className="space-y-6">
+              <Form method="post" onSubmit={handleSubmit} className="space-y-6">
                 <input type="hidden" name="intent" value="deleteAccount" />
 
                 {/* Confirmation Input */}
@@ -91,12 +101,7 @@ export function DeleteAccountDialog({ username }: DeleteAccountDialogProps) {
                     </NeoBrutalButton>
                   </Dialog.Close>
 
-                  <NeoBrutalButton
-                    variant="accent"
-                    size="md"
-                    type="submit"
-                    disabled={!isValid}
-                  >
+                  <NeoBrutalButton variant="accent" size="md" type="submit" disabled={!isValid}>
                     {t('delete_account_confirm_button')}
                   </NeoBrutalButton>
                 </div>

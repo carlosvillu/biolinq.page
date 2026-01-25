@@ -7,6 +7,7 @@ import { getUserBiolink } from '~/services/username.server'
 import { deleteAccount } from '~/services/account.server'
 import { AccountInfoCard } from '~/components/dashboard/AccountInfoCard'
 import { DeleteAccountDialog } from '~/components/dashboard/DeleteAccountDialog'
+import { useUserPropertiesTracking } from '~/hooks/useUserPropertiesTracking'
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
@@ -83,11 +84,19 @@ export default function AccountPage() {
   const actionData = useActionData<typeof action>()
   const { t } = useTranslation()
 
+  useUserPropertiesTracking({
+    isPremium: accountUser.isPremium,
+    hasBiolink: true,
+    linkCount: null,
+  })
+
   return (
     <div className="min-h-screen bg-neo-input/30">
       <main className="max-w-3xl mx-auto px-4 py-8 md:py-12">
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-neo-dark mb-2">{t('account_settings_title')}</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-neo-dark mb-2">
+            {t('account_settings_title')}
+          </h1>
           <p className="text-gray-700">{t('account_settings_subtitle')}</p>
         </div>
 
@@ -106,9 +115,7 @@ export default function AccountPage() {
         {/* Delete Account Section */}
         <div className="border-t-[3px] border-neo-dark pt-8">
           <h2 className="text-xl font-bold text-neo-dark mb-2">{t('account_danger_zone_title')}</h2>
-          <p className="text-gray-700 mb-4">
-            {t('account_danger_zone_description')}
-          </p>
+          <p className="text-gray-700 mb-4">{t('account_danger_zone_description')}</p>
           <DeleteAccountDialog username={biolink.username} />
         </div>
       </main>

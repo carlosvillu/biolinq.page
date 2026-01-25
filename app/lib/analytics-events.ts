@@ -93,3 +93,34 @@ export function setLanguageProperty(language: string): void {
   }
   window.gtag('set', 'user_properties', { language })
 }
+
+// User property setters for dashboard tracking
+export function setUserTypeProperty(userType: 'free' | 'premium'): void {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') {
+    return
+  }
+  window.gtag('set', 'user_properties', { user_type: userType })
+}
+
+export function setHasBiolinkProperty(hasBiolink: boolean): void {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') {
+    return
+  }
+  window.gtag('set', 'user_properties', { has_biolink: hasBiolink })
+}
+
+export function setLinkCountProperty(linkCount: number): void {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') {
+    return
+  }
+  window.gtag('set', 'user_properties', { link_count: linkCount })
+}
+
+// Delete account events
+export function trackDeleteAccountStarted(): void {
+  gtagEvent('delete_account_started')
+}
+
+export function trackAccountDeleted(): void {
+  gtagEvent('account_deleted')
+}
