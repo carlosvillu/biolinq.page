@@ -521,14 +521,14 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 9.4: Dashboard & Authenticated Area Tracking
 
-- [ ] Track dashboard pageviews with user properties (is_premium, has_biolink)
-- [ ] Track account page visits
-- [ ] Track delete account flow started/completed
-- [ ] Add user properties to GA4:
+- [x] Track dashboard pageviews with user properties (is_premium, has_biolink)
+- [x] Track account page visits
+- [x] Track delete account flow started/completed
+- [x] Add user properties to GA4:
   - `user_type`: "free" | "premium"
   - `has_biolink`: boolean
   - `link_count`: number
-- [ ] Ensure no PII is sent to GA (no email, no full name)
+- [x] Ensure no PII is sent to GA (no email, no full name)
 
 #### Task 9.5: Consent & Privacy Compliance
 

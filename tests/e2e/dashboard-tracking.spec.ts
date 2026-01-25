@@ -4,8 +4,12 @@ import { resetDatabase } from '../helpers/db'
 import { createAuthSession, setAuthCookie } from '../helpers/auth'
 
 test.describe('Dashboard Tracking', () => {
-  test.beforeEach(async ({ dbContext }) => {
+  test.beforeEach(async ({ dbContext, context }) => {
     await resetDatabase(dbContext)
+    // Accept analytics consent so GA loads - use addInitScript to set before page loads
+    await context.addInitScript(() => {
+      localStorage.setItem('biolinq_analytics_consent', 'accepted')
+    })
   })
 
   test.describe('User Properties on Dashboard', () => {

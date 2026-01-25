@@ -4,8 +4,12 @@ import { resetDatabase } from '../helpers/db'
 import { createAuthSession, setAuthCookie } from '../helpers/auth'
 
 test.describe('Ecommerce Tracking', () => {
-  test.beforeEach(async ({ dbContext }) => {
+  test.beforeEach(async ({ dbContext, context }) => {
     await resetDatabase(dbContext)
+    // Accept analytics consent so GA loads
+    await context.addInitScript(() => {
+      localStorage.setItem('biolinq_analytics_consent', 'accepted')
+    })
   })
 
   test.describe('begin_checkout event', () => {

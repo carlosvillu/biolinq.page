@@ -241,3 +241,90 @@ const dataLayer = await page.evaluate(() =>
 - When testing GA4 events in E2E, always use `Array.from()` to convert dataLayer entries
 - TypeScript errors about `window.dataLayer` in `page.evaluate()` are expected (browser context vs Node context)
 - For events fired during form submission (which causes navigation), use `page.exposeFunction()` to capture events before the page navigates away
+
+---
+
+## UI / Styling
+
+### Neo-Brutal Panel Text Contrast
+
+**Date:** 2025-01-25
+
+**Problem:** Text using `text-gray-700` on `bg-neo-panel` (beige/cream background) has poor contrast and is hard to read.
+
+**Root Cause:**
+- `text-gray-700` is designed for white/neutral backgrounds
+- The `neo-panel` color is a warm beige (`#F5F0E6`) that clashes with cool grays
+- Dark mode variants (`dark:text-gray-300`) don't apply when the component uses Neo-Brutal theming
+
+**Solution:** Use `text-neo-dark/80` instead of `text-gray-700` for secondary text on Neo-Brutal panels. This uses the same dark color as headings but at 80% opacity, ensuring consistent contrast.
+
+**Prevention:**
+- On `bg-neo-panel` backgrounds, always use `text-neo-dark` (full) or `text-neo-dark/80` (secondary)
+- Never use `text-gray-*` colors on Neo-Brutal themed components
+- Test text contrast visually on the actual background color, not just in code
+
+---
+
+## Testing
+
+### GA-Related Tests Require Consent Acceptance
+
+**Date:** 2025-01-25
+
+**Problem:** After implementing cookie consent for GA4, all existing tests that depend on `window.dataLayer` or GA script loading started failing with timeouts.
+
+**Root Cause:**
+- GA4 now only loads after user accepts consent (stored in `localStorage`)
+- Tests were waiting for `dataLayer` to exist, but GA never loaded because consent was `'pending'`
+- Setting localStorage after page load doesn't work reliably due to SSR hydration timing
+
+**Solution:** Use `context.addInitScript()` in `beforeEach` to set consent **before** any page loads:
+
+```typescript
+test.beforeEach(async ({ context }) => {
+  await context.addInitScript(() => {
+    localStorage.setItem('biolinq_analytics_consent', 'accepted')
+  })
+})
+```
+
+**Prevention:**
+- When adding consent-gated features, update ALL related E2E tests to set consent in `beforeEach`
+- Use `addInitScript()` instead of `page.evaluate()` — it runs before the page loads
+- Tests for the consent banner itself should NOT set consent (to test the banner appearing)
+
+---
+
+## Architecture
+
+### Dynamic Script Loading for Consent-Gated Features
+
+**Date:** 2025-01-25
+
+**Problem:** GA4 scripts rendered via React JSX (`<script>`) didn't execute after hydration when consent changed from `'pending'` to `'accepted'`.
+
+**Root Cause:**
+- SSR renders with `consent = 'pending'` (no localStorage on server)
+- Client hydrates, reads localStorage → `consent = 'accepted'`
+- React re-renders and adds `<script>` tags to DOM
+- But dynamically added `<script>` tags via React don't execute — browser ignores them
+
+**Solution:** Use `useEffect` to dynamically create and append scripts:
+
+```typescript
+useEffect(() => {
+  if (!hasConsent) return
+  
+  const script = document.createElement('script')
+  script.async = true
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
+  document.head.appendChild(script)
+}, [hasConsent, measurementId])
+```
+
+**Prevention:**
+- Never rely on React JSX `<script>` tags for consent-gated third-party scripts
+- Use `useEffect` + `document.createElement('script')` for dynamic script loading
+- Initialize global functions (like `gtag`) before loading the external script
+- Use a `ref` to prevent double-initialization on re-renders

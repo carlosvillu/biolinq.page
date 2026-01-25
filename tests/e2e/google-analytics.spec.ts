@@ -1,6 +1,13 @@
 import { test, expect } from '../fixtures/app.fixture'
 
 test.describe('Google Analytics 4 Integration', () => {
+  test.beforeEach(async ({ context }) => {
+    // Accept analytics consent so GA loads
+    await context.addInitScript(() => {
+      localStorage.setItem('biolinq_analytics_consent', 'accepted')
+    })
+  })
+
   test('GA4 script loads when measurement ID is configured', async ({ page }) => {
     await page.goto('/', { waitUntil: 'networkidle' })
 

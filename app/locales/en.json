@@ -232,5 +232,10 @@
   "delete_account_description": "This action cannot be undone. All your data, links, and stats will be permanently deleted.",
   "delete_account_confirmation_label": "To confirm, type your username: <strong>{{username}}</strong>",
   "delete_account_placeholder": "Type your username",
-  "delete_account_confirm_button": "Delete My Account"
+  "delete_account_confirm_button": "Delete My Account",
+
+  "consent_banner_title": "We use cookies for analytics",
+  "consent_banner_description": "We use Google Analytics to understand how you use our site and improve your experience. No personal data is shared with third parties.",
+  "consent_accept_all": "Accept All",
+  "consent_reject_all": "Reject All"
 }

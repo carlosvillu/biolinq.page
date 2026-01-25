@@ -28,6 +28,8 @@ import { auth } from '~/lib/auth'
 import { hashUserId } from '~/lib/hash.server'
 import { GoogleAnalytics } from '~/components/GoogleAnalytics'
 import { usePageviewTracking } from '~/hooks/usePageviewTracking'
+import { useConsent } from '~/hooks/useConsent'
+import { CookieConsentBanner } from '~/components/CookieConsentBanner'
 import { NeoBrutalToastProvider } from '~/components/neo-brutal/NeoBrutalToast'
 import { ThemeProvider } from '~/components/ThemeContext'
 import { getThemeCookie, getThemeInitScript } from '~/lib/theme'
@@ -154,6 +156,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
   const gaMeasurementId = loaderData?.gaMeasurementId
   const nodeEnv = loaderData?.nodeEnv ?? 'development'
   const hashedUserId = loaderData?.hashedUserId ?? null
+  const { consent } = useConsent()
 
   usePageviewTracking(gaMeasurementId)
 
@@ -185,6 +188,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
             measurementId={gaMeasurementId}
             nodeEnv={nodeEnv}
             hashedUserId={hashedUserId}
+            hasConsent={consent === 'accepted'}
           />
           {hideLayout ? (
             <Outlet />
@@ -209,6 +213,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
           measurementId={gaMeasurementId}
           nodeEnv={nodeEnv}
           hashedUserId={hashedUserId}
+          hasConsent={consent === 'accepted'}
         />
         <I18nextProvider i18n={i18nInstance}>
           {hideLayout ? (
@@ -223,6 +228,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
             </div>
           )}
         </I18nextProvider>
+        <CookieConsentBanner />
       </ThemeProvider>
     </NeoBrutalToastProvider>
   )
