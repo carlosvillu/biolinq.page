@@ -5,6 +5,7 @@ import type { Link } from '~/db/schema/links'
 import { usePageView } from '~/hooks/usePageView'
 import { getThemeCSSVariables, getThemeClasses, getThemeShadowStyle } from '~/lib/theme-styles'
 import { getThemeById, resolveThemeColors } from '~/lib/themes'
+import { CustomGa4Tracker } from './CustomGa4Tracker'
 import { LoadTimeIndicator } from './LoadTimeIndicator'
 import { PublicLinkCard } from './PublicLinkCard'
 import { Watermark } from './Watermark'
@@ -15,7 +16,10 @@ type PublicProfileProps = {
     image: string | null
     isPremium: boolean
   }
-  biolink: Pick<Biolink, 'id' | 'username' | 'theme' | 'customPrimaryColor' | 'customBgColor'>
+  biolink: Pick<
+    Biolink,
+    'id' | 'username' | 'theme' | 'customPrimaryColor' | 'customBgColor' | 'customGa4TrackingId'
+  >
   links: Link[]
   isPreview?: boolean
 }
@@ -90,6 +94,11 @@ export function PublicProfile({ user, biolink, links, isPreview = false }: Publi
       {!user.isPremium && <Watermark theme={theme} />}
 
       <LoadTimeIndicator />
+
+      {/* Custom GA4 tracking for biolink owner */}
+      {user.isPremium && biolink.customGa4TrackingId && (
+        <CustomGa4Tracker customGa4TrackingId={biolink.customGa4TrackingId} />
+      )}
     </main>
   )
 }

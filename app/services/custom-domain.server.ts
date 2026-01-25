@@ -38,6 +38,7 @@ export type ResolveDomainResult =
         theme: 'brutalist' | 'light_minimal' | 'dark_mode' | 'colorful'
         customPrimaryColor: string | null
         customBgColor: string | null
+        customGa4TrackingId: string | null
       }
       user: { name: string | null; image: string | null; isPremium: boolean }
     }
@@ -261,6 +262,7 @@ export async function getBiolinkByCustomDomain(domain: string): Promise<ResolveD
       theme: biolinks.theme,
       customPrimaryColor: biolinks.customPrimaryColor,
       customBgColor: biolinks.customBgColor,
+      customGa4TrackingId: biolinks.customGa4TrackingId,
       userName: users.name,
       userImage: users.image,
       userIsPremium: users.isPremium,
@@ -289,6 +291,7 @@ export async function getBiolinkByCustomDomain(domain: string): Promise<ResolveD
       theme: row.theme,
       customPrimaryColor: row.customPrimaryColor,
       customBgColor: row.customBgColor,
+      customGa4TrackingId: row.customGa4TrackingId,
     },
     user: {
       name: row.userName,

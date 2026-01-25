@@ -14,10 +14,15 @@ import {
   LivePreview,
   CustomizationSection,
   CustomDomainSection,
+  Ga4TrackingSection,
 } from '~/components/dashboard'
 import { useUpgradeTracking } from '~/hooks/useUpgradeTracking'
 import { useUserPropertiesTracking } from '~/hooks/useUserPropertiesTracking'
-import { updateBiolinkTheme, updateBiolinkColors } from '~/services/theme.server'
+import {
+  updateBiolinkTheme,
+  updateBiolinkColors,
+  updateBiolinkGa4TrackingId,
+} from '~/services/theme.server'
 import { THEMES } from '~/lib/themes'
 import type { BiolinkTheme } from '~/db/schema/biolinks'
 import { getBasicStats, getPremiumStats, getLast7DaysData } from '~/services/analytics.server'
@@ -232,6 +237,23 @@ export async function action({ request }: ActionFunctionArgs) {
     return data({ cnameVerified: result.verified })
   }
 
+  if (intent === 'updateGa4TrackingId') {
+    const biolinkId = formData.get('biolinkId') as string
+    const ga4TrackingId = formData.get('ga4TrackingId') as string
+
+    const result = await updateBiolinkGa4TrackingId(
+      biolinkId,
+      ga4TrackingId || null
+    )
+
+    if (!result.success) {
+      return data({ error: result.error })
+    }
+
+    invalidateBiolinkCache(biolink.username)
+    return data({ success: true })
+  }
+
   return data({ error: 'UNKNOWN_INTENT' })
 }
 
@@ -284,6 +306,11 @@ export default function DashboardPage() {
             domainVerificationToken={biolink.domainVerificationToken}
             domainOwnershipVerified={biolink.domainOwnershipVerified ?? false}
             cnameVerified={biolink.cnameVerified ?? false}
+            isPremium={user.isPremium}
+          />
+          <Ga4TrackingSection
+            biolinkId={biolink.id}
+            customGa4TrackingId={biolink.customGa4TrackingId}
             isPremium={user.isPremium}
           />
         </div>

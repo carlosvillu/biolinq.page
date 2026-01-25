@@ -34,6 +34,7 @@ export const biolinks = pgTable(
     domainVerificationToken: varchar('domain_verification_token', { length: 64 }),
     domainOwnershipVerified: boolean('domain_ownership_verified').default(false),
     cnameVerified: boolean('cname_verified').default(false),
+    customGa4TrackingId: varchar('custom_ga4_tracking_id', { length: 15 }),
     createdAt: timestamp('created_at').notNull().defaultNow(),
     updatedAt: timestamp('updated_at').notNull().defaultNow(),
   },

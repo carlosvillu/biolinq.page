@@ -237,5 +237,17 @@
   "consent_banner_title": "We use cookies for analytics",
   "consent_banner_description": "We use Google Analytics to understand how you use our site and improve your experience. No personal data is shared with third parties.",
   "consent_accept_all": "Accept All",
-  "consent_reject_all": "Reject All"
+  "consent_reject_all": "Reject All",
+
+  "ga4_tracking_title": "Visitor Analytics",
+  "ga4_tracking_description": "Add your own Google Analytics 4 tracking ID to track visitors on your public page",
+  "ga4_tracking_label": "GA4 Measurement ID",
+  "ga4_tracking_hint": "Find this in your GA4 property settings (format: G-XXXXXXXXXX)",
+  "ga4_tracking_save": "Save Tracking ID",
+  "ga4_tracking_saved": "Tracking ID saved successfully",
+  "ga4_tracking_active": "Currently tracking to",
+  "ga4_tracking_remove": "Remove Tracking ID",
+  "ga4_tracking_error_invalid_format": "Invalid format. Must be G- followed by 10 alphanumeric characters",
+  "ga4_tracking_error_PREMIUM_REQUIRED": "Custom analytics tracking requires Premium",
+  "ga4_tracking_error_INVALID_FORMAT": "Invalid GA4 Measurement ID format"
 }

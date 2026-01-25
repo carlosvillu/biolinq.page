@@ -1,0 +1,1 @@
+ALTER TABLE "biolinks" ADD COLUMN "custom_ga4_tracking_id" varchar(15);
