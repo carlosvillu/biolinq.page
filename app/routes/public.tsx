@@ -3,6 +3,7 @@ import { type LoaderFunctionArgs, type MetaFunction, data } from 'react-router'
 import { useLoaderData, isRouteErrorResponse, useRouteError } from 'react-router'
 import { getBiolinkWithUserByUsername } from '~/services/username.server'
 import { getPublicLinksByBiolinkId } from '~/services/links.server'
+import { sanitizeImageUrl } from '~/lib/link-validation'
 import { PublicProfile } from '~/components/public/PublicProfile'
 import { PublicNotFound } from '~/components/public/PublicNotFound'
 import { PublicError } from '~/components/public/PublicError'
@@ -57,7 +58,8 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 
   const userName = data.user.name ?? data.biolink.username
   const description = `Check out ${userName}'s links on BioLinq`
-  const avatarUrl = data.user.image ?? 'https://biolinq.page/default-avatar.png'
+  const avatarUrl =
+    sanitizeImageUrl(data.user.image) ?? 'https://biolinq.page/default-avatar.png'
   const pageUrl = `https://biolinq.page/${data.biolink.username}`
 
   return [

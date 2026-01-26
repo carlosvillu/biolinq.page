@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type { Biolink } from '~/db/schema/biolinks'
 import type { Link } from '~/db/schema/links'
 import { usePageView } from '~/hooks/usePageView'
+import { sanitizeImageUrl } from '~/lib/link-validation'
 import { getThemeCSSVariables, getThemeClasses, getThemeShadowStyle } from '~/lib/theme-styles'
 import { getThemeById, resolveThemeColors } from '~/lib/themes'
 import { LoadTimeIndicator } from './LoadTimeIndicator'
@@ -24,6 +25,7 @@ export function PublicProfile({ user, biolink, links, isPreview = false }: Publi
   const { t } = useTranslation()
   usePageView(biolink.id, biolink.username, isPreview)
   const displayName = user.name ?? biolink.username
+  const safeImageUrl = sanitizeImageUrl(user.image)
 
   const theme = getThemeById(biolink.theme)
   const colors = resolveThemeColors(theme, biolink.customPrimaryColor, biolink.customBgColor)
@@ -52,8 +54,8 @@ export function PublicProfile({ user, biolink, links, isPreview = false }: Publi
               ...avatarShadow,
             }}
           >
-            {user.image ? (
-              <img src={user.image} alt={displayName} className="w-full h-full object-cover" />
+            {safeImageUrl ? (
+              <img src={safeImageUrl} alt={displayName} className="w-full h-full object-cover" />
             ) : (
               <span className="text-3xl font-black" style={{ color: 'var(--theme-text)' }}>
                 {displayName.charAt(0).toUpperCase()}

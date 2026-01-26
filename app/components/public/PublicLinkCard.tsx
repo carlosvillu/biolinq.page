@@ -1,4 +1,5 @@
 import type { Link } from '~/db/schema/links'
+import { sanitizeUrl } from '~/lib/link-validation'
 import { getThemeBorderStyle, getThemeClasses, getThemeShadowStyle } from '~/lib/theme-styles'
 import type { Theme } from '~/lib/themes'
 import { useAnalytics } from '~/hooks/useAnalytics'
@@ -19,7 +20,7 @@ export function PublicLinkCard({ link, theme, isPreview = false, position }: Pub
 
   return (
     <a
-      href={isPreview ? link.url : `/go/${link.id}`}
+      href={isPreview ? sanitizeUrl(link.url) : `/go/${link.id}`}
       target="_blank"
       rel="noopener noreferrer"
       className="group relative block w-full"
