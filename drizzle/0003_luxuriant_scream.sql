@@ -1,0 +1,1 @@
+ALTER TABLE "biolinks" ADD COLUMN "ga4_measurement_id" varchar(20);

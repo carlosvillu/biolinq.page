@@ -45,6 +45,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       user: result.user,
       links,
       isPreview,
+      userGa4MeasurementId: result.biolink.ga4MeasurementId,
     },
     { headers }
   )

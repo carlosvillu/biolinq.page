@@ -1,9 +1,5 @@
 # FEATURE_3.7_UserGA4Configuration.md
 
-## ✅ IMPLEMENTATION STATUS: 100% COMPLETE
-
-**Verificado en producción: Sin fallos ✅**
-
 ---
 
 ## 1. Natural Language Description
@@ -64,21 +60,25 @@
 ### Route Module Breakdown
 
 **`app/routes/dashboard.tsx`**:
+
 - **Loader**: Ya retorna `biolink` con `ga4MeasurementId`
 - **Action**: Agrega case para `intent === 'updateGA4'` que llama `updateGA4MeasurementId`
 - **Component**: Agrega `<GA4Settings>` en el grid
 
 **`app/routes/public.tsx`**:
+
 - **Loader**: Ya retorna `biolink` y `user` - necesita exponer `ga4MeasurementId` + `isPremium`
 - **Component**: Pasa datos a `<GA4Scripts>` que inyecta los scripts
 
 ### Component Breakdown
 
 **`GA4Settings.tsx`**:
+
 - **Hooks**: `useFetcher`, `useTranslation`, `useState` para input value
 - **No business logic**: Solo estado de UI y form submission
 
 **`GA4Scripts.tsx`**:
+
 - **Props**: `siteGA4Id`, `userGA4Id`, `links` (para click tracking)
 - **No hooks**: Componente puro que renderiza `<script>` tags
 
@@ -91,6 +91,7 @@
 **Objective:** Agregar columna para almacenar el GA4 Measurement ID del usuario
 
 **Pseudocode:**
+
 ```pseudocode
 // Add to existing biolinks table definition
 ga4MeasurementId: varchar('ga4_measurement_id', { length: 20 })
@@ -105,6 +106,7 @@ ga4MeasurementId: varchar('ga4_measurement_id', { length: 20 })
 **Objective:** Validación de formato GA4 Measurement ID reutilizable en frontend y backend
 
 **Pseudocode:**
+
 ```pseudocode
 CONSTANT GA4_REGEX = /^G-[A-Z0-9]{10}$/
 
@@ -127,6 +129,7 @@ END
 **Objective:** Servicio para actualizar GA4 ID con validación y premium check
 
 **Pseudocode:**
+
 ```pseudocode
 TYPE GA4Error = 'BIOLINK_NOT_FOUND' | 'INVALID_GA4_FORMAT' | 'PREMIUM_REQUIRED'
 TYPE UpdateGA4Result = { success: true } | { success: false; error: GA4Error }
@@ -174,6 +177,7 @@ END
 **Objective:** Componente de configuración GA4 con estado locked para free users
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT GA4Settings
   PROPS:
@@ -268,6 +272,7 @@ END COMPONENT
 **Objective:** Exportar el nuevo componente
 
 **Pseudocode:**
+
 ```pseudocode
 // Add to existing exports
 EXPORT { GA4Settings } FROM './GA4Settings'
@@ -280,6 +285,7 @@ EXPORT { GA4Settings } FROM './GA4Settings'
 **Objective:** Integrar GA4Settings en el dashboard y agregar action handler
 
 **Pseudocode:**
+
 ```pseudocode
 // IMPORT (add to existing)
 IMPORT { updateGA4MeasurementId } FROM '~/services/ga4.server'
@@ -328,6 +334,7 @@ END IF
 **Objective:** Inyectar scripts de GA4 (site y user) con tracking de clicks
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT GA4Scripts
   PROPS:
@@ -387,6 +394,7 @@ END COMPONENT
 **Objective:** Agregar tracking de click para GA4 del usuario
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT PublicLinkCard
   PROPS: (existing)
@@ -422,6 +430,7 @@ END COMPONENT
 **Objective:** Pasar position a PublicLinkCard e integrar GA4Scripts
 
 **Pseudocode:**
+
 ```pseudocode
 COMPONENT PublicProfile
   PROPS: (add new)
@@ -464,6 +473,7 @@ END COMPONENT
 **Objective:** Pasar GA4 IDs al componente PublicProfile
 
 **Pseudocode:**
+
 ```pseudocode
 // LOADER: Add site GA4 ID from env
 FUNCTION loader
@@ -503,6 +513,7 @@ END
 **Objective:** Test API route para E2E tests del servicio GA4
 
 **Pseudocode:**
+
 ```pseudocode
 // Only available when DB_TEST_URL is set
 
@@ -538,6 +549,7 @@ END
 **Objective:** Registrar la nueva ruta de test API
 
 **Pseudocode:**
+
 ```pseudocode
 // Add to existing routes
 route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
@@ -555,14 +567,14 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 
 ### New keys to create
 
-| Key | English | Spanish |
-|-----|---------|---------|
-| `ga4_title` | Analytics | Analytics |
-| `ga4_description` | Track your page visits with Google Analytics 4 | Rastrea las visitas a tu página con Google Analytics 4 |
-| `ga4_id_label` | Measurement ID | ID de Medición |
-| `ga4_id_placeholder` | G-XXXXXXXXXX | G-XXXXXXXXXX |
-| `ga4_invalid_format` | Must be in format G-XXXXXXXXXX | Debe tener el formato G-XXXXXXXXXX |
-| `ga4_error_premium_required` | GA4 tracking requires Premium | El tracking GA4 requiere Premium |
+| Key                          | English                                        | Spanish                                                |
+| ---------------------------- | ---------------------------------------------- | ------------------------------------------------------ |
+| `ga4_title`                  | Analytics                                      | Analytics                                              |
+| `ga4_description`            | Track your page visits with Google Analytics 4 | Rastrea las visitas a tu página con Google Analytics 4 |
+| `ga4_id_label`               | Measurement ID                                 | ID de Medición                                         |
+| `ga4_id_placeholder`         | G-XXXXXXXXXX                                   | G-XXXXXXXXXX                                           |
+| `ga4_invalid_format`         | Must be in format G-XXXXXXXXXX                 | Debe tener el formato G-XXXXXXXXXX                     |
+| `ga4_error_premium_required` | GA4 tracking requires Premium                  | El tracking GA4 requiere Premium                       |
 
 ---
 
@@ -575,15 +587,18 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Premium user can save valid GA4 ID
 
 **Preconditions:**
+
 - User exists with `isPremium: true`
 - User has a biolink
 
 **Steps:**
+
 1. Create premium user and biolink via seeders
 2. POST to `/api/__test__/ga4` with valid GA4 ID (`G-TEST123456`)
 3. GET `/api/__test__/ga4?biolinkId=xxx` to verify
 
 **Expected:**
+
 - POST returns `{ success: true }`
 - GET returns `{ ga4MeasurementId: 'G-TEST123456' }`
 
@@ -592,14 +607,17 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Premium user can clear GA4 ID
 
 **Preconditions:**
+
 - Premium user with existing GA4 ID configured
 
 **Steps:**
+
 1. Create premium user with biolink that has GA4 ID set
 2. POST to `/api/__test__/ga4` with empty string or null
 3. GET to verify cleared
 
 **Expected:**
+
 - POST returns `{ success: true }`
 - GET returns `{ ga4MeasurementId: null }`
 
@@ -608,9 +626,11 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Invalid GA4 ID format shows validation error
 
 **Preconditions:**
+
 - Premium user with biolink
 
 **Steps:**
+
 1. POST to `/api/__test__/ga4` with invalid formats:
    - `INVALID`
    - `G-123` (too short)
@@ -618,6 +638,7 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
    - `g-test123456` (lowercase)
 
 **Expected:**
+
 - Each POST returns `{ success: false, error: 'INVALID_GA4_FORMAT' }`
 
 ---
@@ -625,14 +646,17 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Free user cannot save GA4 ID (API level)
 
 **Preconditions:**
+
 - User exists with `isPremium: false`
 - User has a biolink
 
 **Steps:**
+
 1. Create free user and biolink
 2. POST to `/api/__test__/ga4` with valid GA4 ID
 
 **Expected:**
+
 - Returns `{ success: false, error: 'PREMIUM_REQUIRED' }`
 
 ---
@@ -640,14 +664,17 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Free user sees locked GA4 section in dashboard
 
 **Preconditions:**
+
 - Free user logged in with biolink
 
 **Steps:**
+
 1. Login as free user
 2. Navigate to `/dashboard`
 3. Scroll to Analytics section
 
 **Expected:**
+
 - GA4 input is visible but blurred
 - "PREMIUM" badge is displayed over the section
 - Input cannot be interacted with (pointer-events-none)
@@ -658,14 +685,17 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Premium user sees functional GA4 section in dashboard
 
 **Preconditions:**
+
 - Premium user logged in with biolink
 
 **Steps:**
+
 1. Login as premium user
 2. Navigate to `/dashboard`
 3. Find Analytics section
 
 **Expected:**
+
 - GA4 input is visible and interactive
 - No blur or PREMIUM badge
 - Can type in the input field
@@ -676,14 +706,17 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Public page includes site GA4 script always
 
 **Preconditions:**
+
 - User with biolink exists
 - `GA_MEASUREMENT_ID` env var is set
 
 **Steps:**
+
 1. Navigate to `/:username` (public page)
 2. Inspect page source/scripts
 
 **Expected:**
+
 - Script tag for `gtag.js` with site GA4 ID is present
 - `gtag('config', 'G-SITE-ID')` is executed
 
@@ -692,13 +725,16 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Public page includes user GA4 script only for premium users
 
 **Preconditions:**
+
 - Premium user with biolink that has GA4 ID configured
 
 **Steps:**
+
 1. Navigate to `/:username` (public page)
 2. Inspect page source/scripts
 
 **Expected:**
+
 - Both site GA4 and user GA4 scripts are present
 - `window.trackBioLinkClick` function is defined
 
@@ -707,13 +743,16 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Public page does NOT include user GA4 for free users
 
 **Preconditions:**
+
 - Free user with biolink (even if `ga4_measurement_id` somehow has a value)
 
 **Steps:**
+
 1. Navigate to `/:username` (public page)
 2. Inspect page source/scripts
 
 **Expected:**
+
 - Only site GA4 script is present
 - `window.trackBioLinkClick` is NOT defined
 
@@ -722,16 +761,19 @@ route('api/__test__/ga4', 'routes/api.__test__.ga4.tsx'),
 ### Test: Link click triggers user GA4 event (integration)
 
 **Preconditions:**
+
 - Premium user with GA4 ID configured
 - Has at least one link
 
 **Steps:**
+
 1. Navigate to public page
 2. Mock/intercept `window.trackBioLinkClick`
 3. Click on first link
 4. Verify tracking function was called
 
 **Expected:**
+
 - `trackBioLinkClick` called with correct params: `(url, title, 1)`
 - Link still navigates to `/go/:linkId`
 
@@ -746,6 +788,7 @@ After implementing the schema change in `app/db/schema/biolinks.ts`:
 3. Verify with: `SELECT column_name FROM information_schema.columns WHERE table_name = 'biolinks'`
 
 The migration will add:
+
 - `ga4_measurement_id VARCHAR(20) NULL` to `biolinks` table
 
 ---
@@ -757,9 +800,9 @@ Add to `app/types/global.d.ts` (create if doesn't exist):
 ```typescript
 declare global {
   interface Window {
-    trackBioLinkClick?: (linkUrl: string, linkTitle: string, linkPosition: number) => void;
+    trackBioLinkClick?: (linkUrl: string, linkTitle: string, linkPosition: number) => void
   }
 }
 
-export {};
+export {}
 ```

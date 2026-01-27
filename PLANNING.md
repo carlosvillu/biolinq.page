@@ -278,28 +278,28 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 3.7: Add User GA4 Configuration (Premium Only)
 
-- [ ] Add `ga4_measurement_id` column to `biolinks` table (varchar(20), nullable)
-- [ ] Generate and run migration for new column
-- [ ] Create `app/services/ga4.server.ts`:
-  - [ ] `updateGA4MeasurementId(biolinkId, userId, ga4Id)` function
-  - [ ] Validate GA4 ID format (G-XXXXXXXXXX)
-  - [ ] Check user is premium before saving (throw error if not)
-- [ ] Create `app/components/dashboard/GA4Settings.tsx`:
-  - [ ] Input field for GA4 Measurement ID
-  - [ ] Format validation (G-XXXXXXXXXX pattern)
-  - [ ] Save button with loading state
-  - [ ] Help text explaining what this does
-  - [ ] For free users: show locked state with "Premium" badge (same as customization section)
-- [ ] Add GA4 settings section to dashboard (below theme selector)
-- [ ] Create dashboard action to handle GA4 ID update (verify premium status)
-- [ ] Update public page (`/:username`) to load dual GA4:
-  - [ ] Site GA4 (from env `GA_MEASUREMENT_ID`) - always present
-  - [ ] User GA4 (from `biolinks.ga4_measurement_id`) - only if configured AND user is premium
-- [ ] Add i18n keys for GA4 settings UI (including premium lock message)
-- [ ] E2E test: Premium user can save valid GA4 ID
-- [ ] E2E test: Invalid GA4 ID format shows validation error
-- [ ] E2E test: Free user sees locked GA4 section with premium badge
-- [ ] E2E test: Public page includes user GA4 script only for premium users
+- [x] Add `ga4_measurement_id` column to `biolinks` table (varchar(20), nullable)
+- [x] Generate and run migration for new column
+- [x] Create `app/services/ga4.server.ts`:
+  - [x] `updateGA4MeasurementId(biolinkId, userId, ga4Id)` function
+  - [x] Validate GA4 ID format (G-XXXXXXXXXX)
+  - [x] Check user is premium before saving (throw error if not)
+- [x] Create `app/components/dashboard/GA4Settings.tsx`:
+  - [x] Input field for GA4 Measurement ID
+  - [x] Format validation (G-XXXXXXXXXX pattern)
+  - [x] Save button with loading state
+  - [x] Help text explaining what this does
+  - [x] For free users: show locked state with "Premium" badge (same as customization section)
+- [x] Add GA4 settings section to dashboard (below theme selector)
+- [x] Create dashboard action to handle GA4 ID update (verify premium status)
+- [x] Update public page (`/:username`) to load dual GA4:
+  - [x] Site GA4 (from env `GA_MEASUREMENT_ID`) - always present
+  - [x] User GA4 (from `biolinks.ga4_measurement_id`) - only if configured AND user is premium
+- [x] Add i18n keys for GA4 settings UI (including premium lock message)
+- [x] E2E test: Premium user can save valid GA4 ID
+- [x] E2E test: Invalid GA4 ID format shows validation error
+- [x] E2E test: Free user sees locked GA4 section with premium badge
+- [x] E2E test: Public page includes user GA4 script only for premium users
 
 ---
 
@@ -532,13 +532,13 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 9.5: Consent & Privacy Compliance
 
-- [ ] Create cookie consent banner component (GDPR compliance)
-- [ ] Store consent preference in localStorage
-- [ ] Only initialize GA after user consent
-- [ ] Add "Analytics" section to privacy policy page (if exists)
-- [ ] Implement `gtag('consent', 'default', {...})` for consent mode
-- [ ] E2E test: GA does not load without consent
-- [ ] E2E test: GA loads after consent is given
+- [x] Create cookie consent banner component (GDPR compliance)
+- [x] Store consent preference in localStorage
+- [x] Only initialize GA after user consent
+- [x] Add "Analytics" section to privacy policy page (if exists)
+- [x] Implement `gtag('consent', 'default', {...})` for consent mode
+- [x] E2E test: GA does not load without consent
+- [x] E2E test: GA loads after consent is given
 
 ---
 
@@ -666,7 +666,7 @@ Sequential list of all tasks in recommended order:
 | 3     | 3.4   | ✅ Complete    | View tracking                           |
 | 3     | 3.5   | ⬜ Not Started | Performance optimization                |
 | 3     | 3.6   | ✅ Complete    | Live iframe preview in dashboard        |
-| 3     | 3.7   | ⬜ Not Started | User GA4 configuration (Premium)        |
+| 3     | 3.7   | ✅ Complete    | User GA4 configuration (Premium)        |
 | 4     | 4.1   | ✅ Complete    | Theme configuration                     |
 | 4     | 4.2   | ✅ Complete    | Theme selector                          |
 | 4     | 4.3   | ✅ Complete    | Theme service                           |

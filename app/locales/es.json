@@ -241,5 +241,15 @@
   "consent_banner_title": "Usamos cookies para analítica",
   "consent_banner_description": "Usamos Google Analytics para entender cómo usas nuestro sitio y mejorar tu experiencia. No compartimos datos personales con terceros.",
   "consent_accept_all": "Aceptar todo",
-  "consent_reject_all": "Rechazar todo"
+  "consent_reject_all": "Rechazar todo",
+
+  "ga4_settings_title": "Google Analytics",
+  "ga4_settings_description": "Agrega tu propio ID de medición de GA4 para rastrear visitas y clics en tu página pública",
+  "ga4_measurement_id_label": "ID de medición GA4",
+  "ga4_invalid_format": "Formato inválido. Debe ser G-XXXXXXXXXX (10 caracteres después de G-)",
+  "ga4_format_hint": "Formato: G-XXXXXXXXXX (encontrado en la configuración de tu propiedad GA4)",
+  "ga4_current_id": "ID actual",
+  "ga4_save_button": "Guardar ID GA4",
+  "ga4_error_INVALID_GA4_FORMAT": "Formato de ID GA4 inválido",
+  "ga4_error_PREMIUM_REQUIRED": "Se requiere Premium para agregar tracking de GA4"
 }
