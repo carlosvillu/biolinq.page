@@ -29,15 +29,24 @@ function subscribe(callback: () => void): () => void {
   }
 }
 
-function getServerSnapshot(): ConsentState {
+function getServerConsentSnapshot(): ConsentState {
   return 'pending'
 }
 
-export function useConsent(): UseConsentReturn {
-  const consent = useSyncExternalStore(subscribe, getStoredConsent, getServerSnapshot)
+function getServerInitializedSnapshot(): boolean {
+  return false
+}
 
-  // On client, we're always initialized after first render
-  const initialized = typeof window !== 'undefined'
+export function useConsent(): UseConsentReturn {
+  const consent = useSyncExternalStore(subscribe, getStoredConsent, getServerConsentSnapshot)
+
+  // Use useSyncExternalStore for initialized to prevent hydration mismatch
+  // Server always returns false, client reads actual state after hydration
+  const initialized = useSyncExternalStore(
+    subscribe,
+    () => true,
+    getServerInitializedSnapshot
+  )
 
   const acceptAll = useCallback(() => {
     if (typeof window === 'undefined') return
