@@ -18,9 +18,16 @@ type PublicProfileProps = {
   biolink: Pick<Biolink, 'id' | 'username' | 'theme' | 'customPrimaryColor' | 'customBgColor'>
   links: Link[]
   isPreview?: boolean
+  userMeasurementId?: string
 }
 
-export function PublicProfile({ user, biolink, links, isPreview = false }: PublicProfileProps) {
+export function PublicProfile({
+  user,
+  biolink,
+  links,
+  isPreview = false,
+  userMeasurementId,
+}: PublicProfileProps) {
   const { t } = useTranslation()
   usePageView(biolink.id, biolink.username, isPreview)
   const displayName = user.name ?? biolink.username
@@ -76,6 +83,7 @@ export function PublicProfile({ user, biolink, links, isPreview = false }: Publi
               theme={theme}
               isPreview={isPreview}
               position={index}
+              userMeasurementId={userMeasurementId}
             />
           ))}
 

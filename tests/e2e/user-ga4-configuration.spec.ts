@@ -298,5 +298,82 @@ test.describe('User GA4 Configuration Feature', () => {
       // Only site GA4 should be present (G-TESTMEASURE from test env)
       expect(pageContent).not.toContain('G-PUBLIC1234')
     })
+
+    test('link click sends link_click event to user GA4', async ({
+      page,
+      context,
+      baseURL,
+      dbContext,
+    }) => {
+      const { token, userId } = await createAuthSession(baseURL!, {
+        email: 'premium-ga4-click@example.com',
+        password: 'TestPassword123!',
+      })
+
+      await makePremium(dbContext, userId)
+      const biolinkId = await seedBiolink(dbContext, {
+        userId,
+        username: 'linkclicktest',
+      })
+      await setBiolinkGA4(dbContext, biolinkId, 'G-LINKCLICK')
+
+      // Add a link to the biolink
+      await executeSQL(
+        dbContext,
+        `INSERT INTO links (id, biolink_id, title, url, emoji, position, created_at, updated_at)
+         VALUES (gen_random_uuid(), $1, 'Test Link', 'https://example.com', '🔗', 0, NOW(), NOW())`,
+        [biolinkId]
+      )
+
+      await setAuthCookie(context, token)
+
+      await page.goto('/linkclicktest')
+
+      // Accept cookie consent to enable GA4
+      await page.getByRole('button', { name: 'Accept All' }).click()
+
+      // Wait for GA4 to be initialized
+      await page.waitForTimeout(500)
+
+      // Intercept gtag calls to verify link_click event
+      const gtagCalls: Array<{ event: string; params: unknown }> = []
+      await page.exposeFunction('captureGtag', (command: string, eventName: string, params: unknown) => {
+        if (command === 'event') {
+          gtagCalls.push({ event: eventName, params })
+        }
+      })
+
+      // Override gtag to capture calls
+      await page.evaluate(() => {
+        const originalGtag = window.gtag
+        window.gtag = function (command: string, eventName: string | Date, params?: unknown) {
+          if (command === 'event') {
+            // @ts-expect-error - exposed function
+            window.captureGtag(command, eventName, params)
+          }
+          // eslint-disable-next-line prefer-rest-params
+          originalGtag.apply(window, arguments as unknown as Parameters<typeof originalGtag>)
+        }
+      })
+
+      // Click on the link
+      await page.getByText('Test Link').click()
+
+      // Wait a bit for the event to be sent
+      await page.waitForTimeout(200)
+
+      // Verify link_click event was sent
+      const linkClickEvents = gtagCalls.filter((call) => call.event === 'link_click')
+      expect(linkClickEvents.length).toBeGreaterThan(0)
+
+      // Verify event parameters
+      const linkClickEvent = linkClickEvents[0]
+      expect(linkClickEvent.params).toMatchObject({
+        send_to: 'G-LINKCLICK',
+        link_url: 'https://example.com',
+        link_title: 'Test Link',
+        link_position: 1, // 1-indexed
+      })
+    })
   })
 })

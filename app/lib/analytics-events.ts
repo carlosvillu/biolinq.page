@@ -124,3 +124,21 @@ export function trackDeleteAccountStarted(): void {
 export function trackAccountDeleted(): void {
   gtagEvent('account_deleted')
 }
+
+// User GA4 link click tracking (for public profile pages)
+export function trackUserLinkClick(
+  measurementId: string,
+  linkUrl: string,
+  linkTitle: string,
+  linkPosition: number
+): void {
+  if (typeof window === 'undefined' || typeof window.gtag !== 'function') {
+    return
+  }
+  window.gtag('event', 'link_click', {
+    send_to: measurementId,
+    link_url: linkUrl,
+    link_title: linkTitle,
+    link_position: linkPosition,
+  })
+}

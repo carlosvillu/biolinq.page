@@ -99,6 +99,7 @@ export default function PublicPage() {
       biolink={data.biolink}
       links={data.links}
       isPreview={data.isPreview}
+      userMeasurementId={data.userGa4MeasurementId ?? undefined}
     />
   )
 }

@@ -8,14 +8,33 @@ type PublicLinkCardProps = {
   theme: Theme
   isPreview?: boolean
   position: number
+  userMeasurementId?: string
 }
 
-export function PublicLinkCard({ link, theme, isPreview = false, position }: PublicLinkCardProps) {
-  const { trackLinkClicked } = useAnalytics()
+export function PublicLinkCard({
+  link,
+  theme,
+  isPreview = false,
+  position,
+  userMeasurementId,
+}: PublicLinkCardProps) {
+  const { trackLinkClicked, trackUserLinkClick } = useAnalytics()
   const classes = getThemeClasses(theme.style)
   const shadowStyle = getThemeShadowStyle(theme.style)
   const borderClass = getThemeBorderStyle(theme.style)
   const useShadowLayer = theme.style.shadowType === 'hard'
+
+  const handleClick = () => {
+    if (isPreview) return
+
+    // Track internally for BioLinq analytics
+    trackLinkClicked(link.id, position)
+
+    // Track to user's GA4 if configured (premium feature)
+    if (userMeasurementId) {
+      trackUserLinkClick(userMeasurementId, link.url, link.title, position + 1)
+    }
+  }
 
   return (
     <a
@@ -23,7 +42,7 @@ export function PublicLinkCard({ link, theme, isPreview = false, position }: Pub
       target="_blank"
       rel="noopener noreferrer"
       className="group relative block w-full"
-      onClick={() => !isPreview && trackLinkClicked(link.id, position)}
+      onClick={handleClick}
     >
       {/* Shadow Layer - Only for hard shadow themes (brutalist) */}
       {useShadowLayer && (
