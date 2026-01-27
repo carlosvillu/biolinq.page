@@ -10,14 +10,33 @@ export function useUpgradeTracking(): void {
     const upgrade = searchParams.get('upgrade')
     const sessionId = searchParams.get('session_id')
 
-    if (upgrade === 'success' && sessionId && !hasFired.current) {
-      hasFired.current = true
-      trackPurchase(sessionId)
-
-      const newParams = new URLSearchParams(searchParams)
-      newParams.delete('upgrade')
-      newParams.delete('session_id')
-      setSearchParams(newParams, { replace: true })
+    if (upgrade !== 'success' || !sessionId || hasFired.current) {
+      return
     }
+
+    const validSessionId = sessionId
+    let retries = 0
+    const maxRetries = 10
+    const retryDelay = 100
+
+    function tryTrackPurchase() {
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        hasFired.current = true
+        trackPurchase(validSessionId)
+
+        const newParams = new URLSearchParams(searchParams)
+        newParams.delete('upgrade')
+        newParams.delete('session_id')
+        setSearchParams(newParams, { replace: true })
+        return
+      }
+
+      if (retries < maxRetries) {
+        retries++
+        setTimeout(tryTrackPurchase, retryDelay)
+      }
+    }
+
+    tryTrackPurchase()
   }, [searchParams, setSearchParams])
 }

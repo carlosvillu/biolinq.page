@@ -13,13 +13,27 @@ interface UserPropertiesData {
 
 export function useUserPropertiesTracking(data: UserPropertiesData): void {
   useEffect(() => {
-    const userType = data.isPremium ? 'premium' : 'free'
-    setUserTypeProperty(userType)
+    let retries = 0
+    const maxRetries = 10
+    const retryDelay = 100
 
-    setHasBiolinkProperty(data.hasBiolink)
+    function trySetProperties() {
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        const userType = data.isPremium ? 'premium' : 'free'
+        setUserTypeProperty(userType)
+        setHasBiolinkProperty(data.hasBiolink)
+        if (data.linkCount !== null) {
+          setLinkCountProperty(data.linkCount)
+        }
+        return
+      }
 
-    if (data.linkCount !== null) {
-      setLinkCountProperty(data.linkCount)
+      if (retries < maxRetries) {
+        retries++
+        setTimeout(trySetProperties, retryDelay)
+      }
     }
+
+    trySetProperties()
   }, [data.isPremium, data.hasBiolink, data.linkCount])
 }
