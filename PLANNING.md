@@ -572,6 +572,76 @@ Antes de empezar, necesitas tener configurado:
 
 ---
 
+### Phase 11: Legal & Cookie Pages
+
+**🔴 Antes:** Footer tiene links a /terms y /privacy que devuelven 404. No hay página de cookies.
+**🟢 Después:** Tres páginas legales funcionando con contenido en Markdown, cambiando idioma según selector.
+
+#### Task 11.1: Setup Markdown Infrastructure
+
+- [x] Install `marked` package for Markdown parsing
+- [x] Create `content/legal/en/` and `content/legal/es/` directories
+- [x] Create `content/legal/en/terms.md` with Terms of Service template
+- [x] Create `content/legal/es/terms.md` with Términos de Servicio template
+- [x] Create `content/legal/en/privacy.md` with Privacy Policy template
+- [x] Create `content/legal/es/privacy.md` with Política de Privacidad template
+- [x] Create `content/legal/en/cookies.md` with Cookie Policy template
+- [x] Create `content/legal/es/cookies.md` with Política de Cookies template
+
+#### Task 11.2: Create Legal Content Service
+
+- [ ] Create `app/services/legal-content.server.ts`
+- [ ] Implement `getLegalContent(page, locale)` function
+- [ ] Read Markdown file from `content/legal/{locale}/{page}.md`
+- [ ] Fallback to English if locale file not found
+- [ ] Parse Markdown to HTML using `marked`
+- [ ] Extract title from first H1 heading
+- [ ] Return `{ html, title }` object
+
+#### Task 11.3: Create Legal Page Layout Component
+
+- [ ] Create `app/components/legal/LegalPageLayout.tsx`
+- [ ] Accept `html` and `title` props
+- [ ] Render HTML with `dangerouslySetInnerHTML`
+- [ ] Apply Tailwind `prose` classes for typography
+- [ ] Style with Neo-Brutal design (bg-neo-canvas, borders)
+- [ ] Ensure responsive design (max-w-3xl, centered)
+
+#### Task 11.4: Create Terms Route
+
+- [ ] Create `app/routes/legal.terms.tsx`
+- [ ] Implement loader: detect locale, call `getLegalContent('terms', locale)`
+- [ ] Add meta function for SEO (title, description)
+- [ ] Render `LegalPageLayout` with loader data
+- [ ] Register route `/terms` in `app/routes.ts`
+- [ ] E2E test: Terms page renders in English by default
+- [ ] E2E test: Terms page renders in Spanish when language changed
+
+#### Task 11.5: Create Privacy Route
+
+- [ ] Create `app/routes/legal.privacy.tsx`
+- [ ] Implement loader: detect locale, call `getLegalContent('privacy', locale)`
+- [ ] Add meta function for SEO (title, description)
+- [ ] Render `LegalPageLayout` with loader data
+- [ ] Register route `/privacy` in `app/routes.ts`
+- [ ] E2E test: Privacy page renders correctly
+- [ ] E2E test: Privacy page changes language with selector
+
+#### Task 11.6: Create Cookies Route & Update Footer
+
+- [ ] Create `app/routes/legal.cookies.tsx`
+- [ ] Implement loader: detect locale, call `getLegalContent('cookies', locale)`
+- [ ] Add meta function for SEO (title, description)
+- [ ] Render `LegalPageLayout` with loader data
+- [ ] Register route `/cookies` in `app/routes.ts`
+- [ ] Add `footer_cookies` i18n key (en: "Cookies", es: "Cookies")
+- [ ] Update `Footer.tsx` to include link to `/cookies`
+- [ ] E2E test: Cookies page renders correctly
+- [ ] E2E test: Footer links navigate to all three legal pages
+- [ ] E2E test: Language persists across legal pages
+
+---
+
 ## Implementation Order
 
 Sequential list of all tasks in recommended order:
@@ -619,6 +689,12 @@ Sequential list of all tasks in recommended order:
 41. Task 10.1 - Error Handling & Edge Cases
 42. Task 10.2 - Complete E2E Test Suite
 43. Task 10.3 - Final Checks
+44. Task 11.1 - Setup Markdown Infrastructure
+45. Task 11.2 - Create Legal Content Service
+46. Task 11.3 - Create Legal Page Layout Component
+47. Task 11.4 - Create Terms Route
+48. Task 11.5 - Create Privacy Route
+49. Task 11.6 - Create Cookies Route & Update Footer
 
 ---
 
@@ -691,5 +767,11 @@ Sequential list of all tasks in recommended order:
 | 10    | 10.1  | ⬜ Not Started | Error handling                          |
 | 10    | 10.2  | ⬜ Not Started | E2E test suite                          |
 | 10    | 10.3  | ⬜ Not Started | Final checks                            |
+| 11    | 11.1  | ✅ Complete    | Setup Markdown infrastructure           |
+| 11    | 11.2  | ⬜ Not Started | Legal content service                   |
+| 11    | 11.3  | ⬜ Not Started | Legal page layout component             |
+| 11    | 11.4  | ⬜ Not Started | Terms route                             |
+| 11    | 11.5  | ⬜ Not Started | Privacy route                           |
+| 11    | 11.6  | ⬜ Not Started | Cookies route & footer update           |
 
 **Status Legend:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked
