@@ -590,13 +590,13 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 11.2: Create Legal Content Service
 
-- [ ] Create `app/services/legal-content.server.ts`
-- [ ] Implement `getLegalContent(page, locale)` function
-- [ ] Read Markdown file from `content/legal/{locale}/{page}.md`
-- [ ] Fallback to English if locale file not found
-- [ ] Parse Markdown to HTML using `marked`
-- [ ] Extract title from first H1 heading
-- [ ] Return `{ html, title }` object
+- [x] Create `app/services/legal-content.server.ts`
+- [x] Implement `getLegalContent(page, locale)` function
+- [x] Read Markdown file from `content/legal/{locale}/{page}.md`
+- [x] Fallback to English if locale file not found
+- [x] Parse Markdown to HTML using `marked`
+- [x] Extract title from first H1 heading
+- [x] Return `{ html, title }` object
 
 #### Task 11.3: Create Legal Page Layout Component
 
@@ -768,7 +768,7 @@ Sequential list of all tasks in recommended order:
 | 10    | 10.2  | ⬜ Not Started | E2E test suite                          |
 | 10    | 10.3  | ⬜ Not Started | Final checks                            |
 | 11    | 11.1  | ✅ Complete    | Setup Markdown infrastructure           |
-| 11    | 11.2  | ⬜ Not Started | Legal content service                   |
+| 11    | 11.2  | ✅ Complete    | Legal content service                   |
 | 11    | 11.3  | ⬜ Not Started | Legal page layout component             |
 | 11    | 11.4  | ⬜ Not Started | Terms route                             |
 | 11    | 11.5  | ⬜ Not Started | Privacy route                           |
