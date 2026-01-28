@@ -1,11 +1,12 @@
 import type { Route } from './+types/public'
-import { type LoaderFunctionArgs, type MetaFunction, data } from 'react-router'
+import { type LoaderFunctionArgs, type MetaFunction, data, useRouteLoaderData } from 'react-router'
 import { useLoaderData, isRouteErrorResponse, useRouteError } from 'react-router'
 import { getBiolinkWithUserByUsername } from '~/services/username.server'
 import { getPublicLinksByBiolinkId } from '~/services/links.server'
 import { PublicProfile } from '~/components/public/PublicProfile'
 import { PublicNotFound } from '~/components/public/PublicNotFound'
 import { PublicError } from '~/components/public/PublicError'
+import { usePublicPageviewTracking } from '~/hooks/usePublicPageviewTracking'
 
 export const handle = { hideLayout: true }
 
@@ -45,6 +46,7 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
       user: result.user,
       links,
       isPreview,
+      userGa4MeasurementId: result.biolink.ga4MeasurementId,
     },
     { headers }
   )
@@ -81,6 +83,15 @@ export const meta: MetaFunction<typeof loader> = ({ data, error }) => {
 
 export default function PublicPage() {
   const data = useLoaderData<typeof loader>()
+  const rootData = useRouteLoaderData<{
+    gaMeasurementId?: string
+  }>('root')
+
+  // Track pageviews to both site GA4 and user's GA4 (if configured)
+  usePublicPageviewTracking(
+    rootData?.gaMeasurementId,
+    data.userGa4MeasurementId ?? undefined
+  )
 
   return (
     <PublicProfile
@@ -88,6 +99,7 @@ export default function PublicPage() {
       biolink={data.biolink}
       links={data.links}
       isPreview={data.isPreview}
+      userMeasurementId={data.userGa4MeasurementId ?? undefined}
     />
   )
 }

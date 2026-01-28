@@ -94,6 +94,7 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
       domain_verification_token VARCHAR(64),
       domain_ownership_verified BOOLEAN DEFAULT FALSE,
       cname_verified BOOLEAN DEFAULT FALSE,
+      ga4_measurement_id VARCHAR(20),
       created_at TIMESTAMP NOT NULL DEFAULT now(),
       updated_at TIMESTAMP NOT NULL DEFAULT now()
     )`
@@ -243,12 +244,13 @@ export async function seedBiolink(
     domainVerificationToken?: string | null
     domainOwnershipVerified?: boolean
     cnameVerified?: boolean
+    ga4MeasurementId?: string | null
   }
 ): Promise<string> {
   const result = await executeSQL(
     ctx,
-    `INSERT INTO biolinks (user_id, username, theme, custom_primary_color, custom_bg_color, total_views, custom_domain, domain_verification_token, domain_ownership_verified, cname_verified)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    `INSERT INTO biolinks (user_id, username, theme, custom_primary_color, custom_bg_color, total_views, custom_domain, domain_verification_token, domain_ownership_verified, cname_verified, ga4_measurement_id)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
      RETURNING id`,
     [
       data.userId,
@@ -261,6 +263,7 @@ export async function seedBiolink(
       data.domainVerificationToken ?? null,
       data.domainOwnershipVerified ?? false,
       data.cnameVerified ?? false,
+      data.ga4MeasurementId ?? null,
     ]
   )
   return result.rows[0].id

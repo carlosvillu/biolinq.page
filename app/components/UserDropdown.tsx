@@ -31,15 +31,15 @@ export function UserDropdown({ user, onLogout }: UserDropdownProps) {
   return (
     <NeoBrutalMenuRoot>
       <NeoBrutalMenuTrigger>
-        <button
-          className="flex items-center gap-2 px-3 py-2 border-[3px] border-neo-dark rounded bg-white hover:bg-neo-panel transition-colors"
+        <div
+          className="flex items-center gap-2 px-3 py-2 border-[3px] border-neo-dark rounded bg-white hover:bg-neo-panel transition-colors cursor-pointer"
           aria-label="User menu"
         >
           {/* Avatar: always visible */}
           <div className="w-6 h-6 rounded-full bg-neo-dark text-white flex items-center justify-center text-xs font-bold">
             {initials}
           </div>
-        </button>
+        </div>
       </NeoBrutalMenuTrigger>
 
       <NeoBrutalMenuPopup>

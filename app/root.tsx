@@ -167,6 +167,12 @@ export default function App({ loaderData }: Route.ComponentProps) {
       (match.data as { hideLayout?: boolean } | undefined)?.hideLayout
   )
 
+  // Get user's GA4 measurement ID from public page route data (if available)
+  const userGa4MeasurementId = matches.reduce<string | undefined>((acc, match) => {
+    const data = match.data as { userGa4MeasurementId?: string } | undefined
+    return data?.userGa4MeasurementId || acc
+  }, undefined)
+
   // Update html lang attribute when locale changes
   useEffect(() => {
     document.documentElement.lang = locale
@@ -189,6 +195,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
             nodeEnv={nodeEnv}
             hashedUserId={hashedUserId}
             hasConsent={consent === 'accepted'}
+            userMeasurementId={userGa4MeasurementId}
           />
           {hideLayout ? (
             <Outlet />
@@ -214,6 +221,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
           nodeEnv={nodeEnv}
           hashedUserId={hashedUserId}
           hasConsent={consent === 'accepted'}
+          userMeasurementId={userGa4MeasurementId}
         />
         <I18nextProvider i18n={i18nInstance}>
           {hideLayout ? (
