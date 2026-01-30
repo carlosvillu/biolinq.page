@@ -40,9 +40,9 @@ export function LegalPageLayout({
 
           {/* Content Card */}
           <article className="relative z-10 rounded-xl border-[3px] border-neo-dark bg-neo-panel p-6 md:p-8">
-            {/* Sanitized HTML Content with Tailwind Prose */}
+            {/* Sanitized HTML Content with Neo-Brutal styling */}
             <div
-              className="prose prose-lg prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-neo-dark prose-p:leading-relaxed prose-p:text-gray-700 prose-a:font-medium prose-a:text-neo-primary prose-a:underline prose-strong:font-bold prose-strong:text-neo-dark prose-ul:text-gray-700 prose-ol:text-gray-700 prose-li:marker:text-neo-dark max-w-none"
+              className="neo-article"
               // Safe because html comes from DOMPurify.sanitize() in legal-content.server.ts
               dangerouslySetInnerHTML={{ __html: html }}
             />
