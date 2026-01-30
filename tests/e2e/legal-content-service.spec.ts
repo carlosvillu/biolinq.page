@@ -15,8 +15,9 @@ test.describe('Legal Content Service', () => {
     expect(data).toHaveProperty('title')
     expect(data).toHaveProperty('description')
 
-    // Verify content
-    expect(data.html).toContain('<h1>Terms of Service</h1>')
+    // Verify content (h1 is extracted and removed from HTML since layout renders it separately)
+    expect(data.html).not.toContain('<h1>')
+    expect(data.html).toContain('<h2>')
     expect(data.title).toBe('Terms of Service')
     expect(data.description).toBeTruthy()
     expect(data.description.length).toBeGreaterThan(0)
@@ -35,8 +36,9 @@ test.describe('Legal Content Service', () => {
 
     const data = await response.json()
 
-    // Verify fallback to English
-    expect(data.html).toContain('<h1>Terms of Service</h1>')
+    // Verify fallback to English (h1 is extracted and removed from HTML)
+    expect(data.html).not.toContain('<h1>')
+    expect(data.html).toContain('<h2>')
     expect(data.title).toBe('Terms of Service')
   })
 
@@ -85,8 +87,8 @@ test.describe('Legal Content Service', () => {
       expect(data.html).not.toContain('onerror=')
       expect(data.html).not.toContain('alert(')
 
-      // Verify safe HTML tags remain
-      expect(data.html).toContain('<h1>')
+      // Verify safe HTML tags remain (h1 is removed since layout renders it)
+      expect(data.html).not.toContain('<h1>')
       expect(data.html).toContain('<p>')
     } finally {
       // Restore original content

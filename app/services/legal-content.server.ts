@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { marked } from 'marked'
-import DOMPurify from 'isomorphic-dompurify'
+import sanitizeHtml from 'sanitize-html'
 
 export type LegalContent = {
   html: string // HTML sanitizado del contenido
@@ -54,7 +54,13 @@ export function getLegalContent(page: LegalPage, locale: Locale): LegalContent {
   const rawHtml = marked.parse(markdownContent) as string
 
   // 5. Sanitize HTML
-  const sanitizedHtml = DOMPurify.sanitize(rawHtml)
+  const sanitizedHtml = sanitizeHtml(rawHtml, {
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
+    allowedAttributes: {
+      ...sanitizeHtml.defaults.allowedAttributes,
+      a: ['href', 'name', 'target', 'rel']
+    }
+  })
 
   // 6. Extract title from first <h1>
   const titleMatch = sanitizedHtml.match(/<h1[^>]*>(.*?)<\/h1>/)
@@ -66,9 +72,12 @@ export function getLegalContent(page: LegalPage, locale: Locale): LegalContent {
     ? descriptionMatch[1].trim().substring(0, 160) + '...'
     : ''
 
-  // 8. Return structured content
+  // 8. Remove the h1 from HTML (since LegalPageLayout renders its own h1)
+  const htmlWithoutH1 = sanitizedHtml.replace(/<h1[^>]*>.*?<\/h1>/i, '')
+
+  // 9. Return structured content
   return {
-    html: sanitizedHtml,
+    html: htmlWithoutH1,
     title,
     description
   }

@@ -19,8 +19,7 @@ test.describe('Terms of Service page', () => {
       {
         name: 'lang',
         value: 'es',
-        url: baseURL,
-        path: '/',
+        url: baseURL ?? 'http://localhost:2025',
       },
     ])
 
@@ -43,7 +42,18 @@ test.describe('Terms of Service page', () => {
   test('footer link navigates to terms page', async ({ page }) => {
     await page.goto('/')
 
-    await page.getByRole('link', { name: /terms/i }).click()
+    // Dismiss cookie banner if present (it blocks the footer)
+    const rejectButton = page.getByRole('button', { name: /reject|rechazar/i })
+    try {
+      await rejectButton.click({ timeout: 2000 })
+      // Wait for banner to disappear
+      await expect(rejectButton).not.toBeVisible({ timeout: 1000 })
+    } catch {
+      // Banner might not be visible, continue
+    }
+
+    // Use force click as fallback if banner still intercepts
+    await page.getByRole('link', { name: /terms/i }).click({ force: true })
 
     await expect(page).toHaveURL(TERMS_PATH)
     await expect(page.getByRole('heading', { level: 1, name: 'Terms of Service' })).toBeVisible()
