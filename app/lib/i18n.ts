@@ -36,6 +36,8 @@ export async function createI18nInstance(locale: Locale): Promise<i18n> {
     },
     react: {
       useSuspense: false,
+      bindI18n: 'languageChanged loaded',
+      bindI18nStore: 'added removed',
     },
   })
 

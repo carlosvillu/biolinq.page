@@ -32,6 +32,8 @@ export function initI18nClientSync(initialLocale: Locale): void {
     },
     react: {
       useSuspense: false,
+      bindI18n: 'languageChanged loaded',
+      bindI18nStore: 'added removed',
     },
     initImmediate: false, // Synchronous initialization
   })
@@ -55,6 +57,8 @@ export async function initI18nClient(initialLocale: Locale): Promise<void> {
     },
     react: {
       useSuspense: false,
+      bindI18n: 'languageChanged loaded',
+      bindI18nStore: 'added removed',
     },
   })
 

@@ -328,3 +328,45 @@ useEffect(() => {
 - Use `useEffect` + `document.createElement('script')` for dynamic script loading
 - Initialize global functions (like `gtag`) before loading the external script
 - Use a `ref` to prevent double-initialization on re-renders
+
+---
+
+## i18n / Internationalization
+
+### react-i18next requires useRevalidator for hot-reload with SSR
+
+**Date:** 2025-01-30
+
+**Problem:** Changing language with `i18next.changeLanguage()` did not cause re-render of components using `useTranslation()`. Users had to manually reload the page to see translations in the new language.
+
+**Root Cause:** In a React Router SSR setup with `I18nextProvider`, the `bindI18n: 'languageChanged'` configuration alone is insufficient. The locale comes from the loader on the server side, and changing i18next client-side doesn't trigger the loader to re-run or React components to re-render properly.
+
+**Solution:** Use `useRevalidator` from react-router in the `LanguageSelector` component to force the loader to re-execute after changing the language:
+
+```typescript
+import { useRevalidator } from 'react-router'
+
+function LanguageSelector() {
+  const { revalidate } = useRevalidator()
+
+  const handleSelect = (locale: string) => {
+    changeLanguage(locale)  // Sets cookie + calls i18next.changeLanguage
+    revalidate()            // Forces loader re-run → full UI update
+  }
+}
+```
+
+Also added explicit `bindI18n` configuration in both client and server i18n setup for consistency:
+
+```typescript
+react: {
+  useSuspense: false,
+  bindI18n: 'languageChanged loaded',
+  bindI18nStore: 'added removed',
+}
+```
+
+**Prevention:**
+- When implementing language switching in SSR apps with React Router, always use `useRevalidator` to force the loader to re-run
+- Test language switching in hot-reload mode as part of i18n feature development
+- Add E2E tests that verify UI text changes immediately without page reload

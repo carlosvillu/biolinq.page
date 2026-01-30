@@ -1,5 +1,6 @@
 import { Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useRevalidator } from 'react-router'
 import {
   NeoBrutalMenuRoot,
   NeoBrutalMenuTrigger,
@@ -19,11 +20,13 @@ const LANGUAGE_OPTIONS: { locale: Locale; label: string }[] = [
 export function LanguageSelector() {
   const { i18n } = useTranslation()
   const { trackLanguageChanged } = useAnalytics()
+  const { revalidate } = useRevalidator()
   const currentLocale = isValidLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE
 
   const handleSelect = (locale: string) => {
     changeLanguage(locale as Locale)
     trackLanguageChanged(locale)
+    revalidate()
   }
 
   return (
