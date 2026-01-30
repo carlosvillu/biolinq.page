@@ -600,12 +600,12 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 11.3: Create Legal Page Layout Component
 
-- [ ] Create `app/components/legal/LegalPageLayout.tsx`
-- [ ] Accept `html` and `title` props
-- [ ] Render HTML with `dangerouslySetInnerHTML`
-- [ ] Apply Tailwind `prose` classes for typography
-- [ ] Style with Neo-Brutal design (bg-neo-canvas, borders)
-- [ ] Ensure responsive design (max-w-3xl, centered)
+- [x] Create `app/components/legal/LegalPageLayout.tsx`
+- [x] Accept `html` and `title` props
+- [x] Render HTML with `dangerouslySetInnerHTML`
+- [x] Apply Tailwind `prose` classes for typography
+- [x] Style with Neo-Brutal design (bg-neo-canvas, borders)
+- [x] Ensure responsive design (max-w-3xl, centered)
 
 #### Task 11.4: Create Terms Route
 
