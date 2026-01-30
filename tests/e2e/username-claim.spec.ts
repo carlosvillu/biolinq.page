@@ -19,7 +19,11 @@ test.describe('Username claim from home', () => {
     await page.goto('/')
 
     await page.getByPlaceholder('username').fill('ab')
-    await page.getByRole('button', { name: 'Create my BioLink' }).click()
+
+    // Wait for button to be enabled (React state update)
+    const button = page.getByRole('button', { name: 'Create my BioLink' })
+    await expect(button).toBeEnabled({ timeout: 5000 })
+    await button.click()
 
     await expect(page.getByText('Username must be at least 3 characters')).toBeVisible()
   })
@@ -28,7 +32,11 @@ test.describe('Username claim from home', () => {
     await page.goto('/')
 
     await page.getByPlaceholder('username').fill('admin')
-    await page.getByRole('button', { name: 'Create my BioLink' }).click()
+
+    // Wait for button to be enabled (React state update)
+    const button = page.getByRole('button', { name: 'Create my BioLink' })
+    await expect(button).toBeEnabled({ timeout: 5000 })
+    await button.click()
 
     await expect(page.getByText('This username is reserved')).toBeVisible()
   })
@@ -46,7 +54,11 @@ test.describe('Username claim from home', () => {
     await page.goto('/')
 
     await page.getByPlaceholder('username').fill(`taken${shortId}`)
-    await page.getByRole('button', { name: 'Create my BioLink' }).click()
+
+    // Wait for button to be enabled (React state update)
+    const button = page.getByRole('button', { name: 'Create my BioLink' })
+    await expect(button).toBeEnabled({ timeout: 5000 })
+    await button.click()
 
     await expect(page.getByText('This username is already taken')).toBeVisible()
   })

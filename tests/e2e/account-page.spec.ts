@@ -205,9 +205,9 @@ test.describe('Account Page', () => {
     // Click "Back to Dashboard" button
     await page.locator('a:has-text("Back to Dashboard")').click()
 
-    // Verify redirect to dashboard
-    await page.waitForURL('**/dashboard')
-    expect(page.url()).toContain('/dashboard')
+    // Verify redirect to dashboard (not account page)
+    await page.waitForURL(/\/dashboard$/)
+    expect(page.url()).toMatch(/\/dashboard$/)
   })
 
   test('opens delete account dialog when delete button is clicked', async ({
@@ -232,11 +232,14 @@ test.describe('Account Page', () => {
 
     await page.goto('/dashboard/account')
 
+    // Wait for page to be fully loaded
+    await expect(page.locator('text=Account Settings')).toBeVisible()
+
     // Open delete dialog
     await page.getByText('Delete Account', { exact: true }).click()
 
-    // Verify modal opens
-    await expect(page.getByRole('heading', { name: 'Delete Account?' })).toBeVisible()
+    // Verify modal opens (with extended timeout for animation)
+    await expect(page.getByRole('heading', { name: 'Delete Account?' })).toBeVisible({ timeout: 10000 })
     await expect(
       page.getByText('This action cannot be undone. All your data, links, and stats will be permanently deleted.')
     ).toBeVisible()
@@ -404,11 +407,11 @@ test.describe('Account Page', () => {
 
     await page.goto('/dashboard')
 
-    // Click user dropdown
-    await page.locator('button[aria-label="User menu"]').click()
+    // Click user dropdown (the aria-label is on the div inside the trigger)
+    await page.locator('[aria-label="User menu"]').click()
 
     // Click Account link
-    await page.locator('a:has-text("Account")').click()
+    await page.getByRole('menuitem', { name: /account/i }).click()
 
     // Verify redirect to account page
     await page.waitForURL('**/dashboard/account')

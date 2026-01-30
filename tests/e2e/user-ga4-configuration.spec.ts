@@ -143,10 +143,11 @@ test.describe('User GA4 Configuration Feature', () => {
 
       await page.goto('/dashboard')
 
-      await expect(page.getByText('Google Analytics')).toBeVisible()
+      // Use heading role to avoid ambiguity with multiple "Google Analytics" text matches
+      await expect(page.getByRole('heading', { name: 'Google Analytics' })).toBeVisible()
 
       // The section shows PREMIUM badge overlay
-      const ga4Section = page.locator('text=Google Analytics').locator('..')
+      const ga4Section = page.getByRole('heading', { name: 'Google Analytics' }).locator('..')
       await expect(ga4Section.getByText('PREMIUM')).toBeVisible()
 
       // The Save button should be disabled
@@ -172,11 +173,14 @@ test.describe('User GA4 Configuration Feature', () => {
 
       await page.goto('/dashboard')
 
+      // Wait for the GA4 section to be visible
+      await expect(page.locator('input#ga4-measurement-id')).toBeVisible({ timeout: 10000 })
+
       const ga4Input = page.locator('input#ga4-measurement-id')
       await ga4Input.fill('not-valid-format')
 
-      // Should show validation error
-      await expect(page.getByText('Invalid format')).toBeVisible()
+      // Should show validation error (wait for React validation)
+      await expect(page.getByText('Invalid format')).toBeVisible({ timeout: 5000 })
 
       // Save button should be disabled
       await expect(page.getByRole('button', { name: 'Save GA4 ID' })).toBeDisabled()

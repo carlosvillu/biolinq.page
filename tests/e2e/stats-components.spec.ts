@@ -25,7 +25,11 @@ test.describe('Stats Components', () => {
 
       await page.goto(`${baseUrl}/`)
       await page.getByPlaceholder('username').fill('freeuser')
-      await page.getByRole('button', { name: /create my biolink/i }).click()
+
+      // Wait for button to be enabled (React state update)
+      const button = page.getByRole('button', { name: /create my biolink/i })
+      await expect(button).toBeEnabled({ timeout: 5000 })
+      await button.click()
       await page.waitForURL('**/dashboard')
 
       await expect(page.getByText('Total Views').first()).toBeVisible()
@@ -248,7 +252,11 @@ test.describe('Stats Components', () => {
 
       await page.goto(`${baseUrl}/`)
       await page.getByPlaceholder('username').fill('ordertest')
-      await page.getByRole('button', { name: /create my biolink/i }).click()
+
+      // Wait for button to be enabled (React state update)
+      const button = page.getByRole('button', { name: /create my biolink/i })
+      await expect(button).toBeEnabled({ timeout: 5000 })
+      await button.click()
       await page.waitForURL('**/dashboard')
 
       const statsOverview = page.getByText('Total Views').first()

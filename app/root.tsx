@@ -132,6 +132,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 // Client-side i18n instance (initialized once on first render)
 let clientI18nInstance: i18n | null = null
+// Track the last server locale to detect navigation vs. client-side changes
+let lastServerLocale: Locale | null = null
 
 function getI18nInstanceForRender(locale: Locale): i18n | null {
   if (typeof window === 'undefined') {
@@ -142,10 +144,14 @@ function getI18nInstanceForRender(locale: Locale): i18n | null {
   if (!clientI18nInstance) {
     initI18nClientSync(locale)
     clientI18nInstance = getI18nInstance()
-  } else if (clientI18nInstance.language !== locale) {
-    // Sync language if it differs (e.g., after navigation with different locale)
+    lastServerLocale = locale
+  } else if (lastServerLocale !== locale) {
+    // Server locale changed (navigation) - sync with server
     clientI18nInstance.changeLanguage(locale)
+    lastServerLocale = locale
   }
+  // If lastServerLocale === locale but clientI18nInstance.language differs,
+  // the user changed the language client-side - don't revert it
   return clientI18nInstance
 }
 
@@ -178,12 +184,6 @@ export default function App({ loaderData }: Route.ComponentProps) {
     document.documentElement.lang = locale
   }, [locale])
 
-  // Handle language changes after initial render
-  useEffect(() => {
-    if (typeof window !== 'undefined' && i18nInstance) {
-      i18nInstance.changeLanguage(locale)
-    }
-  }, [locale, i18nInstance])
 
   if (!i18nInstance) {
     // Fallback during SSR if loader hasn't run yet (shouldn't happen normally)

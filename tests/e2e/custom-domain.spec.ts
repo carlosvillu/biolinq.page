@@ -206,7 +206,11 @@ test.describe('Custom Domain Feature', () => {
 
       const domainInput = page.locator('input[name="domain"]')
       await domainInput.fill('not a valid domain')
-      await page.getByRole('button', { name: 'Add Domain' }).click()
+
+      // Wait for button to be enabled (React state update)
+      const button = page.getByRole('button', { name: 'Add Domain' })
+      await expect(button).toBeEnabled({ timeout: 5000 })
+      await button.click()
 
       await expect(page.getByText('Invalid domain format')).toBeVisible()
     })
@@ -230,7 +234,11 @@ test.describe('Custom Domain Feature', () => {
 
       const domainInput = page.locator('input[name="domain"]')
       await domainInput.fill('test.biolinq.page')
-      await page.getByRole('button', { name: 'Add Domain' }).click()
+
+      // Wait for button to be enabled (React state update)
+      const button = page.getByRole('button', { name: 'Add Domain' })
+      await expect(button).toBeEnabled({ timeout: 5000 })
+      await button.click()
 
       await expect(page.getByText('Invalid domain format')).toBeVisible()
     })

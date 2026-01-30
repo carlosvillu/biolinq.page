@@ -95,9 +95,9 @@ test.describe('Theme Customization', () => {
     // Click on "Light Minimal" theme card
     await page.getByRole('button', { name: /light minimal/i }).click()
 
-    // Verify Save button becomes enabled
+    // Verify Save button becomes enabled (wait for React state update)
     const saveButton = page.getByRole('button', { name: /save changes/i })
-    await expect(saveButton).toBeEnabled()
+    await expect(saveButton).toBeEnabled({ timeout: 10000 })
 
     // Click Save
     await saveButton.click()

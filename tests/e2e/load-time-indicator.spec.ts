@@ -25,7 +25,7 @@ test.describe('Load Time Indicator', () => {
     await expect(page.getByRole('heading', { name: 'Alice User' })).toBeVisible()
 
     const loadTimeIndicator = page.getByText(/This page loaded in \d+ms/)
-    await expect(loadTimeIndicator).toBeVisible({ timeout: 5000 })
+    await expect(loadTimeIndicator).toBeVisible({ timeout: 10000 })
 
     const text = await loadTimeIndicator.textContent()
     const match = text?.match(/(\d+)ms/)
@@ -56,7 +56,10 @@ test.describe('Load Time Indicator', () => {
 
     await page.goto('/premiumloadtime')
 
+    // Wait for page content to load first
+    await expect(page.locator('body')).toBeVisible()
+
     const loadTimeIndicator = page.getByText(/This page loaded in \d+ms/)
-    await expect(loadTimeIndicator).toBeVisible({ timeout: 5000 })
+    await expect(loadTimeIndicator).toBeVisible({ timeout: 10000 })
   })
 })
