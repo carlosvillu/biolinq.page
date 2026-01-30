@@ -609,13 +609,13 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 11.4: Create Terms Route
 
-- [ ] Create `app/routes/legal.terms.tsx`
-- [ ] Implement loader: detect locale, call `getLegalContent('terms', locale)`
-- [ ] Add meta function for SEO (title, description)
-- [ ] Render `LegalPageLayout` with loader data
-- [ ] Register route `/terms` in `app/routes.ts`
-- [ ] E2E test: Terms page renders in English by default
-- [ ] E2E test: Terms page renders in Spanish when language changed
+- [x] Create `app/routes/legal.terms.tsx`
+- [x] Implement loader: detect locale, call `getLegalContent('terms', locale)`
+- [x] Add meta function for SEO (title, description)
+- [x] Render `LegalPageLayout` with loader data
+- [x] Register route `/terms` in `app/routes.ts`
+- [x] E2E test: Terms page renders in English by default
+- [x] E2E test: Terms page renders in Spanish when language changed
 
 #### Task 11.5: Create Privacy Route
 

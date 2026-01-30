@@ -20,5 +20,6 @@ export default [
   route('dashboard/account', 'routes/dashboard.account.tsx'),
   route('go/:linkId', 'routes/go.$linkId.tsx'),
   route('terms', 'routes/legal.terms.tsx'),
+  route('privacy', 'routes/legal.privacy.tsx'),
   route(':username', 'routes/public.tsx'),
 ] satisfies RouteConfig
