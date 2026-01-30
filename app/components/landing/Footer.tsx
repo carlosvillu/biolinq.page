@@ -15,6 +15,9 @@ export function Footer() {
           <Link to="/privacy" className="hover:underline">
             {t('footer_privacy')}
           </Link>
+          <Link to="/cookies" className="hover:underline">
+            {t('footer_cookies')}
+          </Link>
         </div>
 
         {/* Copyright */}
