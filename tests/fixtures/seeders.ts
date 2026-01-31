@@ -165,6 +165,20 @@ export async function createAuthSchema(ctx: DbContext): Promise<void> {
     ctx,
     `CREATE INDEX IF NOT EXISTS idx_daily_stats_biolink_date ON daily_stats(biolink_id, date)`
   )
+
+  // Create feedbacks table
+  await executeSQL(
+    ctx,
+    `CREATE TABLE IF NOT EXISTS feedbacks (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      emoji TEXT NOT NULL,
+      text TEXT,
+      user_id UUID REFERENCES users(id) ON DELETE SET NULL,
+      username TEXT,
+      page TEXT,
+      created_at TIMESTAMP NOT NULL DEFAULT now()
+    )`
+  )
 }
 
 /**

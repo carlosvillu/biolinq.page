@@ -34,6 +34,7 @@ import { NeoBrutalToastProvider } from '~/components/neo-brutal/NeoBrutalToast'
 import { ThemeProvider } from '~/components/ThemeContext'
 import { getThemeCookie, getThemeInitScript } from '~/lib/theme'
 import { Footer } from '~/components/landing'
+import { FloatingFeedbackButton } from '~/components/feedback/FloatingFeedbackButton'
 
 export const links: Route.LinksFunction = () => [
   // Basic Favicons
@@ -173,6 +174,10 @@ export default function App({ loaderData }: Route.ComponentProps) {
       (match.data as { hideLayout?: boolean } | undefined)?.hideLayout
   )
 
+  // Check if we're on a public profile page (:username route)
+  // The public profile route is routes/public.tsx with handle.hideLayout = true
+  const isPublicProfilePage = matches.some((match) => match.id === 'routes/public')
+
   // Get user's GA4 measurement ID from public page route data (if available)
   const userGa4MeasurementId = matches.reduce<string | undefined>((acc, match) => {
     const data = match.data as { userGa4MeasurementId?: string } | undefined
@@ -183,7 +188,6 @@ export default function App({ loaderData }: Route.ComponentProps) {
   useEffect(() => {
     document.documentElement.lang = locale
   }, [locale])
-
 
   if (!i18nInstance) {
     // Fallback during SSR if loader hasn't run yet (shouldn't happen normally)
@@ -206,6 +210,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
                 <Outlet />
               </main>
               <Footer />
+              {!isPublicProfilePage && <FloatingFeedbackButton />}
             </div>
           )}
         </ThemeProvider>
@@ -233,6 +238,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
                 <Outlet />
               </main>
               <Footer />
+              {!isPublicProfilePage && <FloatingFeedbackButton />}
             </div>
           )}
         </I18nextProvider>

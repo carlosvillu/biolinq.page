@@ -248,5 +248,16 @@
   "ga4_current_id": "Current ID",
   "ga4_save_button": "Save GA4 ID",
   "ga4_error_INVALID_GA4_FORMAT": "Invalid GA4 ID format",
-  "ga4_error_PREMIUM_REQUIRED": "Premium required to add GA4 tracking"
+  "ga4_error_PREMIUM_REQUIRED": "Premium required to add GA4 tracking",
+
+  "feedback_button_aria": "Give feedback",
+  "feedback_modal_title": "Quick Feedback",
+  "feedback_modal_subtitle": "How was your experience?",
+  "feedback_textarea_placeholder": "Tell us more (optional)",
+  "feedback_cancel": "Cancel",
+  "feedback_submit": "Send Feedback",
+  "feedback_submitting": "Sending...",
+  "feedback_success": "Thank you for your feedback!",
+  "feedback_required_emoji": "Please select an emoji",
+  "feedback_error": "Failed to send feedback. Please try again."
 }

@@ -6,6 +6,7 @@ export default [
   route('api/auth/*', 'routes/api.auth.$.tsx'),
   route('api/username/check', 'routes/api.username.check.tsx'),
   route('api/username/claim', 'routes/api.username.claim.tsx'),
+  route('api/feedback', 'routes/api.feedback.tsx'),
   route('api/stripe/checkout', 'routes/api.stripe.checkout.tsx'),
   route('api/stripe/webhook', 'routes/api.stripe.webhook.tsx'),
   route('api/__test__/username', 'routes/api.__test__.username.tsx'),

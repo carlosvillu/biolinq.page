@@ -142,3 +142,8 @@ export function trackUserLinkClick(
     link_position: linkPosition,
   })
 }
+
+// Feedback events
+export function trackFeedbackSubmitted(emoji: string, hasText: boolean): void {
+  gtagEvent('feedback_submitted', { emoji, has_text: hasText })
+}
