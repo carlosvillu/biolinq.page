@@ -9,9 +9,26 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: 'Cookie Policy | BioLinq' }]
   }
 
+  const title = `${data.title} | BioLinq`
+  const url = 'https://biolinq.page/cookies'
+
   return [
-    { title: `${data.title} | BioLinq` },
+    { title },
     { name: 'description', content: data.description },
+
+    // Open Graph
+    { property: 'og:type', content: 'article' },
+    { property: 'og:url', content: url },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: data.description },
+
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary' },
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: data.description },
+
+    // Canonical
+    { tagName: 'link', rel: 'canonical', href: url },
   ]
 }
 

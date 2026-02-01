@@ -2,6 +2,8 @@ import { type RouteConfig, index, route } from '@react-router/dev/routes'
 
 export default [
   index('routes/home.tsx'),
+  route('sitemap.xml', 'routes/sitemap[.]xml.tsx'),
+  route('robots.txt', 'routes/robots[.]txt.ts'),
   route('health/db', 'routes/health.db.tsx'),
   route('api/auth/*', 'routes/api.auth.$.tsx'),
   route('api/username/check', 'routes/api.username.check.tsx'),

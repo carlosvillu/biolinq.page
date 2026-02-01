@@ -18,11 +18,70 @@ import { trackView } from '~/services/views.server'
 import { parseViewCookie, shouldTrackView, updateViewCookie } from '~/lib/view-cookie.server'
 
 export function meta() {
+  const title = 'BioLinq - Free Link in Bio Tool | Linktree Alternative'
+  const description =
+    'Create your free link in bio page in under 2 minutes. Ultra-fast, brutalist design. 4 themes, analytics, and only 5€ lifetime for premium.'
+  const url = 'https://biolinq.page'
+  const image = 'https://biolinq.page/og-image.jpg'
+
+  const schemaOrgJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        name: 'BioLinq',
+        url: 'https://biolinq.page',
+        logo: 'https://biolinq.page/android/icon-512.png',
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: 'BioLinq',
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web Browser',
+        description,
+        offers: [
+          {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'EUR',
+            name: 'Free Plan',
+          },
+          {
+            '@type': 'Offer',
+            price: '5.00',
+            priceCurrency: 'EUR',
+            name: 'Premium (Lifetime)',
+          },
+        ],
+      },
+    ],
+  }
+
   return [
-    { title: 'BioLinq - The minimalist Linktree' },
+    { title },
+    { name: 'description', content: description },
+
+    // Open Graph
+    { property: 'og:type', content: 'website' },
+    { property: 'og:url', content: url },
+    { property: 'og:title', content: title },
+    { property: 'og:description', content: description },
+    { property: 'og:image', content: image },
+    { property: 'og:site_name', content: 'BioLinq' },
+
+    // Twitter Card
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:url', content: url },
+    { name: 'twitter:title', content: title },
+    { name: 'twitter:description', content: description },
+    { name: 'twitter:image', content: image },
+
+    // Canonical
+    { tagName: 'link', rel: 'canonical', href: url },
+
+    // Schema.org JSON-LD
     {
-      name: 'description',
-      content: 'Ultra-fast, brutalist design link-in-bio pages. Stand out by being simple.',
+      'script:ld+json': schemaOrgJsonLd,
     },
   ]
 }

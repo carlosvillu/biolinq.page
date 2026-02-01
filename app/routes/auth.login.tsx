@@ -1,7 +1,15 @@
+import type { MetaFunction } from 'react-router'
 import { useSearchParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { NeoBrutalCard } from '~/components/neo-brutal'
 import { GoogleAuthButton } from '~/components/GoogleAuthButton'
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: 'Login | BioLinq' },
+    { name: 'robots', content: 'noindex, nofollow' },
+  ]
+}
 
 export default function LoginPage() {
   const { t } = useTranslation()

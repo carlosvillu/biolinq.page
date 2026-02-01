@@ -1,5 +1,5 @@
 import { redirect, data } from 'react-router'
-import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router'
+import type { LoaderFunctionArgs, ActionFunctionArgs, MetaFunction } from 'react-router'
 import { useLoaderData, useActionData } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { getCurrentUser } from '~/lib/auth.server'
@@ -8,6 +8,13 @@ import { deleteAccount } from '~/services/account.server'
 import { AccountInfoCard } from '~/components/dashboard/AccountInfoCard'
 import { DeleteAccountDialog } from '~/components/dashboard/DeleteAccountDialog'
 import { useUserPropertiesTracking } from '~/hooks/useUserPropertiesTracking'
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: 'Account | BioLinq' },
+    { name: 'robots', content: 'noindex, nofollow' },
+  ]
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
