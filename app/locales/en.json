@@ -259,5 +259,12 @@
   "feedback_submitting": "Sending...",
   "feedback_success": "Thank you for your feedback!",
   "feedback_required_emoji": "Please select an emoji",
-  "feedback_error": "Failed to send feedback. Please try again."
+  "feedback_error": "Failed to send feedback. Please try again.",
+
+  "admin_feedback_title": "Feedback Received",
+  "admin_feedback_subtitle": "{{count}} feedback entries",
+  "admin_feedback_empty": "No feedback received yet",
+  "admin_feedback_no_comment": "No comment provided",
+  "admin_feedback_from_page": "From page: {{page}}",
+  "admin_feedback_anonymous": "Anonymous"
 }
