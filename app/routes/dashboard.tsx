@@ -1,5 +1,5 @@
 import { redirect, data } from 'react-router'
-import type { LoaderFunctionArgs, ActionFunctionArgs } from 'react-router'
+import type { LoaderFunctionArgs, ActionFunctionArgs, MetaFunction } from 'react-router'
 import { useLoaderData, useActionData } from 'react-router'
 import { getCurrentUser } from '~/lib/auth.server'
 import { getUserBiolink } from '~/services/username.server'
@@ -31,6 +31,13 @@ import {
   verifyCNAME,
 } from '~/services/custom-domain.server'
 import { invalidateBiolinkCache } from '~/services/cache.server'
+
+export const meta: MetaFunction = () => {
+  return [
+    { title: 'Dashboard | BioLinq' },
+    { name: 'robots', content: 'noindex, nofollow' },
+  ]
+}
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const authSession = await getCurrentUser(request)
