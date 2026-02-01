@@ -24,6 +24,39 @@ export function meta() {
   const url = 'https://biolinq.page'
   const image = 'https://biolinq.page/og-image.jpg'
 
+  const schemaOrgJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        name: 'BioLinq',
+        url: 'https://biolinq.page',
+        logo: 'https://biolinq.page/android/icon-512.png',
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: 'BioLinq',
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web Browser',
+        description,
+        offers: [
+          {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'EUR',
+            name: 'Free Plan',
+          },
+          {
+            '@type': 'Offer',
+            price: '5.00',
+            priceCurrency: 'EUR',
+            name: 'Premium (Lifetime)',
+          },
+        ],
+      },
+    ],
+  }
+
   return [
     { title },
     { name: 'description', content: description },
@@ -45,6 +78,11 @@ export function meta() {
 
     // Canonical
     { tagName: 'link', rel: 'canonical', href: url },
+
+    // Schema.org JSON-LD
+    {
+      'script:ld+json': schemaOrgJsonLd,
+    },
   ]
 }
 

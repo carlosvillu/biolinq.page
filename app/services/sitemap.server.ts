@@ -5,6 +5,12 @@ interface SitemapUrl {
   loc: string
   priority: number
   changefreq: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
+  lastmod?: string
+}
+
+interface BiolinkForSitemap {
+  username: string
+  updatedAt: Date
 }
 
 const STATIC_PAGES: SitemapUrl[] = [
@@ -14,26 +20,30 @@ const STATIC_PAGES: SitemapUrl[] = [
   { loc: '/cookies', priority: 0.3, changefreq: 'monthly' },
 ]
 
-async function getAllPublicUsernames(): Promise<string[]> {
-  const result = await db.select({ username: biolinks.username }).from(biolinks)
-  return result.map((r) => r.username)
+async function getAllPublicBiolinks(): Promise<BiolinkForSitemap[]> {
+  const result = await db
+    .select({ username: biolinks.username, updatedAt: biolinks.updatedAt })
+    .from(biolinks)
+  return result
 }
 
 function buildUrlElement(baseUrl: string, url: SitemapUrl): string {
+  const lastmodLine = url.lastmod ? `\n    <lastmod>${url.lastmod}</lastmod>` : ''
   return `  <url>
-    <loc>${baseUrl}${url.loc}</loc>
+    <loc>${baseUrl}${url.loc}</loc>${lastmodLine}
     <changefreq>${url.changefreq}</changefreq>
     <priority>${url.priority.toFixed(1)}</priority>
   </url>`
 }
 
 export async function generateSitemap(baseUrl: string): Promise<string> {
-  const usernames = await getAllPublicUsernames()
+  const biolinksList = await getAllPublicBiolinks()
 
-  const dynamicPages: SitemapUrl[] = usernames.map((username) => ({
-    loc: `/${username}`,
+  const dynamicPages: SitemapUrl[] = biolinksList.map((biolink) => ({
+    loc: `/${biolink.username}`,
     priority: 0.6,
     changefreq: 'weekly' as const,
+    lastmod: biolink.updatedAt.toISOString().split('T')[0],
   }))
 
   const allUrls = [...STATIC_PAGES, ...dynamicPages]
