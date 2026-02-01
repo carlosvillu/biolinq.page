@@ -263,5 +263,12 @@
   "feedback_submitting": "Enviando...",
   "feedback_success": "¡Gracias por tu feedback!",
   "feedback_required_emoji": "Por favor selecciona un emoji",
-  "feedback_error": "Error al enviar feedback. Inténtalo de nuevo."
+  "feedback_error": "Error al enviar feedback. Inténtalo de nuevo.",
+
+  "admin_feedback_title": "Feedback Recibido",
+  "admin_feedback_subtitle": "{{count}} entradas de feedback",
+  "admin_feedback_empty": "Aún no hay feedback recibido",
+  "admin_feedback_no_comment": "Sin comentario",
+  "admin_feedback_from_page": "Desde página: {{page}}",
+  "admin_feedback_anonymous": "Anónimo"
 }

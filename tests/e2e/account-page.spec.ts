@@ -1,5 +1,9 @@
 import { test, expect } from '../fixtures/app.fixture'
 import { createAuthSession, setAuthCookie } from '../helpers/auth'
+import { seedFeedback } from '../fixtures/seeders'
+import { resetDatabase } from '../helpers/db'
+
+const ADMIN_EMAIL = 'carlosvillu@gmail.com'
 
 // Helper to create a biolink via API
 async function createBiolink(
@@ -416,5 +420,139 @@ test.describe('Account Page', () => {
     // Verify redirect to account page
     await page.waitForURL('**/dashboard/account')
     expect(page.url()).toContain('/dashboard/account')
+  })
+
+  test.describe('Admin Feedback List', () => {
+    test('admin user sees feedback list on account page', async ({
+      page,
+      context,
+      baseURL,
+      dbContext,
+    }) => {
+      await resetDatabase(dbContext)
+
+      // Create admin user session
+      const { token, userId } = await createAuthSession(baseURL!, {
+        email: ADMIN_EMAIL,
+        password: 'TestPassword123!',
+        name: 'Admin User',
+      })
+      await setAuthCookie(context, token)
+
+      // Create biolink for admin
+      const username = `admin${Date.now().toString().slice(-8)}`
+      await createBiolink(baseURL!, userId, username)
+
+      // Seed some feedbacks
+      await seedFeedback(dbContext, {
+        emoji: '😀',
+        text: 'Great app!',
+        username: 'testuser1',
+        page: '/testuser1',
+      })
+      await seedFeedback(dbContext, {
+        emoji: '😐',
+        text: null,
+        username: 'testuser2',
+        page: '/testuser2',
+      })
+      await seedFeedback(dbContext, {
+        emoji: '😕',
+        text: 'Could be better',
+        username: null,
+        page: '/',
+      })
+
+      // Navigate to account page
+      await page.goto('/dashboard/account')
+
+      // Scroll to bottom of page
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+
+      // Verify feedback section is visible
+      await expect(page.getByRole('heading', { name: 'Feedback Received' })).toBeVisible()
+      await expect(page.getByText('3 feedback entries')).toBeVisible()
+
+      // Verify feedback entries are displayed
+      await expect(page.getByText('Great app!')).toBeVisible()
+      await expect(page.getByText('Could be better')).toBeVisible()
+      await expect(page.getByText('No comment provided')).toBeVisible()
+
+      // Verify page info is shown
+      await expect(page.getByText('From page: /testuser1')).toBeVisible()
+    })
+
+    test('non-admin user does not see feedback list', async ({
+      page,
+      context,
+      baseURL,
+      dbContext,
+    }) => {
+      await resetDatabase(dbContext)
+
+      const timestamp = Date.now()
+      const email = `nonadmin-${timestamp}@example.com`
+
+      // Create non-admin user session
+      const { token, userId } = await createAuthSession(baseURL!, {
+        email,
+        password: 'TestPassword123!',
+        name: 'Regular User',
+      })
+      await setAuthCookie(context, token)
+
+      // Create biolink for user
+      const username = `user${timestamp.toString().slice(-8)}`
+      await createBiolink(baseURL!, userId, username)
+
+      // Seed some feedbacks
+      await seedFeedback(dbContext, {
+        emoji: '😀',
+        text: 'Great app!',
+        username: 'testuser1',
+        page: '/testuser1',
+      })
+
+      // Navigate to account page
+      await page.goto('/dashboard/account')
+
+      // Verify Danger Zone is visible
+      await expect(page.getByText('Danger Zone')).toBeVisible()
+
+      // Verify feedback section is NOT visible
+      await expect(page.getByRole('heading', { name: 'Feedback Received' })).not.toBeVisible()
+    })
+
+    test('feedback list shows empty state when no feedbacks exist', async ({
+      page,
+      context,
+      baseURL,
+      dbContext,
+    }) => {
+      await resetDatabase(dbContext)
+
+      // Create admin user session
+      const { token, userId } = await createAuthSession(baseURL!, {
+        email: ADMIN_EMAIL,
+        password: 'TestPassword123!',
+        name: 'Admin User',
+      })
+      await setAuthCookie(context, token)
+
+      // Create biolink for admin
+      const username = `admin${Date.now().toString().slice(-8)}`
+      await createBiolink(baseURL!, userId, username)
+
+      // Navigate to account page (no feedbacks seeded)
+      await page.goto('/dashboard/account')
+
+      // Scroll to bottom of page
+      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight))
+
+      // Verify feedback section is visible with empty state
+      await expect(page.getByRole('heading', { name: 'Feedback Received' })).toBeVisible()
+      await expect(page.getByText('0 feedback entries')).toBeVisible()
+      await expect(page.getByText('No feedback received yet')).toBeVisible()
+    })
   })
 })

@@ -332,3 +332,32 @@ export async function seedDailyStat(
   )
   return result.rows[0].id
 }
+
+/**
+ * Seed a feedback
+ */
+export async function seedFeedback(
+  ctx: DbContext,
+  data: {
+    emoji: string
+    text?: string | null
+    userId?: string | null
+    username?: string | null
+    page?: string | null
+  }
+): Promise<string> {
+  const result = await executeSQL(
+    ctx,
+    `INSERT INTO feedbacks (emoji, text, user_id, username, page)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING id`,
+    [
+      data.emoji,
+      data.text ?? null,
+      data.userId ?? null,
+      data.username ?? null,
+      data.page ?? null,
+    ]
+  )
+  return result.rows[0].id
+}

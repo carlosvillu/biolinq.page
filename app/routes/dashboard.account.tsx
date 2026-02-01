@@ -5,9 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { getCurrentUser } from '~/lib/auth.server'
 import { getUserBiolink } from '~/services/username.server'
 import { deleteAccount } from '~/services/account.server'
+import { getAllFeedbacks } from '~/services/feedback.server'
 import { AccountInfoCard } from '~/components/dashboard/AccountInfoCard'
 import { DeleteAccountDialog } from '~/components/dashboard/DeleteAccountDialog'
+import { FeedbackListCard } from '~/components/dashboard/FeedbackListCard'
 import { useUserPropertiesTracking } from '~/hooks/useUserPropertiesTracking'
+
+const ADMIN_EMAIL = 'carlosvillu@gmail.com'
 
 export const meta: MetaFunction = () => {
   return [
@@ -32,6 +36,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
     return redirect('/')
   }
 
+  // Check if user is admin and fetch feedbacks
+  const isAdmin = authSession.user.email === ADMIN_EMAIL
+  const feedbacks = isAdmin ? await getAllFeedbacks() : null
+
   return {
     accountUser: {
       email: authSession.user.email,
@@ -44,6 +52,8 @@ export async function loader({ request }: LoaderFunctionArgs) {
       username: biolink.username,
       customDomain: biolink.customDomain,
     },
+    feedbacks,
+    isAdmin,
   }
 }
 
@@ -87,7 +97,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 
 export default function AccountPage() {
-  const { accountUser, biolink } = useLoaderData<typeof loader>()
+  const { accountUser, biolink, feedbacks, isAdmin } = useLoaderData<typeof loader>()
   const actionData = useActionData<typeof action>()
   const { t } = useTranslation()
 
@@ -125,6 +135,9 @@ export default function AccountPage() {
           <p className="text-gray-700 mb-4">{t('account_danger_zone_description')}</p>
           <DeleteAccountDialog username={biolink.username} />
         </div>
+
+        {/* Admin Feedback Section */}
+        {isAdmin && feedbacks && <FeedbackListCard feedbacks={feedbacks} />}
       </main>
     </div>
   )

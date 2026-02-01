@@ -1,5 +1,6 @@
+import { desc } from 'drizzle-orm'
 import { db } from '~/db'
-import { feedbacks, ALLOWED_EMOJIS, type AllowedEmoji } from '~/db/schema/feedback'
+import { feedbacks, ALLOWED_EMOJIS, type AllowedEmoji, type Feedback } from '~/db/schema/feedback'
 
 export interface CreateFeedbackInput {
   emoji: AllowedEmoji
@@ -30,4 +31,8 @@ export async function createFeedback(input: CreateFeedbackInput): Promise<Create
     .returning({ id: feedbacks.id })
 
   return { success: true, feedbackId: feedback.id }
+}
+
+export async function getAllFeedbacks(): Promise<Feedback[]> {
+  return db.select().from(feedbacks).orderBy(desc(feedbacks.createdAt))
 }
