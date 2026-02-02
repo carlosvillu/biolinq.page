@@ -572,12 +572,62 @@ Antes de empezar, necesitas tener configurado:
 
 ---
 
-### Phase 11: Legal & Cookie Pages
+### Phase 11: SEO On-Page Optimization
+
+**🔴 Antes:** Sin robots.txt, sin sitemap, landing sin OG tags, rutas protegidas indexables.
+**🟢 Después:** SEO técnico completo con robots.txt, sitemap dinámico, meta tags completos en todas las páginas.
+
+**Planning file:** `features/FEATURE_SEO_OnPageOptimization.md`
+
+#### Task 11.1: Create robots.txt
+
+- [ ] Create `public/robots.txt` with crawling rules
+- [ ] Disallow /dashboard, /auth, /api, /go
+- [ ] Include Sitemap directive
+
+#### Task 11.2: Create Dynamic Sitemap
+
+- [ ] Create `app/services/sitemap.server.ts` service
+- [ ] Implement `generateSitemap()` function
+- [ ] Include static pages (/, /terms, /privacy, /cookies)
+- [ ] Include dynamic public profiles (/:username)
+- [ ] Create `app/routes/sitemap[.]xml.tsx` route
+- [ ] Register route in `app/routes.ts`
+- [ ] E2E test: sitemap.xml returns valid XML
+
+#### Task 11.3: Add Landing Page Meta Tags
+
+- [ ] Update `home.tsx` meta() with optimized title (include keywords)
+- [ ] Add expanded meta description (150+ chars with CTA)
+- [ ] Add Open Graph tags (og:type, og:url, og:title, og:description, og:image)
+- [ ] Add Twitter Card tags (twitter:card, twitter:title, twitter:description, twitter:image)
+- [ ] Add canonical link
+- [ ] Create `public/og-image.png` (1200x630px)
+- [ ] E2E test: Landing has complete meta tags
+
+#### Task 11.4: Add Legal Pages Meta Tags
+
+- [ ] Update `legal.terms.tsx` with OG and Twitter tags
+- [ ] Update `legal.privacy.tsx` with OG and Twitter tags
+- [ ] Update `legal.cookies.tsx` with OG and Twitter tags
+- [ ] Add canonical links to all legal pages
+- [ ] E2E test: Legal pages have OG tags
+
+#### Task 11.5: Add noindex to Protected Routes
+
+- [ ] Add meta robots noindex to `dashboard.tsx`
+- [ ] Add meta robots noindex to `dashboard.account.tsx`
+- [ ] Add meta robots noindex to `auth.login.tsx`
+- [ ] E2E test: Dashboard has noindex meta tag
+
+---
+
+### Phase 12: Legal & Cookie Pages
 
 **🔴 Antes:** Footer tiene links a /terms y /privacy que devuelven 404. No hay página de cookies.
 **🟢 Después:** Tres páginas legales funcionando con contenido en Markdown, cambiando idioma según selector.
 
-#### Task 11.1: Setup Markdown Infrastructure
+#### Task 12.1: Setup Markdown Infrastructure
 
 - [x] Install `marked` package for Markdown parsing
 - [x] Create `content/legal/en/` and `content/legal/es/` directories
@@ -588,7 +638,7 @@ Antes de empezar, necesitas tener configurado:
 - [x] Create `content/legal/en/cookies.md` with Cookie Policy template
 - [x] Create `content/legal/es/cookies.md` with Política de Cookies template
 
-#### Task 11.2: Create Legal Content Service
+#### Task 12.2: Create Legal Content Service
 
 - [x] Create `app/services/legal-content.server.ts`
 - [x] Implement `getLegalContent(page, locale)` function
@@ -598,7 +648,7 @@ Antes de empezar, necesitas tener configurado:
 - [x] Extract title from first H1 heading
 - [x] Return `{ html, title }` object
 
-#### Task 11.3: Create Legal Page Layout Component
+#### Task 12.3: Create Legal Page Layout Component
 
 - [x] Create `app/components/legal/LegalPageLayout.tsx`
 - [x] Accept `html` and `title` props
@@ -607,7 +657,7 @@ Antes de empezar, necesitas tener configurado:
 - [x] Style with Neo-Brutal design (bg-neo-canvas, borders)
 - [x] Ensure responsive design (max-w-3xl, centered)
 
-#### Task 11.4: Create Terms Route
+#### Task 12.4: Create Terms Route
 
 - [x] Create `app/routes/legal.terms.tsx`
 - [x] Implement loader: detect locale, call `getLegalContent('terms', locale)`
@@ -617,17 +667,17 @@ Antes de empezar, necesitas tener configurado:
 - [x] E2E test: Terms page renders in English by default
 - [x] E2E test: Terms page renders in Spanish when language changed
 
-#### Task 11.5: Create Privacy Route
+#### Task 12.5: Create Privacy Route
 
-- [ ] Create `app/routes/legal.privacy.tsx`
-- [ ] Implement loader: detect locale, call `getLegalContent('privacy', locale)`
-- [ ] Add meta function for SEO (title, description)
-- [ ] Render `LegalPageLayout` with loader data
-- [ ] Register route `/privacy` in `app/routes.ts`
-- [ ] E2E test: Privacy page renders correctly
-- [ ] E2E test: Privacy page changes language with selector
+- [x] Create `app/routes/legal.privacy.tsx`
+- [x] Implement loader: detect locale, call `getLegalContent('privacy', locale)`
+- [x] Add meta function for SEO (title, description)
+- [x] Render `LegalPageLayout` with loader data
+- [x] Register route `/privacy` in `app/routes.ts`
+- [x] E2E test: Privacy page renders correctly
+- [x] E2E test: Privacy page changes language with selector
 
-#### Task 11.6: Create Cookies Route & Update Footer
+#### Task 12.6: Create Cookies Route & Update Footer
 
 - [ ] Create `app/routes/legal.cookies.tsx`
 - [ ] Implement loader: detect locale, call `getLegalContent('cookies', locale)`
@@ -689,12 +739,17 @@ Sequential list of all tasks in recommended order:
 41. Task 10.1 - Error Handling & Edge Cases
 42. Task 10.2 - Complete E2E Test Suite
 43. Task 10.3 - Final Checks
-44. Task 11.1 - Setup Markdown Infrastructure
-45. Task 11.2 - Create Legal Content Service
-46. Task 11.3 - Create Legal Page Layout Component
-47. Task 11.4 - Create Terms Route
-48. Task 11.5 - Create Privacy Route
-49. Task 11.6 - Create Cookies Route & Update Footer
+44. Task 11.1 - Create robots.txt
+45. Task 11.2 - Create Dynamic Sitemap
+46. Task 11.3 - Add Landing Page Meta Tags
+47. Task 11.4 - Add Legal Pages Meta Tags
+48. Task 11.5 - Add noindex to Protected Routes
+49. Task 12.1 - Setup Markdown Infrastructure
+50. Task 12.2 - Create Legal Content Service
+51. Task 12.3 - Create Legal Page Layout Component
+52. Task 12.4 - Create Terms Route
+53. Task 12.5 - Create Privacy Route
+54. Task 12.6 - Create Cookies Route & Update Footer
 
 ---
 
@@ -767,11 +822,16 @@ Sequential list of all tasks in recommended order:
 | 10    | 10.1  | ⬜ Not Started | Error handling                          |
 | 10    | 10.2  | ⬜ Not Started | E2E test suite                          |
 | 10    | 10.3  | ⬜ Not Started | Final checks                            |
-| 11    | 11.1  | ✅ Complete    | Setup Markdown infrastructure           |
-| 11    | 11.2  | ✅ Complete    | Legal content service                   |
-| 11    | 11.3  | ⬜ Not Started | Legal page layout component             |
-| 11    | 11.4  | ⬜ Not Started | Terms route                             |
-| 11    | 11.5  | ⬜ Not Started | Privacy route                           |
-| 11    | 11.6  | ⬜ Not Started | Cookies route & footer update           |
+| 11    | 11.1  | ⬜ Not Started | Create robots.txt                       |
+| 11    | 11.2  | ⬜ Not Started | Create dynamic sitemap                  |
+| 11    | 11.3  | ⬜ Not Started | Add landing page meta tags              |
+| 11    | 11.4  | ⬜ Not Started | Add legal pages meta tags               |
+| 11    | 11.5  | ⬜ Not Started | Add noindex to protected routes         |
+| 12    | 12.1  | ✅ Complete    | Setup Markdown infrastructure           |
+| 12    | 12.2  | ✅ Complete    | Legal content service                   |
+| 12    | 12.3  | ⬜ Not Started | Legal page layout component             |
+| 12    | 12.4  | ⬜ Not Started | Terms route                             |
+| 12    | 12.5  | ⬜ Not Started | Privacy route                           |
+| 12    | 12.6  | ⬜ Not Started | Cookies route & footer update           |
 
 **Status Legend:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked
