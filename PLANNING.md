@@ -642,6 +642,149 @@ Antes de empezar, necesitas tener configurado:
 
 ---
 
+### Phase 12: Blog (SEO Content Marketing)
+
+**🔴 Antes:** No hay blog ni contenido SEO. El sitio solo tiene páginas funcionales.
+**🟢 Después:** Blog con landing `/blog`, posts en MD estático bilingüe (en/es), optimizado para SEO con Schema.org, Open Graph, y internal linking a la app.
+
+#### Task 12.1: Create Blog Content Service
+
+- [x] Create `app/services/blog-content.server.ts`
+- [x] Implement `getBlogPost(slug, locale)` function:
+  - Read MD from `content/blog/{locale}/{slug}.md`
+  - Fallback to English if locale file not found
+  - Parse frontmatter (title, slug, description, date, updatedDate, author, tags, coverImage, coverAlt, readingTime, canonicalSlug)
+  - Parse Markdown to HTML with `marked`
+  - Sanitize HTML with `sanitize-html`
+  - Return `{ html, meta }` object
+- [x] Implement `getAllBlogPosts(locale)` function:
+  - Scan `content/blog/{locale}/` directory for all `.md` files
+  - Parse frontmatter only (skip body for performance)
+  - Sort by date descending
+  - Return array of post metadata
+- [x] Implement `getRelatedPosts(currentSlug, tags, locale, limit)` function:
+  - Find posts sharing tags with current post
+  - Exclude current post
+  - Return up to `limit` related posts
+- [x] Define TypeScript types: `BlogPostMeta`, `BlogPost`
+- [x] Define frontmatter Zod schema for validation
+
+#### Task 12.2: Create Blog Post Markdown Template & Seed Post
+
+- [ ] Create `content/blog/en/` and `content/blog/es/` directories
+- [ ] Define frontmatter format:
+  ```yaml
+  ---
+  title: "Post Title"
+  slug: "post-slug-in-this-language"
+  canonicalSlug: "post-slug-en"  # Always the English slug, used to match translations
+  description: "SEO meta description (max 160 chars)"
+  date: "2026-02-06"
+  updatedDate: "2026-02-06"  # Optional, for Schema.org dateModified
+  author: "BioLinq Team"
+  tags: ["link-in-bio", "personal-branding"]
+  coverImage: "/blog/covers/post-slug.webp"
+  coverAlt: "Descriptive alt text for cover image"
+  readingTime: 5
+  ---
+  ```
+- [ ] Create 1 seed post in English: `content/blog/en/what-is-link-in-bio.md`
+  - SEO-optimized content about "what is a link in bio"
+  - Include internal links to BioLinq features
+  - Use proper heading hierarchy (H2, H3)
+  - Include CTA to create a BioLinq account
+- [ ] Create matching Spanish post: `content/blog/es/que-es-link-in-bio.md`
+  - Same `canonicalSlug` as English version
+  - Different `slug` (localized)
+- [ ] Create placeholder cover image or document the expected path
+
+#### Task 12.3: Create Blog Landing Page
+
+- [ ] Create `app/routes/blog.index.tsx` route
+- [ ] Implement loader:
+  - Detect locale from cookie/Accept-Language
+  - Call `getAllBlogPosts(locale)`
+  - Return posts metadata
+- [ ] Add meta function with SEO tags:
+  - Title: "Blog - BioLinq" / "Blog - BioLinq"
+  - Description: SEO description for the blog landing
+  - Open Graph tags (og:title, og:description, og:type=website)
+  - Twitter Card tags (twitter:card=summary_large_image, twitter:title, twitter:description)
+  - `og:locale` and `og:locale:alternate` for multilingual OG
+  - `<link rel="canonical" />`
+  - Cache headers: `public, max-age=1800, s-maxage=3600`
+- [ ] Create `app/components/blog/BlogPostCard.tsx`:
+  - Cover image, title, description, date, reading time, tags (as badges)
+  - Link to `/blog/{slug}`
+  - Neo-Brutal design (border-[3px], shadow, hover lift)
+- [ ] Create `app/components/blog/BlogHeader.tsx`:
+  - Blog title, short description
+  - Neo-Brutal styling consistent with landing
+- [ ] Compose components in route (page as puzzle)
+- [ ] Register route `/blog` in `app/routes.ts`
+- [ ] Add i18n keys for blog landing texts
+- [ ] E2E test: Blog landing renders with post cards
+- [ ] E2E test: Blog landing shows correct language content
+
+#### Task 12.4: Create Blog Post Page
+
+- [ ] Create `app/routes/blog.post.tsx` route (for `/blog/:slug`)
+- [ ] Implement loader:
+  - Detect locale
+  - Call `getBlogPost(slug, locale)`
+  - Return 404 if post not found
+  - Call `getRelatedPosts()` for sidebar/footer
+- [ ] Add meta function with full SEO:
+  - Title: `{postTitle} - BioLinq Blog`
+  - `<meta name="description" content="{post.description}" />`
+  - Open Graph tags (og:title, og:description, og:image, og:type=article)
+  - `<meta property="article:published_time" />`
+  - `<meta property="article:tag" />` for each tag
+  - `<link rel="canonical" />` pointing to English version (canonicalSlug)
+  - `<link rel="alternate" hreflang="en" />`
+  - `<link rel="alternate" hreflang="es" />`
+  - Schema.org `BlogPosting` structured data (JSON-LD) with datePublished + dateModified
+  - `{ name: 'robots', content: 'index, follow' }`
+  - Twitter Card tags (twitter:card=summary_large_image, twitter:title, twitter:description, twitter:image)
+  - `og:locale` (en_US/es_ES) and `og:locale:alternate`
+  - Cache headers: `public, max-age=3600, s-maxage=86400`
+- [ ] Create `app/components/blog/BlogPostLayout.tsx`:
+  - Post header (title, date, author, reading time, tags)
+  - Prose-styled content area (`prose` Tailwind classes)
+  - Table of contents (optional, extracted from headings)
+  - Neo-Brutal design consistent with legal pages
+- [ ] Create `app/components/blog/RelatedPosts.tsx`:
+  - Section at bottom of post with related post cards
+  - CTA to go back to blog or create a BioLinq account
+- [ ] Register route `/blog/:slug` in `app/routes.ts`
+- [ ] Add i18n keys for blog post page texts
+- [ ] E2E test: Blog post renders with correct content
+- [ ] E2E test: Blog post shows proper SEO meta tags
+- [ ] E2E test: Related posts section renders
+- [ ] E2E test: 404 for non-existent post slug
+
+#### Task 12.5: Update Footer & Sitemap
+
+- [ ] Add "Blog" link to `Footer.tsx` (pointing to `/blog`)
+- [ ] Add `footer_blog` i18n key (en: "Blog", es: "Blog")
+- [ ] Update `sitemap.xml` route to include:
+  - `/blog` landing page
+  - All individual blog post URLs (scan content directory)
+  - Proper `<lastmod>` from post dates
+  - `<changefreq>weekly</changefreq>` for blog landing
+  - `<changefreq>monthly</changefreq>` for individual posts
+- [ ] E2E test: Footer contains blog link
+- [ ] E2E test: Sitemap includes blog URLs
+
+#### Task 12.6: Blog Analytics Integration
+
+- [ ] Track `blog_post_viewed` event with post slug and tags
+- [ ] Track `blog_cta_clicked` event when user clicks internal CTA links
+- [ ] Add blog events to `app/lib/analytics-events.ts`
+- [ ] E2E test: Blog post view triggers analytics event (with consent)
+
+---
+
 ## Implementation Order
 
 Sequential list of all tasks in recommended order:
@@ -695,6 +838,12 @@ Sequential list of all tasks in recommended order:
 47. Task 11.4 - Create Terms Route
 48. Task 11.5 - Create Privacy Route
 49. Task 11.6 - Create Cookies Route & Update Footer
+50. Task 12.1 - Create Blog Content Service
+51. Task 12.2 - Create Blog Post Markdown Template & Seed Post
+52. Task 12.3 - Create Blog Landing Page
+53. Task 12.4 - Create Blog Post Page
+54. Task 12.5 - Update Footer & Sitemap
+55. Task 12.6 - Blog Analytics Integration
 
 ---
 
@@ -709,6 +858,8 @@ Sequential list of all tasks in recommended order:
 | Database connection issues  | High   | Connection pooling, proper error handling             |
 | GA blocking performance     | Medium | Async loading, defer scripts, consent mode            |
 | GDPR/Privacy compliance     | High   | Cookie consent banner, consent mode v2, no PII to GA  |
+| Blog SEO not indexing       | Medium | Schema.org markup, canonical URLs, hreflang, sitemap  |
+| Blog content duplication    | Low    | canonicalSlug links EN/ES versions, hreflang alternate |
 
 ---
 
@@ -773,5 +924,11 @@ Sequential list of all tasks in recommended order:
 | 11    | 11.4  | ⬜ Not Started | Terms route                             |
 | 11    | 11.5  | ⬜ Not Started | Privacy route                           |
 | 11    | 11.6  | ⬜ Not Started | Cookies route & footer update           |
+| 12    | 12.1  | ⬜ Not Started | Blog content service                    |
+| 12    | 12.2  | ⬜ Not Started | Blog MD template & seed post            |
+| 12    | 12.3  | ⬜ Not Started | Blog landing page                       |
+| 12    | 12.4  | ⬜ Not Started | Blog post page                          |
+| 12    | 12.5  | ⬜ Not Started | Footer & sitemap update                 |
+| 12    | 12.6  | ⬜ Not Started | Blog analytics integration              |
 
 **Status Legend:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked
