@@ -728,13 +728,13 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 12.4: Create Blog Post Page
 
-- [ ] Create `app/routes/blog.post.tsx` route (for `/blog/:slug`)
-- [ ] Implement loader:
+- [x] Create `app/routes/blog.post.tsx` route (for `/blog/:slug`)
+- [x] Implement loader:
   - Detect locale
   - Call `getBlogPost(slug, locale)`
   - Return 404 if post not found
   - Call `getRelatedPosts()` for sidebar/footer
-- [ ] Add meta function with full SEO:
+- [x] Add meta function with full SEO:
   - Title: `{postTitle} - BioLinq Blog`
   - `<meta name="description" content="{post.description}" />`
   - Open Graph tags (og:title, og:description, og:image, og:type=article)
@@ -748,20 +748,20 @@ Antes de empezar, necesitas tener configurado:
   - Twitter Card tags (twitter:card=summary_large_image, twitter:title, twitter:description, twitter:image)
   - `og:locale` (en_US/es_ES) and `og:locale:alternate`
   - Cache headers: `public, max-age=3600, s-maxage=86400`
-- [ ] Create `app/components/blog/BlogPostLayout.tsx`:
+- [x] Create `app/components/blog/BlogPostLayout.tsx`:
   - Post header (title, date, author, reading time, tags)
   - Prose-styled content area (`prose` Tailwind classes)
   - Table of contents (optional, extracted from headings)
   - Neo-Brutal design consistent with legal pages
-- [ ] Create `app/components/blog/RelatedPosts.tsx`:
+- [x] Create `app/components/blog/RelatedPosts.tsx`:
   - Section at bottom of post with related post cards
   - CTA to go back to blog or create a BioLinq account
-- [ ] Register route `/blog/:slug` in `app/routes.ts`
-- [ ] Add i18n keys for blog post page texts
-- [ ] E2E test: Blog post renders with correct content
-- [ ] E2E test: Blog post shows proper SEO meta tags
-- [ ] E2E test: Related posts section renders
-- [ ] E2E test: 404 for non-existent post slug
+- [x] Register route `/blog/:slug` in `app/routes.ts`
+- [x] Add i18n keys for blog post page texts
+- [x] E2E test: Blog post renders with correct content
+- [x] E2E test: Blog post shows proper SEO meta tags
+- [x] E2E test: Related posts section renders
+- [x] E2E test: 404 for non-existent post slug
 
 #### Task 12.5: Update Footer & Sitemap
 

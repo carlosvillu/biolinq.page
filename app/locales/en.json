@@ -272,5 +272,9 @@
   "blog_description": "Tips, guides, and insights about building your online presence.",
   "blog_min_read": "min read",
   "blog_empty": "No posts yet. Check back soon!",
-  "blog_meta_description": "Read the latest tips and guides on link in bio pages, personal branding, and growing your online presence with BioLinq."
+  "blog_meta_description": "Read the latest tips and guides on link in bio pages, personal branding, and growing your online presence with BioLinq.",
+  "blog_related_posts": "Related Posts",
+  "blog_post_cta_text": "Ready to build your own link in bio page?",
+  "blog_post_cta_button": "Create your free BioLinq →",
+  "blog_post_not_found": "Post not found"
 }
