@@ -26,5 +26,6 @@ export default [
   route('terms', 'routes/legal.terms.tsx'),
   route('privacy', 'routes/legal.privacy.tsx'),
   route('cookies', 'routes/legal.cookies.tsx'),
+  route('blog', 'routes/blog.index.tsx'),
   route(':username', 'routes/public.tsx'),
 ] satisfies RouteConfig

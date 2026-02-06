@@ -270,5 +270,11 @@
   "admin_feedback_empty": "Aún no hay feedback recibido",
   "admin_feedback_no_comment": "Sin comentario",
   "admin_feedback_from_page": "Desde página: {{page}}",
-  "admin_feedback_anonymous": "Anónimo"
+  "admin_feedback_anonymous": "Anónimo",
+
+  "blog_title": "Blog",
+  "blog_description": "Consejos, guías e ideas para construir tu presencia online.",
+  "blog_min_read": "min de lectura",
+  "blog_empty": "Aún no hay posts. ¡Vuelve pronto!",
+  "blog_meta_description": "Lee los últimos consejos y guías sobre páginas de link in bio, marca personal y cómo hacer crecer tu presencia online con BioLinq."
 }

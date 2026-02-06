@@ -700,12 +700,12 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 12.3: Create Blog Landing Page
 
-- [ ] Create `app/routes/blog.index.tsx` route
-- [ ] Implement loader:
+- [x] Create `app/routes/blog.index.tsx` route
+- [x] Implement loader:
   - Detect locale from cookie/Accept-Language
   - Call `getAllBlogPosts(locale)`
   - Return posts metadata
-- [ ] Add meta function with SEO tags:
+- [x] Add meta function with SEO tags:
   - Title: "Blog - BioLinq" / "Blog - BioLinq"
   - Description: SEO description for the blog landing
   - Open Graph tags (og:title, og:description, og:type=website)
@@ -713,18 +713,18 @@ Antes de empezar, necesitas tener configurado:
   - `og:locale` and `og:locale:alternate` for multilingual OG
   - `<link rel="canonical" />`
   - Cache headers: `public, max-age=1800, s-maxage=3600`
-- [ ] Create `app/components/blog/BlogPostCard.tsx`:
+- [x] Create `app/components/blog/BlogPostCard.tsx`:
   - Cover image, title, description, date, reading time, tags (as badges)
   - Link to `/blog/{slug}`
   - Neo-Brutal design (border-[3px], shadow, hover lift)
-- [ ] Create `app/components/blog/BlogHeader.tsx`:
+- [x] Create `app/components/blog/BlogHeader.tsx`:
   - Blog title, short description
   - Neo-Brutal styling consistent with landing
-- [ ] Compose components in route (page as puzzle)
-- [ ] Register route `/blog` in `app/routes.ts`
-- [ ] Add i18n keys for blog landing texts
-- [ ] E2E test: Blog landing renders with post cards
-- [ ] E2E test: Blog landing shows correct language content
+- [x] Compose components in route (page as puzzle)
+- [x] Register route `/blog` in `app/routes.ts`
+- [x] Add i18n keys for blog landing texts
+- [x] E2E test: Blog landing renders with post cards
+- [x] E2E test: Blog landing shows correct language content
 
 #### Task 12.4: Create Blog Post Page
 
