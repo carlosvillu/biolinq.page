@@ -46,13 +46,13 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     {
       tagName: 'link',
       rel: 'alternate',
-      hreflang: 'en',
+      hrefLang: 'en',
       href: `https://biolinq.page/blog/${enSlug}`,
     },
     {
       tagName: 'link',
       rel: 'alternate',
-      hreflang: 'es',
+      hrefLang: 'es',
       href: `https://biolinq.page/blog/${esSlug}`,
     },
     // Schema.org JSON-LD
