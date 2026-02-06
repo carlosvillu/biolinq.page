@@ -114,6 +114,13 @@ These events follow GA4's standard ecommerce schema and appear in GA4's Monetiza
 - `value`: `5.00`
 - `items`: `[{ item_name: 'BioLinq Premium', price: 5.00, quantity: 1 }]`
 
+### Blog Events
+
+| Function | Event Name | Parameters | When to Use |
+|----------|------------|------------|-------------|
+| `trackBlogPostViewed(slug, tags)` | `blog_post_viewed` | `{ slug, tags }` | On blog post page view |
+| `trackBlogCTAClicked(location)` | `blog_cta_clicked` | `{ location }` | On internal CTA link click in blog |
+
 ### Profile Events
 
 | Function | Event Name | Parameters | When to Use |
@@ -211,6 +218,8 @@ Events are integrated in these files:
 - `app/components/dashboard/CustomDomainSection.tsx` - custom domain flow
 - `app/components/public/PublicLinkCard.tsx` - link clicked
 - `app/components/public/PublicProfile.tsx` - profile viewed (via usePageView)
+- `app/components/blog/BlogPostLayout.tsx` - blog post viewed, blog CTA clicked (in-content links)
+- `app/components/blog/RelatedPosts.tsx` - blog CTA clicked (footer CTA)
 - `app/components/LanguageSelector.tsx` - language changed
 - `app/components/landing/PricingSection.tsx` - premium CTA (landing)
 - `app/hooks/usePageviewTracking.ts` - language property

@@ -778,10 +778,10 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 12.6: Blog Analytics Integration
 
-- [ ] Track `blog_post_viewed` event with post slug and tags
-- [ ] Track `blog_cta_clicked` event when user clicks internal CTA links
-- [ ] Add blog events to `app/lib/analytics-events.ts`
-- [ ] E2E test: Blog post view triggers analytics event (with consent)
+- [x] Track `blog_post_viewed` event with post slug and tags
+- [x] Track `blog_cta_clicked` event when user clicks internal CTA links
+- [x] Add blog events to `app/lib/analytics-events.ts`
+- [x] E2E test: Blog post view triggers analytics event (with consent)
 
 ---
 
@@ -929,6 +929,6 @@ Sequential list of all tasks in recommended order:
 | 12    | 12.3  | ⬜ Not Started | Blog landing page                       |
 | 12    | 12.4  | ⬜ Not Started | Blog post page                          |
 | 12    | 12.5  | ✅ Complete    | Footer & sitemap update                 |
-| 12    | 12.6  | ⬜ Not Started | Blog analytics integration              |
+| 12    | 12.6  | ✅ Complete    | Blog analytics integration              |
 
 **Status Legend:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked

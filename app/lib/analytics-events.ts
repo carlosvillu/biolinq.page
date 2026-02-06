@@ -143,6 +143,15 @@ export function trackUserLinkClick(
   })
 }
 
+// Blog events
+export function trackBlogPostViewed(slug: string, tags: string[]): void {
+  gtagEvent('blog_post_viewed', { slug, tags: tags.join(',') })
+}
+
+export function trackBlogCTAClicked(location: string): void {
+  gtagEvent('blog_cta_clicked', { location })
+}
+
 // Feedback events
 export function trackFeedbackSubmitted(emoji: string, hasText: boolean): void {
   gtagEvent('feedback_submitted', { emoji, has_text: hasText })

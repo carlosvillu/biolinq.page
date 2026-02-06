@@ -2,9 +2,15 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import type { BlogPostMeta } from '~/services/blog-content.server'
 import { BlogPostCard } from '~/components/blog/BlogPostCard'
+import { useAnalytics } from '~/hooks/useAnalytics'
 
 export function RelatedPosts({ posts }: { posts: BlogPostMeta[] }) {
   const { t } = useTranslation()
+  const { trackBlogCTAClicked } = useAnalytics()
+
+  const onCTAClick = () => {
+    trackBlogCTAClicked('blog_post_footer')
+  }
 
   return (
     <section className="max-w-3xl mx-auto px-4 py-12">
@@ -27,7 +33,7 @@ export function RelatedPosts({ posts }: { posts: BlogPostMeta[] }) {
       {/* CTA section */}
       <div className="text-center border-t-[3px] border-dark pt-8">
         <p className="text-lg text-dark/80 mb-4">{t('blog_post_cta_text')}</p>
-        <Link to="/" className="inline-block">
+        <Link to="/" className="inline-block" onClick={onCTAClick}>
           {/* Neo-Brutal button */}
           <div className="relative group cursor-pointer">
             <div className="absolute inset-0 bg-dark rounded translate-x-1 translate-y-1" />
