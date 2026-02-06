@@ -765,16 +765,16 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 12.5: Update Footer & Sitemap
 
-- [ ] Add "Blog" link to `Footer.tsx` (pointing to `/blog`)
-- [ ] Add `footer_blog` i18n key (en: "Blog", es: "Blog")
-- [ ] Update `sitemap.xml` route to include:
+- [x] Add "Blog" link to `Footer.tsx` (pointing to `/blog`)
+- [x] Add `footer_blog` i18n key (en: "Blog", es: "Blog")
+- [x] Update `sitemap.xml` route to include:
   - `/blog` landing page
   - All individual blog post URLs (scan content directory)
   - Proper `<lastmod>` from post dates
   - `<changefreq>weekly</changefreq>` for blog landing
   - `<changefreq>monthly</changefreq>` for individual posts
-- [ ] E2E test: Footer contains blog link
-- [ ] E2E test: Sitemap includes blog URLs
+- [x] E2E test: Footer contains blog link
+- [x] E2E test: Sitemap includes blog URLs
 
 #### Task 12.6: Blog Analytics Integration
 
@@ -928,7 +928,7 @@ Sequential list of all tasks in recommended order:
 | 12    | 12.2  | ⬜ Not Started | Blog MD template & seed post            |
 | 12    | 12.3  | ⬜ Not Started | Blog landing page                       |
 | 12    | 12.4  | ⬜ Not Started | Blog post page                          |
-| 12    | 12.5  | ⬜ Not Started | Footer & sitemap update                 |
+| 12    | 12.5  | ✅ Complete    | Footer & sitemap update                 |
 | 12    | 12.6  | ⬜ Not Started | Blog analytics integration              |
 
 **Status Legend:** ⬜ Not Started | 🔄 In Progress | ✅ Complete | ⏸️ Blocked

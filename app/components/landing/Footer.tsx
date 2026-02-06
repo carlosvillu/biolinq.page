@@ -9,6 +9,9 @@ export function Footer() {
       <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Links */}
         <div className="flex gap-6 text-sm font-medium">
+          <Link to="/blog" className="hover:underline">
+            {t('footer_blog')}
+          </Link>
           <Link to="/terms" className="hover:underline">
             {t('footer_terms')}
           </Link>
