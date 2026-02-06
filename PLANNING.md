@@ -671,8 +671,8 @@ Antes de empezar, necesitas tener configurado:
 
 #### Task 12.2: Create Blog Post Markdown Template & Seed Post
 
-- [ ] Create `content/blog/en/` and `content/blog/es/` directories
-- [ ] Define frontmatter format:
+- [x] Create `content/blog/en/` and `content/blog/es/` directories
+- [x] Define frontmatter format:
   ```yaml
   ---
   title: "Post Title"
@@ -688,15 +688,15 @@ Antes de empezar, necesitas tener configurado:
   readingTime: 5
   ---
   ```
-- [ ] Create 1 seed post in English: `content/blog/en/what-is-link-in-bio.md`
+- [x] Create 1 seed post in English: `content/blog/en/what-is-link-in-bio.md`
   - SEO-optimized content about "what is a link in bio"
   - Include internal links to BioLinq features
   - Use proper heading hierarchy (H2, H3)
   - Include CTA to create a BioLinq account
-- [ ] Create matching Spanish post: `content/blog/es/que-es-link-in-bio.md`
+- [x] Create matching Spanish post: `content/blog/es/que-es-link-in-bio.md`
   - Same `canonicalSlug` as English version
   - Different `slug` (localized)
-- [ ] Create placeholder cover image or document the expected path
+- [x] Create placeholder cover image or document the expected path
 
 #### Task 12.3: Create Blog Landing Page
 
