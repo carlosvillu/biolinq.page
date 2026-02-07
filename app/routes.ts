@@ -17,6 +17,7 @@ export default [
   route('api/__test__/analytics', 'routes/api.__test__.analytics.tsx'),
   route('api/__test__/premium', 'routes/api.__test__.premium.tsx'),
   route('api/__test__/legal', 'routes/api.__test__.legal.tsx'),
+  route('api/__test__/blog', 'routes/api.__test__.blog.tsx'),
   route('api/px', 'routes/api.px.tsx'),
   route('auth/login', 'routes/auth.login.tsx'),
   route('dashboard', 'routes/dashboard.tsx'),
@@ -25,5 +26,7 @@ export default [
   route('terms', 'routes/legal.terms.tsx'),
   route('privacy', 'routes/legal.privacy.tsx'),
   route('cookies', 'routes/legal.cookies.tsx'),
+  route('blog/:lang', 'routes/blog.index.tsx'),
+  route('blog/:lang/:slug', 'routes/blog.post.tsx'),
   route(':username', 'routes/public.tsx'),
 ] satisfies RouteConfig

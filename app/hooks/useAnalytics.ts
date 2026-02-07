@@ -22,6 +22,8 @@ import {
   trackDeleteAccountStarted,
   trackAccountDeleted,
   trackUserLinkClick,
+  trackBlogPostViewed,
+  trackBlogCTAClicked,
   trackFeedbackSubmitted,
 } from '~/lib/analytics-events'
 
@@ -50,6 +52,8 @@ export function useAnalytics() {
     trackDeleteAccountStarted,
     trackAccountDeleted,
     trackUserLinkClick,
+    trackBlogPostViewed,
+    trackBlogCTAClicked,
     trackFeedbackSubmitted,
   }
 }
