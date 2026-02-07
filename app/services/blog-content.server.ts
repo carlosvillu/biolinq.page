@@ -225,6 +225,36 @@ function processFile(fullPath: string, results: BlogPostMeta[]): void {
   }
 }
 
+export function getTranslationSlugs(canonicalSlug: string): Record<Locale, string | null> {
+  const baseDir = path.join(process.cwd(), 'content', 'blog')
+  const result: Record<Locale, string | null> = { en: null, es: null }
+
+  const SUPPORTED: Locale[] = ['en', 'es']
+
+  for (const locale of SUPPORTED) {
+    const dirs = [path.join(baseDir, locale)]
+    if (process.env.DB_TEST_URL) {
+      dirs.push(path.join(baseDir, '__test__', locale))
+    }
+
+    for (const dir of dirs) {
+      if (result[locale]) break
+      const files = listMarkdownFiles(dir)
+      for (const file of files) {
+        const content = fs.readFileSync(path.join(dir, file), 'utf-8')
+        const { frontmatter } = parseFrontmatter(content)
+        const parsed = blogFrontmatterSchema.safeParse(frontmatter)
+        if (parsed.success && parsed.data.canonicalSlug === canonicalSlug) {
+          result[locale] = parsed.data.slug
+          break
+        }
+      }
+    }
+  }
+
+  return result
+}
+
 export function getRelatedPosts(
   currentSlug: string,
   tags: string[],

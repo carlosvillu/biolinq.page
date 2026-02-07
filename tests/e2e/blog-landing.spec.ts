@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/app.fixture'
 
 test.describe('Blog Landing Page', () => {
   test('renders blog header and post cards', async ({ page }) => {
-    await page.goto('/blog')
+    await page.goto('/blog/en')
 
     // Page title contains "Blog"
     await expect(page).toHaveTitle(/Blog/)
@@ -11,7 +11,7 @@ test.describe('Blog Landing Page', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Blog' })).toBeVisible()
 
     // At least one blog post card is visible
-    const cards = page.locator('a[href^="/blog/"]')
+    const cards = page.locator('a[href^="/blog/en/"]')
     await expect(cards.first()).toBeVisible()
     const count = await cards.count()
     expect(count).toBeGreaterThanOrEqual(1)
@@ -23,16 +23,16 @@ test.describe('Blog Landing Page', () => {
     await expect(firstCard.getByText('min read')).toBeVisible()
   })
 
-  test('post cards link to /blog/{slug}', async ({ page }) => {
-    await page.goto('/blog')
+  test('post cards link to /blog/en/{slug}', async ({ page }) => {
+    await page.goto('/blog/en')
 
-    const cards = page.locator('a[href^="/blog/"]')
+    const cards = page.locator('a[href^="/blog/en/"]')
     const count = await cards.count()
     expect(count).toBeGreaterThanOrEqual(1)
 
     for (let i = 0; i < count; i++) {
       const href = await cards.nth(i).getAttribute('href')
-      expect(href).toMatch(/^\/blog\/[a-z0-9-]+$/)
+      expect(href).toMatch(/^\/blog\/en\/[a-z0-9-]+$/)
     }
   })
 
@@ -43,7 +43,7 @@ test.describe('Blog Landing Page', () => {
       { name: 'lang', value: 'es', domain: url.hostname, path: '/' },
     ])
 
-    await page.goto('/blog')
+    await page.goto('/blog/es')
 
     // Blog header shows Spanish description text
     await expect(page.getByText('Consejos, guías e ideas')).toBeVisible()

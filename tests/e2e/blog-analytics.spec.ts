@@ -8,7 +8,7 @@ test.describe('Blog Analytics Integration', () => {
   })
 
   test('blog post view triggers blog_post_viewed analytics event', async ({ page }) => {
-    await page.goto('/blog/seed-post-alpha', { waitUntil: 'networkidle' })
+    await page.goto('/blog/en/seed-post-alpha', { waitUntil: 'networkidle' })
 
     const blogViewedEvent = await page.evaluate(() => {
       const dataLayer = (window as unknown as { dataLayer?: unknown[] }).dataLayer

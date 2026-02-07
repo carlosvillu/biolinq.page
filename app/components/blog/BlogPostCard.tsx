@@ -2,7 +2,7 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import type { BlogPostMeta } from '~/services/blog-content.server'
 
-export function BlogPostCard({ post }: { post: BlogPostMeta }) {
+export function BlogPostCard({ post, lang }: { post: BlogPostMeta; lang: string }) {
   const { t } = useTranslation()
 
   const formattedDate = new Date(post.date).toLocaleDateString(undefined, {
@@ -12,7 +12,7 @@ export function BlogPostCard({ post }: { post: BlogPostMeta }) {
   })
 
   return (
-    <Link to={`/blog/${post.slug}`} className="block group">
+    <Link to={`/blog/${lang}/${post.slug}`} className="block group">
       <div className="relative">
         {/* Shadow Layer */}
         <div

@@ -1,8 +1,8 @@
 import type { LoaderFunctionArgs, MetaFunction } from 'react-router'
 import { data, useLoaderData } from 'react-router'
 import type { Route } from './+types/blog.post'
-import { detectLocale, parseLangCookie } from '~/lib/i18n'
-import { getBlogPost, getRelatedPosts } from '~/services/blog-content.server'
+import { isValidLocale } from '~/lib/i18n'
+import { getBlogPost, getRelatedPosts, getTranslationSlugs } from '~/services/blog-content.server'
 import { BlogPostLayout } from '~/components/blog/BlogPostLayout'
 import { RelatedPosts } from '~/components/blog/RelatedPosts'
 
@@ -11,16 +11,16 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     return [{ title: 'Not Found - BioLinq' }]
   }
 
-  const { post, locale } = data
+  const { post, locale, translationSlugs } = data
   const title = `${post.meta.title} - BioLinq Blog`
   const description = post.meta.description
-  const url = `https://biolinq.page/blog/${post.meta.slug}`
-  const canonicalUrl = `https://biolinq.page/blog/${post.meta.canonicalSlug}`
+  const url = `https://biolinq.page/blog/${locale}/${post.meta.slug}`
+  const canonicalUrl = `https://biolinq.page/blog/en/${post.meta.canonicalSlug}`
   const ogLocale = locale === 'es' ? 'es_ES' : 'en_US'
   const ogLocaleAlt = locale === 'es' ? 'en_US' : 'es_ES'
 
-  const esSlug = locale === 'es' ? post.meta.slug : post.meta.canonicalSlug
-  const enSlug = post.meta.canonicalSlug
+  const enSlug = translationSlugs.en ?? post.meta.canonicalSlug
+  const esSlug = translationSlugs.es ?? enSlug
 
   return [
     { title },
@@ -47,13 +47,13 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
       tagName: 'link',
       rel: 'alternate',
       hrefLang: 'en',
-      href: `https://biolinq.page/blog/${enSlug}`,
+      href: `https://biolinq.page/blog/en/${enSlug}`,
     },
     {
       tagName: 'link',
       rel: 'alternate',
       hrefLang: 'es',
-      href: `https://biolinq.page/blog/${esSlug}`,
+      href: `https://biolinq.page/blog/es/${esSlug}`,
     },
     // Schema.org JSON-LD
     {
@@ -77,11 +77,13 @@ export function headers({ loaderHeaders }: Route.HeadersArgs) {
   return loaderHeaders
 }
 
-export async function loader({ request, params }: LoaderFunctionArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
+  const lang = params.lang!
   const slug = params.slug!
-  const cookieHeader = request.headers.get('Cookie')
-  const langCookie = parseLangCookie(cookieHeader)
-  const locale = detectLocale(request, langCookie)
+  if (!isValidLocale(lang)) {
+    throw new Response(null, { status: 404 })
+  }
+  const locale = lang
 
   const post = getBlogPost(slug, locale)
   if (!post) {
@@ -89,20 +91,21 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   }
 
   const relatedPosts = getRelatedPosts(slug, post.meta.tags, locale, 3)
+  const translationSlugs = getTranslationSlugs(post.meta.canonicalSlug)
 
   return data(
-    { post, relatedPosts, locale },
+    { post, relatedPosts, locale, translationSlugs },
     { headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=86400' } }
   )
 }
 
 export default function BlogPostPage() {
-  const { post, relatedPosts } = useLoaderData<typeof loader>()
+  const { post, relatedPosts, locale } = useLoaderData<typeof loader>()
 
   return (
     <>
       <BlogPostLayout html={post.html} meta={post.meta} />
-      <RelatedPosts posts={relatedPosts} />
+      <RelatedPosts posts={relatedPosts} lang={locale} />
     </>
   )
 }

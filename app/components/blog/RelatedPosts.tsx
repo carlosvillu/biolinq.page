@@ -4,7 +4,7 @@ import type { BlogPostMeta } from '~/services/blog-content.server'
 import { BlogPostCard } from '~/components/blog/BlogPostCard'
 import { useAnalytics } from '~/hooks/useAnalytics'
 
-export function RelatedPosts({ posts }: { posts: BlogPostMeta[] }) {
+export function RelatedPosts({ posts, lang }: { posts: BlogPostMeta[]; lang: string }) {
   const { t } = useTranslation()
   const { trackBlogCTAClicked } = useAnalytics()
 
@@ -24,7 +24,7 @@ export function RelatedPosts({ posts }: { posts: BlogPostMeta[] }) {
           {/* Related post cards grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             {posts.map((post) => (
-              <BlogPostCard key={post.slug} post={post} />
+              <BlogPostCard key={post.slug} post={post} lang={lang} />
             ))}
           </div>
         </>

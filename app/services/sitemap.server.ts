@@ -19,7 +19,8 @@ const STATIC_PAGES: SitemapUrl[] = [
   { loc: '/terms', priority: 0.3, changefreq: 'monthly' },
   { loc: '/privacy', priority: 0.3, changefreq: 'monthly' },
   { loc: '/cookies', priority: 0.3, changefreq: 'monthly' },
-  { loc: '/blog', priority: 0.7, changefreq: 'weekly' },
+  { loc: '/blog/en', priority: 0.7, changefreq: 'weekly' },
+  { loc: '/blog/es', priority: 0.7, changefreq: 'weekly' },
 ]
 
 async function getAllPublicBiolinks(): Promise<BiolinkForSitemap[]> {
@@ -48,13 +49,18 @@ export async function generateSitemap(baseUrl: string): Promise<string> {
     lastmod: biolink.updatedAt.toISOString().split('T')[0],
   }))
 
-  const blogPosts = getAllBlogPosts('en')
-  const blogPages: SitemapUrl[] = blogPosts.map((post) => ({
-    loc: `/blog/${post.slug}`,
-    priority: 0.5,
-    changefreq: 'monthly' as const,
-    lastmod: post.updatedDate ?? post.date,
-  }))
+  const blogPages: SitemapUrl[] = []
+  for (const locale of ['en', 'es'] as const) {
+    const blogPosts = getAllBlogPosts(locale)
+    for (const post of blogPosts) {
+      blogPages.push({
+        loc: `/blog/${locale}/${post.slug}`,
+        priority: 0.5,
+        changefreq: 'monthly' as const,
+        lastmod: post.updatedDate ?? post.date,
+      })
+    }
+  }
 
   const allUrls = [...STATIC_PAGES, ...dynamicPages, ...blogPages]
   const urlElements = allUrls.map((url) => buildUrlElement(baseUrl, url)).join('\n')

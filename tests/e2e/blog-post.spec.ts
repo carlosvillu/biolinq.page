@@ -2,7 +2,7 @@ import { test, expect } from '../fixtures/app.fixture'
 
 test.describe('Blog Post Page', () => {
   test('renders with correct content', async ({ page }) => {
-    await page.goto('/blog/seed-post-alpha')
+    await page.goto('/blog/en/seed-post-alpha')
 
     // Page title contains post title and "BioLinq Blog"
     await expect(page).toHaveTitle(/Alpha Post.*BioLinq Blog/)
@@ -33,7 +33,7 @@ test.describe('Blog Post Page', () => {
   })
 
   test('shows proper SEO meta tags', async ({ page }) => {
-    await page.goto('/blog/seed-post-alpha')
+    await page.goto('/blog/en/seed-post-alpha')
 
     // <title> contains post title and "BioLinq Blog"
     await expect(page).toHaveTitle(/Alpha Post.*BioLinq Blog/)
@@ -66,7 +66,7 @@ test.describe('Blog Post Page', () => {
     const canonical = page.locator('link[rel="canonical"]')
     await expect(canonical).toHaveAttribute(
       'href',
-      'https://biolinq.page/blog/seed-post-alpha'
+      'https://biolinq.page/blog/en/seed-post-alpha'
     )
 
     // Schema.org JSON-LD
@@ -87,7 +87,7 @@ test.describe('Blog Post Page', () => {
   })
 
   test('related posts section renders', async ({ page }) => {
-    await page.goto('/blog/seed-post-alpha')
+    await page.goto('/blog/en/seed-post-alpha')
 
     // "Related Posts" heading is visible
     await expect(
@@ -95,15 +95,15 @@ test.describe('Blog Post Page', () => {
     ).toBeVisible()
 
     // At least one related post card (beta shares "link-in-bio" tag)
-    const relatedCards = page.locator('section a[href^="/blog/"]')
+    const relatedCards = page.locator('section a[href^="/blog/en/"]')
     await expect(relatedCards.first()).toBeVisible()
     const count = await relatedCards.count()
     expect(count).toBeGreaterThanOrEqual(1)
 
-    // Related post cards link to /blog/{slug}
+    // Related post cards link to /blog/en/{slug}
     for (let i = 0; i < count; i++) {
       const href = await relatedCards.nth(i).getAttribute('href')
-      expect(href).toMatch(/^\/blog\/[a-z0-9-]+$/)
+      expect(href).toMatch(/^\/blog\/en\/[a-z0-9-]+$/)
     }
 
     // CTA button is visible and links to /
@@ -113,7 +113,7 @@ test.describe('Blog Post Page', () => {
   })
 
   test('404 for non-existent post slug', async ({ page }) => {
-    const response = await page.goto('/blog/this-post-does-not-exist')
+    const response = await page.goto('/blog/en/this-post-does-not-exist')
 
     // Response status is 404
     expect(response?.status()).toBe(404)

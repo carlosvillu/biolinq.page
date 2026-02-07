@@ -1,5 +1,6 @@
 import { Globe } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import {
   NeoBrutalMenuRoot,
   NeoBrutalMenuTrigger,
@@ -10,6 +11,7 @@ import {
 import { changeLanguage } from '~/lib/i18n.client'
 import { DEFAULT_LOCALE, isValidLocale, type Locale } from '~/lib/i18n'
 import { useAnalytics } from '~/hooks/useAnalytics'
+import { useBlogLanguageSwitch } from '~/hooks/useBlogLanguageSwitch'
 
 const LANGUAGE_OPTIONS: { locale: Locale; label: string }[] = [
   { locale: 'en', label: 'English' },
@@ -19,11 +21,17 @@ const LANGUAGE_OPTIONS: { locale: Locale; label: string }[] = [
 export function LanguageSelector() {
   const { i18n } = useTranslation()
   const { trackLanguageChanged } = useAnalytics()
+  const { isBlogPage, getLanguageSwitchUrl } = useBlogLanguageSwitch()
+  const navigate = useNavigate()
   const currentLocale = isValidLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE
 
   const handleSelect = (locale: string) => {
     changeLanguage(locale as Locale)
     trackLanguageChanged(locale)
+    if (isBlogPage && getLanguageSwitchUrl) {
+      const url = getLanguageSwitchUrl(locale)
+      navigate(url)
+    }
   }
 
   return (

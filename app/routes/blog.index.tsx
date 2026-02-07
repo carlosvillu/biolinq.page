@@ -2,7 +2,7 @@ import type { LoaderFunctionArgs, MetaFunction } from 'react-router'
 import { data, useLoaderData } from 'react-router'
 import type { Route } from './+types/blog.index'
 import { useTranslation } from 'react-i18next'
-import { detectLocale, parseLangCookie } from '~/lib/i18n'
+import { isValidLocale } from '~/lib/i18n'
 import { getAllBlogPosts } from '~/services/blog-content.server'
 import { BlogHeader } from '~/components/blog/BlogHeader'
 import { BlogPostCard } from '~/components/blog/BlogPostCard'
@@ -19,7 +19,7 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
 
   const title = 'Blog - BioLinq'
   const description = META_DESCRIPTIONS[data.locale] ?? META_DESCRIPTIONS.en
-  const url = 'https://biolinq.page/blog'
+  const url = `https://biolinq.page/blog/${data.locale}`
 
   return [
     { title },
@@ -37,6 +37,9 @@ export const meta: MetaFunction<typeof loader> = ({ data }) => {
     { name: 'twitter:description', content: description },
     // Canonical
     { tagName: 'link', rel: 'canonical', href: url },
+    // Hreflang alternates
+    { tagName: 'link', rel: 'alternate', hrefLang: 'en', href: 'https://biolinq.page/blog/en' },
+    { tagName: 'link', rel: 'alternate', hrefLang: 'es', href: 'https://biolinq.page/blog/es' },
   ]
 }
 
@@ -44,10 +47,12 @@ export function headers({ loaderHeaders }: Route.HeadersArgs) {
   return loaderHeaders
 }
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const cookieHeader = request.headers.get('Cookie')
-  const langCookie = parseLangCookie(cookieHeader)
-  const locale = detectLocale(request, langCookie)
+export async function loader({ params }: LoaderFunctionArgs) {
+  const lang = params.lang!
+  if (!isValidLocale(lang)) {
+    throw new Response(null, { status: 404 })
+  }
+  const locale = lang
   const posts = getAllBlogPosts(locale)
 
   return data(
@@ -57,7 +62,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 }
 
 export default function BlogIndexPage() {
-  const { posts } = useLoaderData<typeof loader>()
+  const { posts, locale } = useLoaderData<typeof loader>()
   const { t } = useTranslation()
 
   return (
@@ -69,7 +74,7 @@ export default function BlogIndexPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {posts.map((post) => (
-              <BlogPostCard key={post.slug} post={post} />
+              <BlogPostCard key={post.slug} post={post} lang={locale} />
             ))}
           </div>
         )}

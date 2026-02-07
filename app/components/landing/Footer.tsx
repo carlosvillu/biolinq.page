@@ -1,15 +1,17 @@
 import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
+import { isValidLocale, DEFAULT_LOCALE } from '~/lib/i18n'
 
 export function Footer() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const currentLocale = isValidLocale(i18n.language) ? i18n.language : DEFAULT_LOCALE
 
   return (
     <footer className="border-t-[3px] border-neo-dark bg-neo-canvas py-8">
       <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
         {/* Links */}
         <div className="flex gap-6 text-sm font-medium">
-          <Link to="/blog" className="hover:underline">
+          <Link to={`/blog/${currentLocale}`} className="hover:underline">
             {t('footer_blog')}
           </Link>
           <Link to="/terms" className="hover:underline">

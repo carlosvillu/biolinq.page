@@ -3,6 +3,7 @@ import {
   getBlogPost,
   getAllBlogPosts,
   getRelatedPosts,
+  getTranslationSlugs,
 } from '~/services/blog-content.server'
 import type { Locale } from '~/lib/i18n'
 
@@ -46,6 +47,15 @@ export async function loader({ request }: LoaderFunctionArgs) {
       const limit = Number(url.searchParams.get('limit') ?? '3')
       const posts = getRelatedPosts(slug, tags, locale, limit)
       return Response.json(posts)
+    }
+
+    case 'getTranslationSlugs': {
+      const canonicalSlug = url.searchParams.get('canonicalSlug')
+      if (!canonicalSlug) {
+        return Response.json({ error: 'canonicalSlug is required' }, { status: 400 })
+      }
+      const result = getTranslationSlugs(canonicalSlug)
+      return Response.json(result)
     }
 
     default:
