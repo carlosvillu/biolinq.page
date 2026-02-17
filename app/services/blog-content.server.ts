@@ -25,6 +25,11 @@ export type BlogPost = {
   meta: BlogPostMeta
 }
 
+export type BlogPostRawMarkdown = {
+  markdown: string
+  meta: BlogPostMeta
+}
+
 // --- Zod Schema ---
 const blogFrontmatterSchema = z.object({
   title: z.string().min(1),
@@ -171,6 +176,28 @@ export function getBlogPost(slug: string, locale: Locale): BlogPost | null {
   const html = parseAndSanitizeHtml(body)
 
   return { html, meta: result.data }
+}
+
+export function getBlogPostRawMarkdown(slug: string, locale: Locale): BlogPostRawMarkdown | null {
+  // Validate slug to prevent path traversal
+  if (!SLUG_REGEX.test(slug)) {
+    return null
+  }
+
+  const filePath = resolveFilePath(slug, locale)
+  if (!filePath) return null
+
+  const markdown = fs.readFileSync(filePath, 'utf-8')
+  const { frontmatter } = parseFrontmatter(markdown)
+
+  const result = blogFrontmatterSchema.safeParse(frontmatter)
+  if (!result.success) {
+    throw new Error(
+      `Invalid frontmatter in ${slug}: ${result.error.issues.map((i) => i.message).join(', ')}`
+    )
+  }
+
+  return { markdown, meta: result.data }
 }
 
 function listMarkdownFiles(dirPath: string): string[] {

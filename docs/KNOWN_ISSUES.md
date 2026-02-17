@@ -296,6 +296,25 @@ test.beforeEach(async ({ context }) => {
 
 ---
 
+## Analytics / Tracking
+
+### Blog view analytics can be lost if GA initializes after component mount
+
+**Date:** 2026-02-16
+
+**Problem:** `blog_post_viewed` was intermittently missing in E2E and production-like conditions even when consent was accepted.
+
+**Root Cause:** The blog post view event was sent on component mount, but `window.gtag` is initialized in a separate `useEffect` (`GoogleAnalytics`). If the blog effect runs first, the event is dropped because `gtagEvent()` returns early when `window.gtag` is undefined.
+
+**Solution:** In `BlogPostLayout`, retry sending `trackBlogPostViewed()` for a short window until `window.gtag` exists (or timeout). This keeps the implementation minimal and avoids introducing a global analytics queue.
+
+**Prevention:**
+- For first-render analytics events, do not assume GA is ready at mount time.
+- Guard against `window.gtag` availability and retry briefly when necessary.
+- In E2E, keep consent pre-accepted with `context.addInitScript()` before navigation.
+
+---
+
 ## Architecture
 
 ### Dynamic Script Loading for Consent-Gated Features

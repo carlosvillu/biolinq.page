@@ -2,12 +2,19 @@ import type { LoaderFunctionArgs, MetaFunction } from 'react-router'
 import { data, useLoaderData } from 'react-router'
 import type { Route } from './+types/blog.post'
 import { isValidLocale } from '~/lib/i18n'
-import { getBlogPost, getRelatedPosts, getTranslationSlugs } from '~/services/blog-content.server'
+import {
+  getBlogPost,
+  getBlogPostRawMarkdown,
+  getRelatedPosts,
+  getTranslationSlugs,
+} from '~/services/blog-content.server'
 import { BlogPostLayout } from '~/components/blog/BlogPostLayout'
 import { RelatedPosts } from '~/components/blog/RelatedPosts'
 
+const BLOG_CACHE_CONTROL = 'public, max-age=3600, s-maxage=86400'
+
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  if (!data) {
+  if (!data || typeof data !== 'object' || !('post' in data)) {
     return [{ title: 'Not Found - BioLinq' }]
   }
 
@@ -77,13 +84,33 @@ export function headers({ loaderHeaders }: Route.HeadersArgs) {
   return loaderHeaders
 }
 
-export async function loader({ params }: LoaderFunctionArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const lang = params.lang!
   const slug = params.slug!
   if (!isValidLocale(lang)) {
     throw new Response(null, { status: 404 })
   }
   const locale = lang
+
+  const contentTypeHeader = request.headers.get('content-type')?.toLowerCase() ?? ''
+  const acceptHeader = request.headers.get('accept')?.toLowerCase() ?? ''
+  const wantsMarkdown =
+    contentTypeHeader.includes('text/markdown') || acceptHeader.includes('text/markdown')
+
+  if (wantsMarkdown) {
+    const rawPost = getBlogPostRawMarkdown(slug, locale)
+    if (!rawPost) {
+      throw new Response(null, { status: 404 })
+    }
+
+    return new Response(rawPost.markdown, {
+      headers: {
+        'Content-Type': 'text/markdown; charset=utf-8',
+        'Cache-Control': BLOG_CACHE_CONTROL,
+        'X-Robots-Tag': 'noindex',
+      },
+    })
+  }
 
   const post = getBlogPost(slug, locale)
   if (!post) {
@@ -95,12 +122,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
   return data(
     { post, relatedPosts, locale, translationSlugs },
-    { headers: { 'Cache-Control': 'public, max-age=3600, s-maxage=86400' } }
+    { headers: { 'Cache-Control': BLOG_CACHE_CONTROL } }
   )
 }
 
 export default function BlogPostPage() {
-  const { post, relatedPosts, locale } = useLoaderData<typeof loader>()
+  const loaderData = useLoaderData<typeof loader>()
+
+  if (!loaderData || typeof loaderData !== 'object' || !('post' in loaderData)) {
+    return null
+  }
+
+  const { post, relatedPosts, locale } = loaderData
 
   return (
     <>

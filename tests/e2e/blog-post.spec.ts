@@ -1,6 +1,8 @@
 import { test, expect } from '../fixtures/app.fixture'
 
 test.describe('Blog Post Page', () => {
+  const blogPostUrl = '/blog/en/seed-post-alpha'
+
   test('renders with correct content', async ({ page }) => {
     await page.goto('/blog/en/seed-post-alpha')
 
@@ -120,5 +122,49 @@ test.describe('Blog Post Page', () => {
 
     // Page does not render a blog post layout
     await expect(page.locator('.neo-article')).not.toBeVisible()
+  })
+
+  test('returns raw markdown when Accept header asks for text/markdown', async ({ request }) => {
+    const response = await request.get(blogPostUrl, {
+      headers: { Accept: 'text/markdown' },
+    })
+
+    expect(response.status()).toBe(200)
+    expect(response.headers()['content-type']).toContain('text/markdown')
+    expect(response.headers()['x-robots-tag']).toBe('noindex')
+
+    const body = await response.text()
+    expect(body).toContain('---\n')
+    expect(body).toContain('## Introduction')
+    expect(body).not.toContain('<h2>Introduction</h2>')
+  })
+
+  test('returns raw markdown when Content-Type header is text/markdown', async ({ request }) => {
+    const response = await request.get(blogPostUrl, {
+      headers: { 'Content-Type': 'text/markdown' },
+    })
+
+    expect(response.status()).toBe(200)
+    expect(response.headers()['content-type']).toContain('text/markdown')
+    expect(response.headers()['x-robots-tag']).toBe('noindex')
+
+    const body = await response.text()
+    expect(body).toContain('---\n')
+    expect(body).toContain('## Introduction')
+    expect(body).not.toContain('<h2>Introduction</h2>')
+  })
+
+  test('keeps 404 semantics in markdown mode for invalid locale and missing slug', async ({
+    request,
+  }) => {
+    const invalidLocaleResponse = await request.get('/blog/fr/seed-post-alpha', {
+      headers: { Accept: 'text/markdown' },
+    })
+    expect(invalidLocaleResponse.status()).toBe(404)
+
+    const missingSlugResponse = await request.get('/blog/en/this-post-does-not-exist', {
+      headers: { Accept: 'text/markdown' },
+    })
+    expect(missingSlugResponse.status()).toBe(404)
   })
 })

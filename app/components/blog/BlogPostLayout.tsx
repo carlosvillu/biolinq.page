@@ -15,8 +15,33 @@ export function BlogPostLayout({ html, meta }: { html: string; meta: BlogPostMet
   })
 
   useEffect(() => {
-    trackBlogPostViewed(meta.slug, meta.tags)
-  }, [meta.slug]) // eslint-disable-line react-hooks/exhaustive-deps
+    let cancelled = false
+    let attempts = 0
+    let retryTimer: number | null = null
+
+    const tryTrack = () => {
+      if (cancelled) return
+
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        trackBlogPostViewed(meta.slug, meta.tags)
+        return
+      }
+
+      attempts += 1
+      if (attempts < 20) {
+        retryTimer = window.setTimeout(tryTrack, 50)
+      }
+    }
+
+    tryTrack()
+
+    return () => {
+      cancelled = true
+      if (retryTimer !== null) {
+        window.clearTimeout(retryTimer)
+      }
+    }
+  }, [meta.slug, meta.tags, trackBlogPostViewed])
 
   useEffect(() => {
     const container = articleRef.current
